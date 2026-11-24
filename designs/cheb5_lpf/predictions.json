@@ -1,0 +1,5 @@
+{
+  "s21_pass": {"value": -0.72, "unit": "dB", "basis": "worst S21 over 0.1-1.8 GHz, at 1.8 GHz; ABCD cascade, HJ+KJ eeff, conductor+dielectric loss (sim.py/final_check.py)"},
+  "s11_pass": {"value": -17.6, "unit": "dB", "basis": "worst S11 over 0.1-1.8 GHz, near 1.43 GHz; same cascade, no MSTEP"},
+  "s21_stop": {"value": -27.8, "unit": "dB", "basis": "S21 at 4 GHz from the lossy cascade (lossless ideal Chebyshev about -35 dB)"}
+}

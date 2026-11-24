@@ -1,0 +1,211 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "QWT3",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "QWT3",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "QWT3",
+   "kind": "polygon",
+   "layer": "2:Perfect Conductor",
+   "points": [
+    [
+     14.5215,
+     18.469
+    ],
+    [
+     24.5215,
+     18.469
+    ],
+    [
+     24.5215,
+     19.192465
+    ],
+    [
+     45.4785,
+     19.192465
+    ],
+    [
+     45.4785,
+     20.807535
+    ],
+    [
+     24.5215,
+     20.807535
+    ],
+    [
+     24.5215,
+     21.531
+    ],
+    [
+     14.5215,
+     21.531
+    ]
+   ]
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "QWT3",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "QWT3",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2,
+   "impedance": 100
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1600000000.0,
+   "stop_hz": 2400000000.0,
+   "points": 17,
+   "document": "QWT3"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "QWT3"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "QWT3_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Re(Z(1,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Re(Z(1,2))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Re(Z(2,2))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Im(Z(1,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Im(Z(1,2))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "QWT3_G",
+   "source_doc": "QWT3",
+   "measurement": "Im(Z(2,2))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "QWT3_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "QWT3_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "QWT3"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "QWT3",
+   "tail_chars": 400
+  }
+ }
+]

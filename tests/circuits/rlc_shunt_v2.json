@@ -1,0 +1,135 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_RLC_SHN2"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "model": "TLIN",
+   "id": "T1",
+   "params": {
+    "Z0": 50,
+    "EL": "0",
+    "F0": 1000000000.0
+   }
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "pin": "T1:1",
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "pin": "T1:2",
+   "number": 2
+  }
+ },
+ {
+  "tool": "add_shunt",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "pin": "T1:2",
+   "model": "IND",
+   "id": "L1",
+   "params": {
+    "L": 1e-07
+   }
+  }
+ },
+ {
+  "tool": "delete_element",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "element": "GND"
+  }
+ },
+ {
+  "tool": "add_shunt",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "pin": "L1:2",
+   "model": "CAP",
+   "id": "C1",
+   "params": {
+    "C": 1e-13
+   }
+  }
+ },
+ {
+  "tool": "delete_element",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "element": "GND"
+  }
+ },
+ {
+  "tool": "add_shunt",
+  "args": {
+   "schematic": "V_RLC_SHN2",
+   "pin": "C1:2",
+   "model": "RES",
+   "id": "R1",
+   "params": {
+    "R": 1
+   }
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 2200000000.0,
+   "points": 12001,
+   "document": "V_RLC_SHN2"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_RLC_SHN2_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SHN2_G",
+   "source_doc": "V_RLC_SHN2",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_RLC_SHN2_G",
+   "summary": true
+  }
+ },
+ {
+  "tool": "list_wires",
+  "args": {
+   "schematic": "V_RLC_SHN2"
+  }
+ }
+]

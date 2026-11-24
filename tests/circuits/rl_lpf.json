@@ -1,0 +1,122 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_RL_LPF"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "model": "IND",
+   "id": "L1",
+   "params": {
+    "L": 1e-07
+   }
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "model": "RES",
+   "id": "R1",
+   "params": {
+    "R": 50
+   },
+   "rotation": 270,
+   "near": "L1"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "from_pin": "L1:2",
+   "to_pin": "R1:1"
+  }
+ },
+ {
+  "tool": "add_ground",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "pin": "R1:2"
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "pin": "L1:1",
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RL_LPF",
+   "pin": "R1:1",
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000.0,
+   "stop_hz": 1000000000.0,
+   "points": 121,
+   "log": true,
+   "document": "V_RL_LPF"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_RL_LPF_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RL_LPF_G",
+   "source_doc": "V_RL_LPF",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RL_LPF_G",
+   "source_doc": "V_RL_LPF",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RL_LPF_G",
+   "source_doc": "V_RL_LPF",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_RL_LPF_G",
+   "max_points": 5000
+  }
+ }
+]

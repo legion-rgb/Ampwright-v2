@@ -1,0 +1,134 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_RLC_SER"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "model": "RES",
+   "id": "R1",
+   "params": {
+    "R": 1
+   }
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "model": "IND",
+   "id": "L1",
+   "params": {
+    "L": 1e-07
+   },
+   "near": "R1"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "model": "CAP",
+   "id": "C1",
+   "params": {
+    "C": 1e-13
+   },
+   "near": "L1"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "from_pin": "R1:2",
+   "to_pin": "L1:1"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "from_pin": "L1:2",
+   "to_pin": "C1:1"
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "pin": "R1:1",
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SER",
+   "pin": "C1:2",
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 2200000000.0,
+   "points": 1201,
+   "log": false,
+   "document": "V_RLC_SER"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_RLC_SER_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SER_G",
+   "source_doc": "V_RLC_SER",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SER_G",
+   "source_doc": "V_RLC_SER",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SER_G",
+   "source_doc": "V_RLC_SER",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_RLC_SER_G",
+   "max_points": 5000
+  }
+ }
+]

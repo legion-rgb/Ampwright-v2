@@ -1,0 +1,321 @@
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+--- create_em_structure
+{
+  "em": "LINT_WC",
+  "simulator": "Analyst",
+  "process_definition": "+LINT_WC",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them"
+}
+--- set_em_stackup
+{
+  "em": "LINT_WC",
+  "conductors": [
+    {
+      "drawing_layer": "TR",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    },
+    {
+      "drawing_layer": "GND",
+      "em_layer": 3,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "LINT_WC",
+    "simulator": "Analyst",
+    "process_definition": "+LINT_WC",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 5.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 4.4,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 40.0,
+      "y_mm": 40.0,
+      "height_mm": 6.6,
+      "x_div": 160,
+      "y_div": 160,
+      "cell_mm": 0.25
+    },
+    "z_top_mm": 6.6,
+    "boundaries": {
+      "top": "approx_open",
+      "bottom": "perfect_conductor",
+      "sides": "EMBoundary polygon"
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "TR",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      },
+      {
+        "drawing_layer": "GND",
+        "em_layer": 3,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "boundary_polygons": [],
+    "ports": []
+  }
+}
+--- add_em_shape
+{
+  "id": 1,
+  "kind": "polygon",
+  "layer": "EMBoundary",
+  "bbox_mm": [
+    0.0,
+    0.0,
+    10.0,
+    40.0
+  ],
+  "n_on_layer": 1
+}
+--- add_em_shape
+{
+  "id": 2,
+  "kind": "rect",
+  "layer": "TR",
+  "bbox_mm": [
+    5.0,
+    15.0,
+    30.0,
+    18.0
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port
+{
+  "number": 1,
+  "kind": "wave_custom",
+  "flags": 192,
+  "edge": "right",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      30.0,
+      18.0
+    ],
+    [
+      30.0,
+      15.0
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": true,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=1, Right, Wave Custom Size, Deembed=Yes, RefPlane=0 um, Entity ID=-1, [TR], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- check_em_setup
+{
+  "severity": "error",
+  "rule": "wave_custom_outside",
+  "message": "Wave Custom Size port 1 lies outside the boundary"
+}
+{
+  "severity": "error",
+  "rule": "air_margin",
+  "message": "Air margin below lambda/4 = 74.9 mm at 1 GHz: {'x_low': 5.0, 'x_high': -20.0, 'y_low': 15.0, 'y_high': 22.0, 'above': 5.0}"
+}
+--- create_em_structure
+{
+  "em": "LINT_PN",
+  "simulator": "Analyst",
+  "process_definition": "+LINT_PN",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them"
+}
+--- set_em_stackup
+{
+  "em": "LINT_PN",
+  "conductors": [
+    {
+      "drawing_layer": "TR",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    },
+    {
+      "drawing_layer": "GND",
+      "em_layer": 3,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "LINT_PN",
+    "simulator": "Analyst",
+    "process_definition": "+LINT_PN",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 5.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 4.4,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 40.0,
+      "y_mm": 40.0,
+      "height_mm": 6.6,
+      "x_div": 160,
+      "y_div": 160,
+      "cell_mm": 0.25
+    },
+    "z_top_mm": 6.6,
+    "boundaries": {
+      "top": "approx_open",
+      "bottom": "perfect_conductor",
+      "sides": "EMBoundary polygon"
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "TR",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      },
+      {
+        "drawing_layer": "GND",
+        "em_layer": 3,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "boundary_polygons": [],
+    "ports": []
+  }
+}
+--- add_em_shape
+{
+  "id": 1,
+  "kind": "rect",
+  "layer": "TR",
+  "bbox_mm": [
+    15.0,
+    15.0,
+    25.0,
+    18.0
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port  [ERROR]
+Error executing tool add_em_port: (-2147352567, 'Exception occurred.', (0, None, 'Unable to associate port with owner conductor from port location.', '', 672, -2146827616), None)
+--- check_em_setup
+{
+  "severity": "error",
+  "rule": "no_ports",
+  "message": "The structure has no ports"
+}
+{
+  "severity": "error",
+  "rule": "air_margin",
+  "message": "Air margin below lambda/4 = 74.9 mm at 1 GHz: {'x_low': 15.0, 'x_high': 15.0, 'y_low': 15.0, 'y_high': 22.0, 'above': 5.0}"
+}

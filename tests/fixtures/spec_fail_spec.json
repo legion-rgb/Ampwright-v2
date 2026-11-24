@@ -1,0 +1,42 @@
+{
+ "name": "t",
+ "class": "bias",
+ "schematic": "s",
+ "goals": [
+  {
+   "id": "s11",
+   "metric": "S11_dB",
+   "graph": "g_s",
+   "measurement": "S(1,1)",
+   "over_hz": [
+    1500000000.0,
+    2500000000.0
+   ],
+   "op": "<=",
+   "value": -10
+  },
+  {
+   "id": "id",
+   "metric": "Id_A",
+   "graph": "g_iv",
+   "at": {
+    "Vds": 3.0
+   },
+   "op": "within",
+   "value": 0.02,
+   "tol": 0.001
+  },
+  {
+   "id": "gain",
+   "metric": "S21_dB",
+   "graph": "g_s",
+   "measurement": "DB(|S(2,1)|)",
+   "over_hz": [
+    1500000000.0,
+    2500000000.0
+   ],
+   "op": ">=",
+   "value": 15
+  }
+ ]
+}

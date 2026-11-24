@@ -1,0 +1,21 @@
+[
+  {"tool": "project_info"},
+  {"tool": "search_models", "args": {"query": "RES", "limit": 3}},
+  {"tool": "create_schematic", "args": {"name": "RC"}},
+  {"tool": "add_element", "args": {"schematic": "RC", "model": "RES", "id": "R1", "params": {"R": 1000}}},
+  {"tool": "add_element", "args": {"schematic": "RC", "model": "CAP", "id": "C1", "params": {"C": 1e-9}, "rotation": 270, "near": "R1"}},
+  {"tool": "connect", "args": {"schematic": "RC", "from_pin": "R1:2", "to_pin": "C1:1"}},
+  {"tool": "add_ground", "args": {"schematic": "RC", "pin": "C1:2"}},
+  {"tool": "add_port", "args": {"schematic": "RC", "pin": "R1:1", "number": 1}},
+  {"tool": "add_port", "args": {"schematic": "RC", "pin": "C1:1", "number": 2}},
+  {"tool": "list_elements", "args": {"schematic": "RC"}},
+  {"tool": "set_frequencies", "args": {"start_hz": 1e4, "stop_hz": 1e7, "points": 61, "log": true}},
+  {"tool": "create_graph", "args": {"name": "RC_S"}},
+  {"tool": "add_measurement", "args": {"graph": "RC_S", "source_doc": "RC", "measurement": "DB(|S(2,1)|)"}},
+  {"tool": "add_measurement", "args": {"graph": "RC_S", "source_doc": "RC", "measurement": "DB(|S(1,1)|)"}},
+  {"tool": "clear_status_messages"},
+  {"tool": "simulate"},
+  {"tool": "wait_for_simulation", "args": {"timeout_s": 120}},
+  {"tool": "graph_data", "args": {"graph": "RC_S"}},
+  {"tool": "graph_image", "args": {"graph": "RC_S"}}
+]

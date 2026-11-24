@@ -1,0 +1,8 @@
+{
+  "name": "ne3508_bias",
+  "class": "bias",
+  "schematic": "v2_ne3508_bias",
+  "goals": [
+    {"id": "id", "metric": "Id_A", "graph": "v2_ne3508_bias_iv", "at": {"Vds": 3.0}, "op": "within", "value": 0.020, "tol": 0.001}
+  ]
+}

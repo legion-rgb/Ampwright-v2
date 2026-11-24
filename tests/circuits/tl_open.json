@@ -1,0 +1,121 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_TL_OPEN"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_TL_OPEN",
+   "model": "TLIN",
+   "id": "T1",
+   "params": {
+    "Z0": 50,
+    "EL": "0",
+    "F0": 2000000000.0
+   },
+   "rotation": 90
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_TL_OPEN",
+   "model": "TLOC",
+   "id": "S1",
+   "params": {
+    "Z0": 50,
+    "EL": "90",
+    "F0": 2000000000.0
+   },
+   "near": "T1"
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_TL_OPEN",
+   "pin": "T1:1",
+   "number": 1,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_TL_OPEN",
+   "pin": "T1:2",
+   "number": 2,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_TL_OPEN",
+   "from_pin": "T1:2",
+   "to_pin": "S1:1"
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 500000000.0,
+   "stop_hz": 7000000000.0,
+   "points": 1301,
+   "log": false,
+   "document": "V_TL_OPEN"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_TL_OPEN_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_OPEN_G",
+   "source_doc": "V_TL_OPEN",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_OPEN_G",
+   "source_doc": "V_TL_OPEN",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_OPEN_G",
+   "source_doc": "V_TL_OPEN",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_TL_OPEN_G",
+   "max_points": 5000
+  }
+ }
+]

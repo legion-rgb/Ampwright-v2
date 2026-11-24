@@ -1,0 +1,115 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_MS_50"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_MS_50",
+   "model": "MSUB",
+   "id": null,
+   "params": {
+    "Er": 4.4,
+    "H": 0.0016,
+    "T": 0,
+    "Rho": 0,
+    "Tand": 0,
+    "Name": "MSUB"
+   }
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_MS_50",
+   "model": "MLIN",
+   "id": "M1",
+   "params": {
+    "W": 0.003062,
+    "L": 0.02053,
+    "MSUB": "MSUB"
+   },
+   "near": "MSUB"
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_MS_50",
+   "pin": "M1:1",
+   "number": 1,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_MS_50",
+   "pin": "M1:2",
+   "number": 2,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 500000000.0,
+   "stop_hz": 4000000000.0,
+   "points": 351,
+   "log": false,
+   "document": "V_MS_50"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_MS_50_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_MS_50_G",
+   "source_doc": "V_MS_50",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_MS_50_G",
+   "source_doc": "V_MS_50",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_MS_50_G",
+   "source_doc": "V_MS_50",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_MS_50_G",
+   "max_points": 5000
+  }
+ }
+]

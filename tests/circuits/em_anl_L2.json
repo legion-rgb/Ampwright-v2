@@ -1,0 +1,172 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL2",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL2",
+   "dielectrics": [
+    {
+     "thickness_mm": 15,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    }
+   ],
+   "enclosure": {
+    "x_mm": 41.06,
+    "y_mm": 30,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "perfect_conductor",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "set_em_option",
+  "args": {
+   "em": "ANL2",
+   "name": "Em3DP_AMR_Tolerance",
+   "value": 0.005
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL2",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 0,
+   "y": 13.469,
+   "w": 41.06,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL2",
+   "type": "wave",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL2",
+   "type": "wave",
+   "at": {
+    "layer": "TR",
+    "edge": "right"
+   },
+   "number": 2,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 5,
+   "document": "ANL2"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL2"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "ANL2_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "ANL2_G",
+   "source_doc": "ANL2",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "ANL2_G",
+   "source_doc": "ANL2",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "ANL2_G",
+   "source_doc": "ANL2",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "ANL2_G",
+   "source_doc": "ANL2",
+   "measurement": "Ang(S(1,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "ANL2_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "ANL2_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "ANL2"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "ANL2",
+   "tail_chars": 400
+  }
+ }
+]

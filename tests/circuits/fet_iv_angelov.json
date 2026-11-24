@@ -1,0 +1,105 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "FET_IV"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "FET_IV",
+   "model": "ANGELOV",
+   "id": "Q1",
+   "params": {
+    "IPK": 0.05,
+    "VPK": -1,
+    "P1": 1,
+    "P2": 0,
+    "P3": 0,
+    "ALPHA": 1,
+    "LAMBDA": 0,
+    "RG": 1,
+    "RS": 1,
+    "RD": 1
+   }
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "FET_IV",
+   "model": "IVCURVE",
+   "id": "IV1",
+   "near": "Q1",
+   "rotation": 90,
+   "params": {
+    "VSWEEP_start": 0,
+    "VSWEEP_stop": 5,
+    "VSWEEP_step": 0.1,
+    "VSTEP_start": -3,
+    "VSTEP_stop": 0.5,
+    "VSTEP_step": 0.5
+   }
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "FET_IV",
+   "from_pin": "IV1:1",
+   "to_pin": "Q1:2"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "FET_IV",
+   "from_pin": "IV1:2",
+   "to_pin": "Q1:1"
+  }
+ },
+ {
+  "tool": "add_ground",
+  "args": {
+   "schematic": "FET_IV",
+   "pin": "Q1:3"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "FET_IV_Graph"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "FET_IV_Graph",
+   "source_doc": "FET_IV",
+   "measurement": "IVCurve(IV1)"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "FET_IV_Graph"
+  }
+ },
+ {
+  "tool": "graph_image",
+  "args": {
+   "graph": "FET_IV_Graph"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "FET_IV_Graph",
+   "max_points": 5000
+  }
+ }
+]

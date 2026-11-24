@@ -1,0 +1,173 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "PAT",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "PAT",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 64,
+    "y_mm": 70,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "PAT",
+   "kind": "polygon",
+   "layer": "2:Perfect Conductor",
+   "points": [
+    [
+     16.0,
+     33.469
+    ],
+    [
+     18.0,
+     33.469
+    ],
+    [
+     18.0,
+     15.995000000000001
+    ],
+    [
+     47.42,
+     15.995000000000001
+    ],
+    [
+     47.42,
+     54.004999999999995
+    ],
+    [
+     18.0,
+     54.004999999999995
+    ],
+    [
+     18.0,
+     36.531
+    ],
+    [
+     16.0,
+     36.531
+    ]
+   ]
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "PAT",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 2100000000.0,
+   "stop_hz": 2700000000.0,
+   "points": 13,
+   "document": "PAT"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "PAT"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "PAT_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "PAT_G",
+   "source_doc": "PAT",
+   "measurement": "Re(Z(1,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "PAT_G",
+   "source_doc": "PAT",
+   "measurement": "Im(Z(1,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "PAT_G",
+   "source_doc": "PAT",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "PAT_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "PAT_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "PAT"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "PAT",
+   "tail_chars": 400
+  }
+ }
+]

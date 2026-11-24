@@ -1,0 +1,644 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_OK",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_OK",
+   "dielectrics": [
+    {
+     "thickness_mm": 20,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    },
+    {
+     "name": "GND",
+     "sigma": "perfect",
+     "em_layer": 3
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_OK",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_OK",
+   "kind": "rect",
+   "layer": "GND",
+   "x": 0,
+   "y": 0,
+   "w": 40,
+   "h": 40
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 10000000000.0,
+   "stop_hz": 12000000000.0,
+   "points": 3,
+   "document": "ANL_OK"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_OK",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_OK",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_OK"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_NUM",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_NUM",
+   "dielectrics": [
+    {
+     "thickness_mm": 20,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    },
+    {
+     "name": "GND",
+     "sigma": "perfect",
+     "em_layer": 3
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_NUM",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_NUM",
+   "kind": "rect",
+   "layer": "GND",
+   "x": 0,
+   "y": 0,
+   "w": 40,
+   "h": 40
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 10000000000.0,
+   "stop_hz": 12000000000.0,
+   "points": 3,
+   "document": "ANL_NUM"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_NUM",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_NUM",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "right"
+   },
+   "number": 3
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_NUM"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_DIFF",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_DIFF",
+   "dielectrics": [
+    {
+     "thickness_mm": 20,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    },
+    {
+     "name": "GND",
+     "sigma": "perfect",
+     "em_layer": 3
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_DIFF",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_DIFF",
+   "kind": "rect",
+   "layer": "GND",
+   "x": 0,
+   "y": 0,
+   "w": 40,
+   "h": 40
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 10000000000.0,
+   "stop_hz": 12000000000.0,
+   "points": 3,
+   "document": "ANL_DIFF"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_DIFF",
+   "type": "lumped_diff",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_DIFF"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_WAVE",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_WAVE",
+   "dielectrics": [
+    {
+     "thickness_mm": 20,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    },
+    {
+     "name": "GND",
+     "sigma": "perfect",
+     "em_layer": 3
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_WAVE",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_WAVE",
+   "kind": "rect",
+   "layer": "GND",
+   "x": 0,
+   "y": 0,
+   "w": 40,
+   "h": 40
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 10000000000.0,
+   "stop_hz": 12000000000.0,
+   "points": 3,
+   "document": "ANL_WAVE"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_WAVE",
+   "type": "wave",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_WAVE"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_NOGND",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_NOGND",
+   "dielectrics": [
+    {
+     "thickness_mm": 20,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "approx_open"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_NOGND",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 10000000000.0,
+   "stop_hz": 12000000000.0,
+   "points": 3,
+   "document": "ANL_NOGND"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_NOGND",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_NOGND"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_AIR",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "ANL_AIR",
+   "dielectrics": [
+    {
+     "thickness_mm": 5,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0.02
+    }
+   ],
+   "conductors": [
+    {
+     "name": "TR",
+     "sigma": "perfect",
+     "em_layer": 2
+    },
+    {
+     "name": "GND",
+     "sigma": "perfect",
+     "em_layer": 3
+    }
+   ],
+   "enclosure": {
+    "x_mm": 40,
+    "y_mm": 40,
+    "grid_mm": 1
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_AIR",
+   "kind": "rect",
+   "layer": "TR",
+   "x": 15,
+   "y": 15,
+   "w": 10,
+   "h": 10
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_AIR",
+   "kind": "rect",
+   "layer": "GND",
+   "x": 0,
+   "y": 0,
+   "w": 40,
+   "h": 40
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 3,
+   "document": "ANL_AIR"
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "ANL_AIR",
+   "type": "lumped_down",
+   "at": {
+    "layer": "TR",
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_AIR"
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "ANL_EMPTY",
+   "simulator": "Analyst"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_EMPTY"
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "ANL_OK",
+   "kind": "polygon",
+   "layer": "EMBoundary",
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     20,
+     0
+    ],
+    [
+     20,
+     10
+    ],
+    [
+     30,
+     10
+    ],
+    [
+     30,
+     40
+    ],
+    [
+     0,
+     40
+    ]
+   ]
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "ANL_OK"
+  }
+ }
+]

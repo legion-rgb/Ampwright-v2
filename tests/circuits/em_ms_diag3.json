@@ -1,0 +1,618 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "T1",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "T1",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "perfect_conductor",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "T1",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 19.735,
+   "y": 18.469,
+   "w": 20.53,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "T1",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "T1",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "T1"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "T1"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "T1_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T1_G",
+   "source_doc": "T1",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T1_G",
+   "source_doc": "T1",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T1_G",
+   "source_doc": "T1",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "T1_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "T1_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "T1"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "T1",
+   "tail_chars": 400
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "T2",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "T2",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "perfect_conductor",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "T2",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 9.469999999999999,
+   "y": 18.469,
+   "w": 41.06,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "T2",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "T2",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "T2"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "T2"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "T2_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T2_G",
+   "source_doc": "T2",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T2_G",
+   "source_doc": "T2",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "T2_G",
+   "source_doc": "T2",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "T2_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "T2_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "T2"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "T2",
+   "tail_chars": 400
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "M1",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "M1",
+   "dielectrics": [
+    {
+     "thickness_mm": 10,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "M1",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 19.735,
+   "y": 18.469,
+   "w": 20.53,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "M1",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "M1",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "M1"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "M1"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "M1_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M1_G",
+   "source_doc": "M1",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M1_G",
+   "source_doc": "M1",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M1_G",
+   "source_doc": "M1",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "M1_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "M1_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "M1"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "M1",
+   "tail_chars": 400
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "M2",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "M2",
+   "dielectrics": [
+    {
+     "thickness_mm": 10,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "M2",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 9.469999999999999,
+   "y": 18.469,
+   "w": 41.06,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "M2",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "M2",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "M2"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "M2"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "M2_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M2_G",
+   "source_doc": "M2",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M2_G",
+   "source_doc": "M2",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "M2_G",
+   "source_doc": "M2",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "M2_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "M2_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "M2"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "M2",
+   "tail_chars": 400
+  }
+ }
+]

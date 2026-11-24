@@ -1,0 +1,4 @@
+{
+ "max_rounds": 2,
+ "seed": "After the round-0 PASS, the lead has awr-builder set C1 C to 4.775e-9 (10x) in v2_rc_lpf_fault and re-simulate, recorded only in designs/_seeds/rc_lpf_fault.md. Set state round 1, then rerun evaluator and judge: it must FAIL, then the fixer must fix it."
+}

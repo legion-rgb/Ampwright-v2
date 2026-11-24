@@ -1,0 +1,164 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "Z50",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "Z50",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "Z50",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 19.735,
+   "y": 18.469,
+   "w": 20.53,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "Z50",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "Z50",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "Z50"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "Z50"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "Z50_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "Z50_G",
+   "source_doc": "Z50",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "Z50_G",
+   "source_doc": "Z50",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "Z50_G",
+   "source_doc": "Z50",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "Z50_G",
+   "source_doc": "Z50",
+   "measurement": "Ang(S(1,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "Z50_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "Z50_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "Z50"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "Z50",
+   "tail_chars": 400
+  }
+ }
+]

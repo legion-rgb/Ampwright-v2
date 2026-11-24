@@ -1,0 +1,5 @@
+{
+"s21_dc":{"value":-3.522,"unit":"dB","basis":"ABCD of series 50R + shunt 477.5pF at 100 kHz"},
+"s21_fc":{"value":-6.532,"unit":"dB","basis":"ABCD at 10 MHz, C=477.5pF"},
+"s21_stop":{"value":-23.566,"unit":"dB","basis":"ABCD at 100 MHz, C=477.5pF"}
+}

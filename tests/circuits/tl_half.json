@@ -1,0 +1,99 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_TL_HALF"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_TL_HALF",
+   "model": "TLIN",
+   "id": "T1",
+   "params": {
+    "Z0": 100,
+    "EL": "180",
+    "F0": 2000000000.0
+   },
+   "rotation": 90
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_TL_HALF",
+   "pin": "T1:1",
+   "number": 1,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_TL_HALF",
+   "pin": "T1:2",
+   "number": 2,
+   "z0": 50
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 500000000.0,
+   "stop_hz": 7000000000.0,
+   "points": 1301,
+   "log": false,
+   "document": "V_TL_HALF"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_TL_HALF_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_HALF_G",
+   "source_doc": "V_TL_HALF",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_HALF_G",
+   "source_doc": "V_TL_HALF",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_TL_HALF_G",
+   "source_doc": "V_TL_HALF",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_TL_HALF_G",
+   "max_points": 5000
+  }
+ }
+]

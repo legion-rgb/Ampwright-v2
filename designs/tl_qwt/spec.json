@@ -1,0 +1,10 @@
+{
+  "name": "tl_qwt",
+  "class": "matching",
+  "schematic": "v2_tl_qwt",
+  "goals": [
+    {"id": "s11_f0", "metric": "S11_dB", "graph": "v2_tl_qwt_s", "measurement": "S(1,1)", "at": {"f": 2e9}, "op": "<=", "value": -40},
+    {"id": "s11_band", "metric": "S11_dB", "graph": "v2_tl_qwt_s", "measurement": "S(1,1)", "over_hz": [1.75e9, 2.25e9], "op": "<=", "value": -20},
+    {"id": "s11_2f0", "metric": "S11_dB", "graph": "v2_tl_qwt_s", "measurement": "S(1,1)", "at": {"f": 4e9}, "op": "within", "value": -9.54, "tol": 0.1}
+  ]
+}

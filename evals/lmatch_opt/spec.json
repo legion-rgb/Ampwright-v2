@@ -1,0 +1,9 @@
+{
+  "name": "lmatch_opt",
+  "class": "matching",
+  "schematic": "v2_lmatch_opt",
+  "goals": [
+    {"id": "s11_f0", "metric": "S11_dB", "graph": "v2_lmatch_opt_s", "measurement": "S(1,1)", "at": {"f": 1e9}, "op": "<=", "value": -30},
+    {"id": "s11_band", "metric": "S11_dB", "graph": "v2_lmatch_opt_s", "measurement": "S(1,1)", "over_hz": [0.9e9, 1.1e9], "op": "<=", "value": -15}
+  ]
+}

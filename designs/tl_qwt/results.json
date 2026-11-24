@@ -1,0 +1,18 @@
+{
+ "_sim": "ok",
+ "s11_f0": {
+  "measured": -191.57390101140348,
+  "meets": true,
+  "how": "linear interpolation of v2_tl_qwt:DB(|S(1,1)|) at f=2e+09"
+ },
+ "s11_band": {
+  "measured": -23.24679805133647,
+  "meets": true,
+  "how": "worst case (<=) over 1.75e+09..2.25e+09 Hz of v2_tl_qwt:DB(|S(1,1)|)"
+ },
+ "s11_2f0": {
+  "measured": -9.542425094393248,
+  "meets": true,
+  "how": "linear interpolation of v2_tl_qwt:DB(|S(1,1)|) at f=4e+09"
+ }
+}

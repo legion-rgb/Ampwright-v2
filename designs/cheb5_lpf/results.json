@@ -1,0 +1,18 @@
+{
+ "_sim": "ok",
+ "s21_pass": {
+  "measured": -0.6833756017315453,
+  "meets": true,
+  "how": "worst case (>=) over 1e+08..1.8e+09 Hz of v2_cheb5_lpf:DB(|S(2,1)|)"
+ },
+ "s11_pass": {
+  "measured": -17.552045664346217,
+  "meets": true,
+  "how": "worst case (<=) over 1e+08..1.8e+09 Hz of v2_cheb5_lpf:DB(|S(1,1)|)"
+ },
+ "s21_stop": {
+  "measured": -27.85069615457431,
+  "meets": true,
+  "how": "linear interpolation of v2_cheb5_lpf:DB(|S(2,1)|) at f=4e+09"
+ }
+}

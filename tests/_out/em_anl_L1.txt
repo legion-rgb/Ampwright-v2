@@ -1,0 +1,384 @@
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+--- create_em_structure
+{
+  "em": "ANL1",
+  "simulator": "Analyst",
+  "process_definition": "+ANL1",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them; Analyst structures start with a rectangular Approx Open simulation boundary the size of the box (set_em_stackup enclosure redraws it)"
+}
+--- set_em_stackup
+{
+  "em": "ANL1",
+  "solver_stackup": [
+    {
+      "thickness_mm": 15.0,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "thickness_mm": 1.6,
+      "er_xyz": [
+        4.4,
+        4.4,
+        4.4
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "conductors": [
+    {
+      "drawing_layer": "TR",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "ANL1",
+    "simulator": "Analyst",
+    "process_definition": "+ANL1",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 15.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 4.4,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 32.529999999999994,
+      "y_mm": 41.99999999999999,
+      "height_mm": 16.6,
+      "x_div": 1626500,
+      "y_div": 2100000,
+      "cell_mm": 0.00002
+    },
+    "z_top_mm": 16.6,
+    "boundaries": {
+      "top": "perfect_conductor",
+      "bottom": "perfect_conductor",
+      "sides": {
+        "bottom": "perfect_conductor",
+        "right": "perfect_conductor",
+        "top": "perfect_conductor",
+        "left": "perfect_conductor"
+      }
+    },
+    "boundary": {
+      "bbox_mm": [
+        0.0,
+        0.0,
+        20.529999999999998,
+        30.0
+      ],
+      "n_edges": 4,
+      "edges": {
+        "bottom": "perfect_conductor",
+        "right": "perfect_conductor",
+        "top": "perfect_conductor",
+        "left": "perfect_conductor"
+      }
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "TR",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "ports": []
+  }
+}
+--- set_em_option
+{
+  "em": "ANL1",
+  "option": "Em3DP_AMR_Tolerance",
+  "old": 0.02,
+  "new": 0.005,
+  "uses_project_options": false
+}
+--- add_em_shape
+{
+  "id": 2,
+  "kind": "rect",
+  "layer": "TR",
+  "bbox_mm": [
+    0.0,
+    13.469,
+    20.529999999999998,
+    16.531
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port
+{
+  "number": 1,
+  "kind": "wave",
+  "flags": 64,
+  "edge": "left",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      0.0,
+      13.469
+    ],
+    [
+      0.0,
+      16.531
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": true,
+  "deembed": false,
+  "associated": true,
+  "info": "Port=1, Left, Wave, Deembed=No, RefPlane=0 um, Entity ID=-1, [TR], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- add_em_port
+{
+  "number": 2,
+  "kind": "wave",
+  "flags": 64,
+  "edge": "right",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      20.529999999999998,
+      16.531
+    ],
+    [
+      20.529999999999998,
+      13.469
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": false,
+  "deembed": false,
+  "associated": true,
+  "info": "Port=2, Right, Wave, Deembed=No, RefPlane=0 um, Entity ID=-1, [TR], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- set_frequencies
+{
+  "document": "ANL1",
+  "count": 5,
+  "first_hz": 1000000000.0,
+  "last_hz": 3000000000.0
+}
+--- check_em_setup
+--- create_graph
+{
+  "graph": "ANL1_G"
+}
+--- add_measurement
+{
+  "graph": "ANL1_G",
+  "measurement": "ANL1:DB(|S(1,1)|)"
+}
+--- add_measurement
+{
+  "graph": "ANL1_G",
+  "measurement": "ANL1:DB(|S(2,1)|)"
+}
+--- add_measurement
+{
+  "graph": "ANL1_G",
+  "measurement": "ANL1:Ang(S(2,1))"
+}
+--- add_measurement
+{
+  "graph": "ANL1_G",
+  "measurement": "ANL1:Ang(S(1,1))"
+}
+--- clear_status_messages
+{
+  "cleared": true
+}
+--- simulate
+{
+  "state": "ended",
+  "error_count": 0,
+  "errors": [],
+  "graph": "ANL1_G"
+}
+--- graph_data
+{
+  "measurement": "ANL1:DB(|S(1,1)|)",
+  "x": [
+    1000000000.0,
+    1500000000.0,
+    2000000000.0,
+    2500000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -31.700110425151937,
+    -29.154243928471644,
+    -28.422347673909215,
+    -29.266601929608953,
+    -31.842364210244057
+  ],
+  "truncated": false
+}
+{
+  "measurement": "ANL1:DB(|S(2,1)|)",
+  "x": [
+    1000000000.0,
+    1500000000.0,
+    2000000000.0,
+    2500000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -0.0029371093510791348,
+    -0.005279877975974312,
+    -0.006249740620934731,
+    -0.0051449521563692625,
+    -0.0028424314784876925
+  ],
+  "truncated": false
+}
+{
+  "measurement": "ANL1:Ang(S(2,1))",
+  "x": [
+    1000000000.0,
+    1500000000.0,
+    2000000000.0,
+    2500000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -0.7871397772431692,
+    -1.1830558144938383,
+    -1.581252903361887,
+    -1.9819940070648854,
+    -2.38535472418726
+  ],
+  "truncated": false
+}
+{
+  "measurement": "ANL1:Ang(S(1,1))",
+  "x": [
+    1000000000.0,
+    1500000000.0,
+    2000000000.0,
+    2500000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -2.344440884584386,
+    -2.7322223265756755,
+    -3.119060765117691,
+    2.782054316148683,
+    2.4153916521040357
+  ],
+  "truncated": false
+}
+--- em_ports
+{
+  "Number": 1,
+  "Type": 2,
+  "Excitation": "1.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=1, Left, Wave, Deembed=No, RefPlane=0 um, Entity ID=-1, [TR], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+{
+  "Number": 2,
+  "Type": 4,
+  "Excitation": "0.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=2, Right, Wave, Deembed=No, RefPlane=0 um, Entity ID=-1, [TR], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- em_simulation_log
+ process: 406.1 MB on process 0.
+Reason for ports only AMR termination: Zc/Kz converged (error = 0.00602, tolerance = 0.01) 
+AMR Time: 0.01 minutes.
+Reason for AMR termination: Magnitude S converged (error = 0.00495, tolerance = 0.005) 
+AMR Time: 0.61 minutes.
+Elapsed time (minutes): 0.77
+========================================================================================================
+

@@ -1,0 +1,10 @@
+{
+  "name": "rc_lpf_fault",
+  "class": "filter",
+  "schematic": "v2_rc_lpf_fault",
+  "goals": [
+    {"id": "s21_dc", "metric": "S21_dB", "graph": "v2_rc_lpf_fault_s", "measurement": "S(2,1)", "at": {"f": 1e5}, "op": "within", "value": -3.52, "tol": 0.05},
+    {"id": "s21_fc", "metric": "S21_dB", "graph": "v2_rc_lpf_fault_s", "measurement": "S(2,1)", "at": {"f": 1e7}, "op": "within", "value": -6.53, "tol": 0.25},
+    {"id": "s21_stop", "metric": "S21_dB", "graph": "v2_rc_lpf_fault_s", "measurement": "S(2,1)", "at": {"f": 1e8}, "op": "<=", "value": -22}
+  ]
+}

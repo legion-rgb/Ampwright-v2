@@ -1,0 +1,570 @@
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+--- create_em_structure
+{
+  "em": "QWT3",
+  "simulator": "AXIEM",
+  "process_definition": "+QWT3",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them"
+}
+--- set_em_stackup
+{
+  "em": "QWT3",
+  "solver_stackup": [
+    {
+      "thickness_mm": 30.0,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "thickness_mm": 1.6,
+      "er_xyz": [
+        4.4,
+        4.4,
+        4.4
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "conductors": [
+    {
+      "drawing_layer": "MS_PEC",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "QWT3",
+    "simulator": "AXIEM",
+    "process_definition": "+QWT3",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 30.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 4.4,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 60.0,
+      "y_mm": 40.0,
+      "height_mm": 31.6,
+      "x_div": 240,
+      "y_div": 160,
+      "cell_mm": 0.25
+    },
+    "z_top_mm": 31.6,
+    "boundaries": {
+      "top": "approx_open",
+      "bottom": "perfect_conductor",
+      "sides": "perfect_conductor (box walls)"
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "MS_PEC",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "boundary_polygons": [],
+    "ports": []
+  }
+}
+--- add_em_shape
+{
+  "id": 1,
+  "kind": "polygon",
+  "layer": "MS_PEC",
+  "bbox_mm": [
+    14.521500000000001,
+    18.469,
+    45.478500000000004,
+    21.531000000000002
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port
+{
+  "number": 1,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "left",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      14.521500000000001,
+      18.469
+    ],
+    [
+      14.521500000000001,
+      21.531000000000002
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": true,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- add_em_port
+{
+  "number": 2,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "right",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      45.478500000000004,
+      20.80753
+    ],
+    [
+      45.478500000000004,
+      19.19246
+    ]
+  ],
+  "impedance_ohm": [
+    100.0,
+    0.0
+  ],
+  "excited": false,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(100,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- set_frequencies
+{
+  "document": "QWT3",
+  "count": 17,
+  "first_hz": 1600000000.0,
+  "last_hz": 2400000000.0
+}
+--- check_em_setup
+{
+  "severity": "warning",
+  "rule": "air_margin",
+  "message": "Air margin below lambda/4 = 46.8 mm at 1.6 GHz: {'above': 30.0}"
+}
+--- create_graph
+{
+  "graph": "QWT3_G"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Re(Z(1,1))"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Re(Z(1,2))"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Re(Z(2,2))"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Im(Z(1,1))"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Im(Z(1,2))"
+}
+--- add_measurement
+{
+  "graph": "QWT3_G",
+  "measurement": "QWT3:Im(Z(2,2))"
+}
+--- clear_status_messages
+{
+  "cleared": true
+}
+--- simulate
+{
+  "state": "ended",
+  "error_count": 2,
+  "errors": [
+    {
+      "group": "QWT3",
+      "level": "error",
+      "time": "7:18:16 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    },
+    {
+      "group": "QWT3",
+      "level": "error",
+      "time": "7:18:16 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    }
+  ],
+  "graph": "QWT3_G"
+}
+--- graph_data
+{
+  "measurement": "QWT3:Re(Z(1,1))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    0.06549786754817867,
+    0.07157682048285804,
+    0.07934047960734486,
+    0.08859512344915,
+    0.09883175254557969,
+    0.10950691234500619,
+    0.12035393222846592,
+    0.13163620113389124,
+    0.1441025108401651,
+    0.1572172990330757,
+    0.16926493696461023,
+    0.17855779478366887,
+    0.18133834500554458,
+    0.17132946431179816,
+    0.13410580064641497,
+    0.027676241375622034,
+    -0.2788580141947364
+  ],
+  "truncated": false
+}
+{
+  "measurement": "QWT3:Re(Z(1,2))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    -0.08777489999849539,
+    -0.09410131459149182,
+    -0.10317055737842923,
+    -0.11378850276058196,
+    -0.12441282537994651,
+    -0.13408562983414574,
+    -0.14259958043824564,
+    -0.15041020940596195,
+    -0.15856623487262758,
+    -0.1655139095501763,
+    -0.16785906794819908,
+    -0.16270040993426477,
+    -0.14400534865051123,
+    -0.1017406290230442,
+    -0.01368308322503611,
+    0.18195332518574783,
+    0.6719363900457151
+  ],
+  "truncated": false
+}
+{
+  "measurement": "QWT3:Re(Z(2,2))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    0.04024040537751854,
+    0.038535613642722746,
+    0.03880460765918948,
+    0.04074480339521603,
+    0.04297128704118524,
+    0.043409847702168707,
+    0.04069572238850464,
+    0.03513388056221958,
+    0.02818690576221073,
+    0.018732483727837507,
+    0.001840042573699014,
+    -0.02882733877894442,
+    -0.08392167924782874,
+    -0.1790204921833221,
+    -0.3460897654510727,
+    -0.6725290780948614,
+    -1.42100716617883
+  ],
+  "truncated": false
+}
+{
+  "measurement": "QWT3:Im(Z(1,1))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    9.247244384784198,
+    12.997872306761444,
+    16.9468491696143,
+    21.14747620001638,
+    25.665139751007633,
+    30.582866306607507,
+    36.00771798451721,
+    42.08012194073451,
+    48.99008971805043,
+    57.00055786248419,
+    66.49032672646568,
+    78.02942279387103,
+    92.51214214369843,
+    111.4248751899811,
+    137.43642324277113,
+    175.87376770702994,
+    239.14347039392794
+  ],
+  "truncated": false
+}Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+
+{
+  "measurement": "QWT3:Im(Z(1,2))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    -69.76796503651454,
+    -71.60332687095232,
+    -73.82989188385739,
+    -76.50546730416059,
+    -79.70511127014512,
+    -83.5277446799422,
+    -88.10471171864735,
+    -93.61232269600349,
+    -100.29271987860314,
+    -108.48557342487635,
+    -118.68320845181928,
+    -131.62798003712075,
+    -148.488469158875,
+    -171.2120514579919,
+    -203.3016740825482,
+    -251.75637232562732,
+    -332.8828971736883
+  ],
+  "truncated": false
+}
+{
+  "measurement": "QWT3:Im(Z(2,2))",
+  "x": [
+    1600000000.0,
+    1650000000.0,
+    1700000000.0,
+    1750000000.0,
+    1800000000.0,
+    1850000000.0,
+    1900000000.0,
+    1950000000.0,
+    2000000000.0,
+    2050000000.0,
+    2100000000.0,
+    2150000000.0,
+    2200000000.0,
+    2250000000.0,
+    2300000000.0,
+    2350000000.0,
+    2400000000.0
+  ],
+  "y": [
+    37.00717283629095,
+    42.625114362941616,
+    48.62603838291019,
+    55.100149075594025,
+    62.15933437015466,
+    69.94418030456899,
+    78.63542174537422,
+    88.4718112721511,
+    99.77783061503344,
+    113.00846477057392,
+    128.81922337299363,
+    148.19020760216486,
+    172.6602458444643,
+    204.7914192306892,
+    249.19198504528387,
+    315.0684871579129,
+    423.8643651712714
+  ],
+  "truncated": false
+}
+--- em_ports
+{
+  "Number": 1,
+  "Type": 2,
+  "Excitation": "1.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+{
+  "Number": 2,
+  "Type": 4,
+  "Excitation": "0.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "100.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(100,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- em_simulation_log
+ds -----
+		           Port 2: Single line de-embedding
+		           Port 1: Single line de-embedding
+			 - Elapsed time ( 00:00:0.52 )
+     --- Solution @ 2.2 GHz - Elapsed time ( 00:00:0.65 )
+     --- AFS: 5 points simulated (5 of 17 grid points).  Convergence error = -56.0643 dB  [D  R  H  P ]
+     --- AFS: Converged.
+
+------ Total Simulation Time - 00:00:4.60
+
+End simulate (4.74s)  
+

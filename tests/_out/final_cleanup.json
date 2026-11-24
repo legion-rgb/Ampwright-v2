@@ -1,0 +1,8 @@
+[{"tool":"project_info"},
+ {"tool":"create_em_structure","args":{"name":"X","simulator":"Analyst"}},
+ {"tool":"set_em_stackup","args":{"em":"X","boundaries":{"top":"pml"}}},
+ {"tool":"set_em_stackup","args":{"em":"X","dielectrics":[{"thickness_mm":1,"er":1},{"thickness_mm":1,"er":1},{"thickness_mm":1,"er":1},{"thickness_mm":1,"er":1}]}},
+ {"tool":"delete_em_structure","args":{"name":"X"}},
+ {"tool":"new_project","args":{"user_confirmed":true}},
+ {"tool":"project_info"},
+ {"tool":"status_messages"}]

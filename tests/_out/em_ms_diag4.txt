@@ -1,0 +1,779 @@
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+--- create_em_structure
+{
+  "em": "W1",
+  "simulator": "AXIEM",
+  "process_definition": "+W1",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them"
+}
+--- set_em_stackup
+{
+  "em": "W1",
+  "solver_stackup": [
+    {
+      "thickness_mm": 30.0,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "thickness_mm": 1.6,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "conductors": [
+    {
+      "drawing_layer": "MS_PEC",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "W1",
+    "simulator": "AXIEM",
+    "process_definition": "+W1",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 30.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 1.0,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 60.0,
+      "y_mm": 40.0,
+      "height_mm": 31.6,
+      "x_div": 240,
+      "y_div": 160,
+      "cell_mm": 0.25
+    },
+    "z_top_mm": 31.6,
+    "boundaries": {
+      "top": "approx_open",
+      "bottom": "perfect_conductor",
+      "sides": "perfect_conductor (box walls)"
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "MS_PEC",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "boundary_polygons": [],
+    "ports": []
+  }
+}
+--- add_em_shape
+{
+  "id": 1,
+  "kind": "rect",
+  "layer": "MS_PEC",
+  "bbox_mm": [
+    19.735000000000003,
+    16.070500000000003,
+    40.265,
+    23.9295
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port
+{
+  "number": 1,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "left",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      19.735000000000003,
+      16.070500000000003
+    ],
+    [
+      19.735000000000003,
+      23.9295
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": true,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- add_em_port
+{
+  "number": 2,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "right",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      40.265,
+      23.9295
+    ],
+    [
+      40.265,
+      16.070500000000003
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": false,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- set_frequencies
+{
+  "document": "W1",
+  "count": 11,
+  "first_hz": 1000000000.0,
+  "last_hz": 3000000000.0
+}
+--- check_em_setup
+{
+  "severity": "warning",
+  "rule": "air_margin",
+  "message": "Air margin below lambda/4 = 74.9 mm at 1 GHz: {'above': 30.0}"
+}
+--- create_graph
+{
+  "graph": "W1_G"
+}
+--- add_measurement
+{
+  "graph": "W1_G",
+  "measurement": "W1:DB(|S(1,1)|)"
+}
+--- add_measurement
+{
+  "graph": "W1_G",
+  "measurement": "W1:DB(|S(2,1)|)"
+}
+--- add_measurement
+{
+  "graph": "W1_G",
+  "measurement": "W1:Ang(S(2,1))"
+}
+--- clear_status_messages
+{
+  "cleared": true
+}
+--- simulate
+{
+  "state": "ended",
+  "error_count": 2,
+  "errors": [
+    {
+      "group": "W1",
+      "level": "error",
+      "time": "7:14:50 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    },
+    {
+      "group": "W1",
+      "level": "error",
+      "time": "7:14:50 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    }
+  ],
+  "graph": "W1_G"
+}
+--- graph_data
+{
+  "measurement": "W1:DB(|S(1,1)|)",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -57.057963758368835,
+    -55.31199571194666,
+    -53.81454587485109,
+    -53.722221320104225,
+    -52.94028503575174,
+    -51.78049106809118,
+    -50.3163717326434,
+    -49.01816642031878,
+    -47.77221349714005,
+    -46.52287445948015,
+    -45.56615290405789
+  ],
+  "truncated": false
+}
+{
+  "measurement": "W1:DB(|S(2,1)|)",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    0.0005680602105221858,
+    0.008280657683016234,
+    0.01895261648318367,
+    0.021687816010350074,
+    0.018375395646186177,
+    0.013685801349339232,
+    0.014224532637645546,
+    0.013554468103617136,
+    0.008115445070432267,
+    0.0064138984447357095,
+    0.013176327941229377
+  ],
+  "truncated": false
+}
+{
+  "measurement": "W1:Ang(S(2,1))",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -0.42920319252517847,
+    -0.5152239810979903,
+    -0.6021470566851382,
+    -0.6899708794528128,
+    -0.7759354163257212,
+    -0.8632635444266066,
+    -0.9496016799496495,
+    -1.0353908950051838,
+    -1.1223937886973747,
+    -1.2095276921349651,
+    -1.2949293051793265
+  ],
+  "truncated": false
+}
+--- em_ports
+{
+  "Number": 1,
+  "Type": 2,
+  "Excitation": "1.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+{
+  "Number": 2,
+  "Type": 4,
+  "Excitation": "0.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- em_simulation_log
+0 )
+		----- Simulating DeEmbedding Standards -----
+		           Port 1-2: Single line de-embedding
+			 - Elapsed time ( 00:00:0.31 )
+     --- Solution @ 1.6 GHz - Elapsed time ( 00:00:0.43 )
+     --- AFS: 6 points simulated (6 of 11 grid points).  Convergence error = -52.8316 dB  [D  R  H  P ]
+     --- AFS: Converged.
+
+------ Total Simulation Time - 00:00:36.41
+
+End simulate (36.54s)  
+
+--- create_em_structure
+{
+  "em": "W2",
+  "simulator": "AXIEM",
+  "process_definition": "+W2",
+  "note": "AWR starts with 3 dielectric layers (Air 0.5 mm, Diel_1, Diel_2) in a 0.8 x 0.8 mm box; set_em_stackup changes them"
+}
+--- set_em_stackup
+{
+  "em": "W2",
+  "solver_stackup": [
+    {
+      "thickness_mm": 30.0,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "thickness_mm": 1.6,
+      "er_xyz": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tand_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "conductors": [
+    {
+      "drawing_layer": "MS_PEC",
+      "em_layer": 2,
+      "material": "Perfect Conductor"
+    }
+  ],
+  "info": {
+    "em": "W2",
+    "simulator": "AXIEM",
+    "process_definition": "+W2",
+    "dielectrics": [
+      {
+        "layer": 1,
+        "name": "Air",
+        "thickness_mm": 30.0,
+        "er": 1.0,
+        "tand": 0.0
+      },
+      {
+        "layer": 2,
+        "name": "Diel_1",
+        "thickness_mm": 1.6,
+        "er": 1.0,
+        "tand": 0.0
+      }
+    ],
+    "enclosure": {
+      "x_mm": 60.0,
+      "y_mm": 40.0,
+      "height_mm": 31.6,
+      "x_div": 240,
+      "y_div": 160,
+      "cell_mm": 0.25
+    },
+    "z_top_mm": 31.6,
+    "boundaries": {
+      "top": "approx_open",
+      "bottom": "perfect_conductor",
+      "sides": "perfect_conductor (box walls)"
+    },
+    "layers": [
+      {
+        "drawing_layer": "Cap Bottom",
+        "em_layer": 3,
+        "material": "Cap Bottom",
+        "via": false
+      },
+      {
+        "drawing_layer": "Tantalum",
+        "em_layer": 2,
+        "material": "Tantalum",
+        "via": false
+      },
+      {
+        "drawing_layer": "Nitride Etch",
+        "em_layer": 2,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "Thick Metal",
+        "em_layer": 2,
+        "material": "Thick Metal",
+        "via": false
+      },
+      {
+        "drawing_layer": "Via",
+        "em_layer": 3,
+        "material": "",
+        "via": true
+      },
+      {
+        "drawing_layer": "MS_PEC",
+        "em_layer": 2,
+        "material": "Perfect Conductor",
+        "via": false
+      }
+    ],
+    "frequencies_hz": [
+      1000000000.0,
+      2000000000.0
+    ],
+    "uses_project_frequencies": false,
+    "shapes": [],
+    "boundary_polygons": [],
+    "ports": []
+  }
+}Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+
+--- add_em_shape
+{
+  "id": 1,
+  "kind": "rect",
+  "layer": "MS_PEC",
+  "bbox_mm": [
+    9.47,
+    16.070500000000003,
+    50.53,
+    23.9295
+  ],
+  "n_on_layer": 1
+}
+--- add_em_port
+{
+  "number": 1,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "left",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      9.47,
+      16.070500000000003
+    ],
+    [
+      9.47,
+      23.9295
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": true,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- add_em_port
+{
+  "number": 2,
+  "kind": "edge",
+  "flags": 32,
+  "edge": "right",
+  "em_layer": 2,
+  "segment_mm": [
+    [
+      50.53,
+      23.9295
+    ],
+    [
+      50.53,
+      16.070500000000003
+    ]
+  ],
+  "impedance_ohm": [
+    50.0,
+    0.0
+  ],
+  "excited": false,
+  "deembed": true,
+  "associated": true,
+  "info": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- set_frequencies
+{
+  "document": "W2",
+  "count": 11,
+  "first_hz": 1000000000.0,
+  "last_hz": 3000000000.0
+}
+--- check_em_setup
+{
+  "severity": "warning",
+  "rule": "air_margin",
+  "message": "Air margin below lambda/4 = 74.9 mm at 1 GHz: {'above': 30.0}"
+}
+--- create_graph
+{
+  "graph": "W2_G"
+}
+--- add_measurement
+{
+  "graph": "W2_G",
+  "measurement": "W2:DB(|S(1,1)|)"
+}
+--- add_measurement
+{
+  "graph": "W2_G",
+  "measurement": "W2:DB(|S(2,1)|)"
+}
+--- add_measurement
+{
+  "graph": "W2_G",
+  "measurement": "W2:Ang(S(2,1))"
+}
+--- clear_status_messages
+{
+  "cleared": true
+}
+--- simulate
+{
+  "state": "ended",
+  "error_count": 2,
+  "errors": [
+    {
+      "group": "W2",
+      "level": "error",
+      "time": "7:15:34 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    },
+    {
+      "group": "W2",
+      "level": "error",
+      "time": "7:15:34 PM",
+      "text": "The meshing frequency must be greater than or equal to the maximum simulation frequency"
+    }
+  ],
+  "graph": "W2_G"
+}
+--- graph_data
+{
+  "measurement": "W2:DB(|S(1,1)|)",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -51.01974049117385,
+    -49.69848622968641,
+    -48.64388621466048,
+    -48.96219949254369,
+    -49.02271969449049,
+    -48.83895550380533,
+    -48.57816713653358,
+    -48.471672947964215,
+    -48.44174765582394,
+    -48.48108815187767,
+    -48.7397766026137
+  ],
+  "truncated": false
+}
+{
+  "measurement": "W2:DB(|S(2,1)|)",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -0.007745425237405921,
+    0.001589011942193998,
+    0.016383511105445028,
+    0.026810764915807285,
+    0.03282206610604423,
+    0.03333720799584209,
+    0.032806484692602444,
+    0.027483840780224058,
+    0.01411374770605786,
+    -0.0017367448784674643,
+    -0.014947056091666232
+  ],
+  "truncated": false
+}
+{
+  "measurement": "W2:Ang(S(2,1))",
+  "x": [
+    1000000000.0,
+    1200000000.0,
+    1400000000.0,
+    1600000000.0,
+    1800000000.0,
+    2000000000.0,
+    2200000000.0,
+    2400000000.0,
+    2600000000.0,
+    2800000000.0,
+    3000000000.0
+  ],
+  "y": [
+    -0.8592480499273272,
+    -1.031215195165317,
+    -1.2031749212715388,
+    -1.3768810473734028,
+    -1.5499220496989476,
+    -1.7236391762069845,
+    -1.8972024668170013,
+    -2.070496967073506,
+    -2.2435485331708755,
+    -2.41608463785825,
+    -2.5876900548330193
+  ],
+  "truncated": false
+}
+--- em_ports
+{
+  "Number": 1,
+  "Type": 2,
+  "Excitation": "1.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=1, Left, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Excited Power=(0,0), Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+{
+  "Number": 2,
+  "Type": 4,
+  "Excitation": "0.0+0.0j",
+  "GroupNumber": 0,
+  "GroupType": 0,
+  "Impedance": "50.0+0.0j",
+  "ReferencePlaneDist": 0.0,
+  "InfoText": "Port=2, Right, Auto, Deembed=Yes, RefPlane=0 um, [MS_PEC], Z=(50,0), Conductor, EM Layer=2, Material=Perfect Conductor"
+}
+--- em_simulation_log
+.00 )
+		----- Simulating DeEmbedding Standards -----
+		           Port 1-2: Single line de-embedding
+			 - Elapsed time ( 00:00:0.32 )
+     --- Solution @ 1.6 GHz - Elapsed time ( 00:00:0.43 )
+     --- AFS: 6 points simulated (6 of 11 grid points).  Convergence error = -53.4869 dB  [D  R  H  P ]
+     --- AFS: Converged.
+
+------ Total Simulation Time - 00:00:3.70
+
+End simulate (3.83s)  
+

@@ -1,0 +1,314 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "L1n",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "L1n",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "L1n",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 19.735,
+   "y": 18.469,
+   "w": 20.53,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "L1n",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "L1n",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "L1n"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "L1n"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "L1n_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L1n_G",
+   "source_doc": "L1n",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L1n_G",
+   "source_doc": "L1n",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L1n_G",
+   "source_doc": "L1n",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "L1n_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "L1n_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "L1n"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "L1n",
+   "tail_chars": 400
+  }
+ },
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "L2n",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "L2n",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 40,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "L2n",
+   "kind": "rect",
+   "layer": "2:Perfect Conductor",
+   "x": 9.469999999999999,
+   "y": 18.469,
+   "w": 41.06,
+   "h": 3.062
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "L2n",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "L2n",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2,
+   "deembed": false
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 3000000000.0,
+   "points": 11,
+   "document": "L2n"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "L2n"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "L2n_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L2n_G",
+   "source_doc": "L2n",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L2n_G",
+   "source_doc": "L2n",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "L2n_G",
+   "source_doc": "L2n",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "L2n_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "L2n_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "L2n"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "L2n",
+   "tail_chars": 400
+  }
+ }
+]

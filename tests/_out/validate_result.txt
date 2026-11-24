@@ -1,0 +1,57 @@
+PASS  RC             S21 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 4.467e-05 GHz
+PASS  RC             S11 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 3.162e-05 GHz
+PASS  RC             -3.0103 dB corner vs DC                  exp 3.335 MHz +/-1.0%      got 3.3292 MHz (0.173%)
+PASS  RL_LPF         S21 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 0.2661 GHz
+PASS  RL_LPF         S11 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 0.002371 GHz
+PASS  RL_LPF         -3.0103 dB corner vs DC                  exp 119.37 MHz +/-1.0%     got 119.36 MHz (0.008%)
+PASS  RL_LPF         DC S21 (1 MHz)                           exp -3.52 dB +/-0.02       got -3.5221 dB
+PASS  RL_LPF         ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  RL_HPF         S21 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 0.001 GHz
+PASS  RL_HPF         S11 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 0.001259 GHz
+PASS  RL_HPF         -3.0103 dB corner vs HF                  exp 53.05 MHz +/-1.0%      got 52.908 MHz (0.268%)
+PASS  RL_HPF         ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  RLC_SER        S21 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 1.026 GHz
+PASS  RLC_SER        S11 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 1.593 GHz
+PASS  RLC_SER        peak f0                                  exp 1591.5 MHz +/-0.5%     got 1591.5 MHz (0.000%)
+PASS  RLC_SER        -3 dB BW (as 'MHz')                      exp 160.75 MHz +/-2.0%     got 160.75 MHz (0.003%)
+PASS  RLC_SER        ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  RLC_SHUNT      S21 whole curve                          exp max err <= 0.05 dB     got max 0.0000 dB @ 1.591 GHz
+PASS  RLC_SHUNT      notch f0                                 exp 1591.5 MHz +/-0.5%     got 1591.5 MHz (0.000%)
+PASS  RLC_SHUNT      notch depth                              exp -28.30 dB +/-0.3       got -28.290 dB
+PASS  RLC_SHUNT      ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  TL_QWT         S11 vs qwt(z_port2=100), ref>-40         exp max err <= 0.1 dB      got max 0.0000 dB @ 6.05 GHz
+PASS  TL_QWT         S21 vs qwt(z_port2=100), ref>-40         exp max err <= 0.1 dB      got max 0.0000 dB @ 3.58 GHz
+PASS  TL_QWT         S11 null near 2 GHz                      exp 2 GHz +/-0.5%, < -40 dB got 2 GHz, -249.0 dB
+PASS  TL_QWT         S11 null near 6 GHz                      exp 6 GHz +/-0.5%, < -40 dB got 6 GHz, -249.0 dB
+PASS  TL_QWT         |S11| at 4 GHz                           exp -9.54 dB +/-0.1        got -9.542 dB
+PASS  TL_QWT         -20 dB fractional BW                     exp 36.70 % +/-1% rel      got 36.701 %
+PASS  TL_QWT         ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  TL_OPEN        S21 vs stub_lambda4(open), ref>-40       exp max err <= 0.1 dB      got max 0.0000 dB @ 1.99 GHz
+PASS  TL_OPEN        S11 vs stub_lambda4(open), ref>-40       exp max err <= 0.1 dB      got max 0.0000 dB @ 2 GHz
+PASS  TL_OPEN        S21 notch near 2 GHz                     exp 2 GHz +/-0.5%, < -40 dB got 2 GHz, -318.2 dB
+PASS  TL_OPEN        S21 notch near 6 GHz                     exp 6 GHz +/-0.5%, < -40 dB got 6 GHz, -308.7 dB
+PASS  TL_OPEN        ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  TL_SHORT       S21 vs stub_lambda4(short), ref>-40      exp max err <= 0.1 dB      got max 0.0000 dB @ 3.99 GHz
+PASS  TL_SHORT       |S21| at 2 GHz                           exp 0 dB +/-0.05           got -0.0000 dB
+PASS  TL_SHORT       ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  TL_HALF        S11 vs tline, ref>-40                    exp max err <= 0.1 dB      got max 0.0000 dB @ 3.99 GHz
+PASS  TL_HALF        S21 vs tline                             exp max err <= 0.1 dB      got max 0.0000 dB @ 5.52 GHz
+PASS  TL_HALF        S11 null at 2 GHz                        exp < -40 dB               got -161.1 dB
+PASS  TL_HALF        |S11| max near 1 GHz                     exp 1 GHz, -4.44 dB        got 1 GHz, -4.437 dB
+PASS  TL_HALF        ANG(S21) at 2 GHz                        exp +/-180 deg             got -180.000 deg
+PASS  TL_HALF        ANG(S21) vs ref (rad->deg)               exp max err <= 0.5 deg     got max 0.0000 deg
+PASS  MS_50          S11 < -30 dB, 0.5-4 GHz                  exp < -30 dB               got max -58.4 dB @ 3.23 GHz
+PASS  MS_50          ANG(S21) at 2 GHz                        exp -90 deg +/-3           got -90.523 deg
+INFO  MS_50  eps_eff from phase 3.3707  (static HJ 3.3313, KJ@2GHz 3.3707)
+PASS  MS_QWT         S11 null vs 2 GHz                        exp 2 GHz +/-3%            got 1.9914 GHz (-0.43%), -77.0 dB
+PASS  FET_IV         traces x points                          exp 7 x 61                 got 7 x 61
+PASS  FET_IV         Ids ~ 0 for Vgs <= VTO                   exp <= 1% of max           got max 5.36e-07 % of 44.80 mA
+PASS  FET_IV         Ids rises with Vgs (Vds>0)               exp non-decreasing         got ok
+PASS  FET_IV         linear region then saturation (Vgs max)  exp slope(0-0.2V) > 10 x slope(last 2V) got 7.628e-02 vs 7.999e-04 A/V
+PASS  FET_IV         Ids(Vgs=0,Vds=3) vs curtice_quadratic    exp 42.3995 mA +/-2%       got 42.3977 mA (0.004%)
+PASS  FET_IV         Ids(Vgs=-1,Vds=1) vs curtice_quadratic   exp 9.8331 mA +/-2%        got 9.8329 mA (0.002%)
+PASS  FET_IV         Ids(Vgs=-0.5,Vds=0.5) vs curtice_quadratic exp 17.3072 mA +/-2%       got 17.3062 mA (0.006%)
+PASS  FET_IV         Ids(Vgs=-1.5,Vds=4) vs curtice_quadratic exp 2.7000 mA +/-2%        got 2.7000 mA (0.001%)
+PASS  FET_IV         whole family vs formula (Ids>1% max)     exp <= 2 %                 got max 0.016 %
+
+54/54 checks passed

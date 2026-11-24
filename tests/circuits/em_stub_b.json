@@ -1,0 +1,178 @@
+[
+ {
+  "tool": "create_em_structure",
+  "args": {
+   "name": "STB",
+   "simulator": "AXIEM"
+  }
+ },
+ {
+  "tool": "set_em_stackup",
+  "args": {
+   "em": "STB",
+   "dielectrics": [
+    {
+     "thickness_mm": 30,
+     "er": 1.0,
+     "tand": 0
+    },
+    {
+     "thickness_mm": 1.6,
+     "er": 4.4,
+     "tand": 0
+    }
+   ],
+   "conductors": [
+    {
+     "name": "MS_PEC",
+     "sigma": "perfect",
+     "thickness_mm": 0
+    }
+   ],
+   "enclosure": {
+    "x_mm": 60,
+    "y_mm": 56,
+    "grid_mm": 0.5
+   },
+   "boundaries": {
+    "top": "approx_open",
+    "bottom": "perfect_conductor",
+    "sides": "perfect_conductor"
+   }
+  }
+ },
+ {
+  "tool": "add_em_shape",
+  "args": {
+   "em": "STB",
+   "kind": "polygon",
+   "layer": "2:Perfect Conductor",
+   "points": [
+    [
+     15.0,
+     16
+    ],
+    [
+     45.0,
+     16
+    ],
+    [
+     45.0,
+     19.062
+    ],
+    [
+     31.531,
+     19.062
+    ],
+    [
+     31.531,
+     39.592
+    ],
+    [
+     28.469,
+     39.592
+    ],
+    [
+     28.469,
+     19.062
+    ],
+    [
+     15.0,
+     19.062
+    ]
+   ]
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "STB",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "left"
+   },
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_em_port",
+  "args": {
+   "em": "STB",
+   "type": "edge",
+   "at": {
+    "layer": "2:Perfect Conductor",
+    "n": 1,
+    "edge": "right"
+   },
+   "number": 2
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1600000000.0,
+   "stop_hz": 2400000000.0,
+   "points": 17,
+   "document": "STB"
+  }
+ },
+ {
+  "tool": "check_em_setup",
+  "args": {
+   "em": "STB"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "STB_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "STB_G",
+   "source_doc": "STB",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "STB_G",
+   "source_doc": "STB",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate",
+  "args": {
+   "graph": "STB_G"
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "STB_G",
+   "max_points": 60
+  }
+ },
+ {
+  "tool": "em_ports",
+  "args": {
+   "em_structure": "STB"
+  }
+ },
+ {
+  "tool": "em_simulation_log",
+  "args": {
+   "em_structure": "STB",
+   "tail_chars": 400
+  }
+ }
+]

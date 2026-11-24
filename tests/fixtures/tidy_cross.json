@@ -1,0 +1,100 @@
+{
+ "elements": [
+  {
+   "name": "R1",
+   "id": "R1",
+   "model": "R",
+   "parameters": [],
+   "pins": [
+    {
+     "pin": 1,
+     "net": 1,
+     "connected": true,
+     "x": 0,
+     "y": 0
+    },
+    {
+     "pin": 2,
+     "net": 2,
+     "connected": true,
+     "x": 1000,
+     "y": 0
+    }
+   ]
+  },
+  {
+   "name": "R2",
+   "id": "R2",
+   "model": "R",
+   "parameters": [],
+   "pins": [
+    {
+     "pin": 1,
+     "net": 1,
+     "connected": true,
+     "x": 3000,
+     "y": 0
+    },
+    {
+     "pin": 2,
+     "net": 2,
+     "connected": true,
+     "x": 4000,
+     "y": 0
+    }
+   ]
+  },
+  {
+   "name": "GND1",
+   "id": "GND1",
+   "model": "G",
+   "parameters": [],
+   "pins": [
+    {
+     "pin": 1,
+     "net": 1,
+     "connected": true,
+     "x": 0,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "x1": 1000,
+   "y1": 0,
+   "x2": 3000,
+   "y2": 0,
+   "net": "N1"
+  },
+  {
+   "x1": 2000,
+   "y1": 0,
+   "x2": 2000,
+   "y2": 1000,
+   "net": "N1"
+  },
+  {
+   "x1": 0,
+   "y1": 0,
+   "x2": 0,
+   "y2": 1000,
+   "net": "N2"
+  },
+  {
+   "x1": 4000,
+   "y1": 0,
+   "x2": 5000,
+   "y2": 0,
+   "net": "N3"
+  },
+  {
+   "x1": 2500,
+   "y1": -500,
+   "x2": 2500,
+   "y2": 500,
+   "net": "N9"
+  }
+ ]
+}

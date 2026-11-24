@@ -1,0 +1,9 @@
+{
+  "name": "rlc_notch",
+  "class": "filter",
+  "schematic": "v2_rlc_notch",
+  "goals": [
+    {"id": "s21_f0", "metric": "S21_dB", "graph": "v2_rlc_notch_s", "measurement": "S(2,1)", "at": {"f": 1.5915494e9}, "op": "within", "value": -28.30, "tol": 0.3},
+    {"id": "s21_pass", "metric": "S21_dB", "graph": "v2_rlc_notch_s", "measurement": "S(2,1)", "at": {"f": 1e9}, "op": ">=", "value": -0.5}
+  ]
+}

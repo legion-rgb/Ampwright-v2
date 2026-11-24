@@ -1,0 +1,2 @@
+{"s21_f0":{"value":-28.30,"unit":"dB","basis":"20log(2R/(2R+50)) at f0=1591.55 MHz; sweep point within 0.05 MHz adds <0.01 dB"},
+ "s21_pass":{"value":-0.0031,"unit":"dB","basis":"|2Z/(2Z+50)| with Z=1-j963.2 Ohm at 1 GHz"}}

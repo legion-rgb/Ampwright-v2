@@ -1,0 +1,18 @@
+{
+ "_sim": "ok",
+ "s21_dc": {
+  "measured": -3.5222595178596827,
+  "meets": true,
+  "how": "linear interpolation of v2_rc_lpf_fault:DB(|S(2,1)|) at f=100000"
+ },
+ "s21_fc": {
+  "measured": -6.532445045117159,
+  "meets": true,
+  "how": "linear interpolation of v2_rc_lpf_fault:DB(|S(2,1)|) at f=1e+07"
+ },
+ "s21_stop": {
+  "measured": -23.56567237600038,
+  "meets": true,
+  "how": "linear interpolation of v2_rc_lpf_fault:DB(|S(2,1)|) at f=1e+08"
+ }
+}

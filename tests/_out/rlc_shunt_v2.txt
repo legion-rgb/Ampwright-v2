@@ -1,0 +1,370 @@
+Processing request of type CallToolRequest
+Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+--- create_schematic
+{
+  "schematic": "V_RLC_SHN2"
+}
+--- add_element
+{
+  "name": "TLIN.T1",
+  "id": "T1",
+  "model": "TLIN",
+  "parameters": [
+    {
+      "name": "ID",
+      "value": "T1",
+      "unit": ""
+    },
+    {
+      "name": "Z0",
+      "value": "50",
+      "unit": "Ohm"
+    },
+    {
+      "name": "EL",
+      "value": "0",
+      "unit": "Deg"
+    },
+    {
+      "name": "F0",
+      "value": "1",
+      "unit": "GHz"
+    }
+  ],
+  "pins": [
+    {
+      "pin": 1,
+      "net": 1,
+      "connected": false,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "pin": 2,
+      "net": 2,
+      "connected": false,
+      "x": 1000,
+      "y": 0
+    }
+  ]
+}
+--- add_port
+{
+  "name": "PORT.P1",
+  "id": "P1",
+  "model": "PORT",
+  "parameters": [
+    {
+      "name": "P",
+      "value": "1",
+      "unit": ""
+    },
+    {
+      "name": "Z",
+      "value": "50",
+      "unit": "Ohm"
+    },
+    {
+      "name": "PIN_ID",
+      "value": "",
+      "unit": ""
+    }
+  ],
+  "pins": [
+    {
+      "pin": 1,
+      "net": 1,
+      "connected": true,
+      "x": -1000,
+      "y": 0
+    }
+  ],
+  "attached_to": "T1:1",
+  "connected": true
+}
+--- add_port
+{
+  "name": "PORT.P2",
+  "id": "P2",
+  "model": "PORT",
+  "parameters": [
+    {
+      "name": "P",
+      "value": "2",
+      "unit": ""
+    },
+    {
+      "name": "Z",
+      "value": "50",
+      "unit": "Ohm"
+    },
+    {
+      "name": "PIN_ID",
+      "value": "",
+      "unit": ""
+    }
+  ],
+  "pins": [
+    {
+      "pin": 1,
+      "net": 2,
+      "connected": true,
+      "x": 2000,
+      "y": 0
+    }
+  ],
+  "attached_to": "T1:2",
+  "connected": true
+}
+--- add_shunt
+{
+  "part": {
+    "name": "IND.L1",
+    "id": "L1",
+    "model": "IND",
+    "parameters": [
+      {
+        "name": "ID",
+        "value": "L1",
+        "unit": ""
+      },
+      {
+        "name": "L",
+        "value": "100",
+        "unit": "nH"
+      }
+    ],
+    "pins": [
+      {
+        "pin": 1,
+        "net": 2,
+        "connected": true,
+        "x": 1000,
+        "y": 1000
+      },
+      {
+        "pin": 2,
+        "net": 3,
+        "connected": true,
+        "x": 1000,
+        "y": 2000
+      }
+    ]
+  },
+  "ground": "GND",
+  "connected": true
+}
+--- delete_element
+{
+  "deleted": "GND",
+  "wires_removed": 1
+}
+--- add_shunt
+{
+  "part": {
+    "name": "CAP.C1",
+    "id": "C1",
+    "model": "CAP",
+    "parameters": [
+      {
+        "name": "ID",
+        "value": "C1",
+        "unit": ""
+      },
+      {
+        "name": "C",
+        "value": "0.1",
+        "unit": "pF"
+      }
+    ],
+    "pins": [
+      {
+        "pin": 1,
+        "net": 3,
+        "connected": true,
+        "x": 1000,
+        "y": 3000
+      },
+      {
+        "pin": 2,
+        "net": 4,
+        "connected": true,
+        "x": 1000,
+        "y": 4000
+      }
+    ]
+  },
+  "ground": "GND",
+  "connected": true
+}
+--- delete_element
+{
+  "deleted": "GND",
+  "wires_removed": 1
+}
+--- add_shunt
+{
+  "part": {
+    "name": "RES.R1",
+    "id": "R1",
+    "model": "RES",
+    "parameters": [
+      {
+        "name": "ID",
+        "value": "R1",
+        "unit": ""
+      },
+      {
+        "name": "R",
+        "value": "1",
+        "unit": "Ohm"
+      }
+    ],
+    "pins": [
+      {
+        "pin": 1,
+        "net": 4,
+        "connected": true,
+        "x": 1000,
+        "y": 5000
+      },
+      {
+        "pin": 2,
+        "net": 5,
+        "connected": true,
+        "x": 1000,
+        "y": 6000
+      }
+    ]
+  },
+  "ground": "GND",
+  "connected": true
+}
+--- set_frequencies
+{
+  "document": "V_RLC_SHN2",
+  "count": 12001,
+  "first_hz": 1000000000.0,
+  "last_hz": 2200000000.0
+}
+--- create_graph
+{
+  "graph": "V_RLC_SHN2_G"
+}
+--- add_measurement
+{
+  "graph": "V_RLC_SHN2_G",
+  "measurement": "V_RLC_SHN2:DB(|S(2,1)|)"
+}
+--- clear_status_messages
+{
+  "cleared": true
+}
+--- simulate
+{
+  "state": "simulating",
+  "error_count": 0,
+  "errors": [],
+  "timed_out": false
+}
+--- wait_for_simulation
+{
+  "state": "ended",
+  "error_count": 0,
+  "errors": [],
+  "timed_out": false
+}
+--- graph_data
+{
+  "measurement": "V_RLC_SHN2:DB(|S(2,1)|)",
+  "points": 12001,
+  "x_range": [
+    1000000000.0,
+    2200000000.0
+  ],
+  "min": -28.282766449367834,
+  "x_at_min": 1591500000.0,
+  "max": -0.003158521643964728,
+  "x_at_max": 1000000000.0,
+  "samples": [
+    [
+      1000000000.0,
+      -0.003158521643964728
+    ],
+    [
+      1300000000.0,
+      -0.01762171014113128
+    ],
+    [
+      1600000000.0,
+      -8.428732238848857
+    ],
+    [
+      1900000000.0,
+      -0.023050130702276343
+    ],
+    [
+      2200000000.0,
+      -0.006747739786730081
+    ]
+  ]
+}
+--- list_wires
+{
+  "x1": 0,
+  "y1": 0,
+  "x2": -1000,
+  "y2": 0,
+  "net": "ELENET2.P1"
+}
+{
+  "x1": 1000,
+  "y1": 0,
+  "x2": 2000,
+  "y2": 0,
+  "net": "ELENET2.P2"
+}
+{
+  "x1": 1000,
+  "y1": 0,
+  "x2": 1000,
+  "y2": 1000,
+  "net": "ELENET2.P2"
+}
+{
+  "x1": 1000,
+  "y1": 2000,
+  "x2": 1000,
+  "y2": 3000,
+  "net": "ELENET2.EN1"
+}
+{
+  "x1": 1000,
+  "y1": 4000,
+  "x2": 1000,
+  "y2": 5000,
+  "net": "ELENET2.EN2"
+}
+{
+  "x1": 1000,
+  "y1": 6000,
+  "x2": 1000,
+  "y2": 6500,
+  "net": "ELENET2.GND"
+}

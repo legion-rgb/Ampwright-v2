@@ -1,0 +1,8 @@
+{
+ "_sim": "ok",
+ "id": {
+  "measured": 0.019964236152719965,
+  "meets": true,
+  "how": "linear interpolation of v2_ne3508_bias.AP_DC:IDC(DCVSS.VD) at Vds=3"
+ }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "cheb5_lpf",
+  "class": "filter",
+  "schematic": "v2_cheb5_lpf",
+  "goals": [
+    {"id": "s21_pass", "metric": "S21_dB", "graph": "v2_cheb5_lpf_s", "measurement": "S(2,1)", "over_hz": [1e8, 1.8e9], "op": ">=", "value": -1.0},
+    {"id": "s11_pass", "metric": "S11_dB", "graph": "v2_cheb5_lpf_s", "measurement": "S(1,1)", "over_hz": [1e8, 1.8e9], "op": "<=", "value": -12},
+    {"id": "s21_stop", "metric": "S21_dB", "graph": "v2_cheb5_lpf_s", "measurement": "S(2,1)", "at": {"f": 4e9}, "op": "<=", "value": -25}
+  ]
+}

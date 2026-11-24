@@ -1,0 +1,5 @@
+{
+ "max_rounds": 2,
+ "fix_uses": "run_optimizer",
+ "seed": "After the round-0 PASS, the lead has awr-builder set both L and C to 1.3x their values (as SI numbers, then confirmed with get_parameters) in v2_lmatch_opt and re-simulate. Record this only in designs/_seeds/lmatch_opt.md. Set state round 1, then rerun the evaluator and judge, which must FAIL. Tell the fixer: two values are off, so retune with the optimizer (add_opt_goal per goal, set_opt_variable, run_optimizer) as its one change."
+}

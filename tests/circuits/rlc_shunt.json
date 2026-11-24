@@ -1,0 +1,167 @@
+[
+ {
+  "tool": "create_schematic",
+  "args": {
+   "name": "V_RLC_SHN"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "model": "TLIN",
+   "id": "T1",
+   "params": {
+    "Z0": 50,
+    "EL": 0,
+    "F0": 1000000000.0
+   },
+   "rotation": 90
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "model": "RES",
+   "id": "R1",
+   "params": {
+    "R": 1
+   },
+   "rotation": 270,
+   "near": "T1"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "model": "IND",
+   "id": "L1",
+   "params": {
+    "L": 1e-07
+   },
+   "rotation": 90,
+   "near": "R1"
+  }
+ },
+ {
+  "tool": "add_element",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "model": "CAP",
+   "id": "C1",
+   "params": {
+    "C": 1e-13
+   },
+   "rotation": 270,
+   "near": "L1"
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "pin": "T1:1",
+   "number": 1
+  }
+ },
+ {
+  "tool": "add_port",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "pin": "T1:2",
+   "number": 2
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "from_pin": "T1:2",
+   "to_pin": "R1:1"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "from_pin": "R1:2",
+   "to_pin": "L1:1"
+  }
+ },
+ {
+  "tool": "connect",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "from_pin": "L1:2",
+   "to_pin": "C1:1"
+  }
+ },
+ {
+  "tool": "add_ground",
+  "args": {
+   "schematic": "V_RLC_SHN",
+   "pin": "C1:2"
+  }
+ },
+ {
+  "tool": "set_frequencies",
+  "args": {
+   "start_hz": 1000000000.0,
+   "stop_hz": 2200000000.0,
+   "points": 1201,
+   "log": false,
+   "document": "V_RLC_SHN"
+  }
+ },
+ {
+  "tool": "create_graph",
+  "args": {
+   "name": "V_RLC_SHN_G"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SHN_G",
+   "source_doc": "V_RLC_SHN",
+   "measurement": "DB(|S(2,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SHN_G",
+   "source_doc": "V_RLC_SHN",
+   "measurement": "DB(|S(1,1)|)"
+  }
+ },
+ {
+  "tool": "add_measurement",
+  "args": {
+   "graph": "V_RLC_SHN_G",
+   "source_doc": "V_RLC_SHN",
+   "measurement": "Ang(S(2,1))"
+  }
+ },
+ {
+  "tool": "clear_status_messages"
+ },
+ {
+  "tool": "simulate"
+ },
+ {
+  "tool": "wait_for_simulation",
+  "args": {
+   "timeout_s": 300
+  }
+ },
+ {
+  "tool": "graph_data",
+  "args": {
+   "graph": "V_RLC_SHN_G",
+   "max_points": 5000
+  }
+ }
+]

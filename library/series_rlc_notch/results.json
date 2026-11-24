@@ -1,0 +1,13 @@
+{
+ "_sim": "ok",
+ "s21_f0": {
+  "measured": -28.282383467179752,
+  "meets": true,
+  "how": "linear interpolation of v2_rlc_notch:DB(|S(2,1)|) at f=1.59155e+09"
+ },
+ "s21_pass": {
+  "measured": -0.0031585214194420333,
+  "meets": true,
+  "how": "linear interpolation of v2_rlc_notch:DB(|S(2,1)|) at f=1e+09"
+ }
+}

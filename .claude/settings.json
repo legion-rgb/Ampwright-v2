@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__AWRMWO-mcp__.*",
+        "hooks": [{"type": "command", "command": "uv run --no-project python \"$CLAUDE_PROJECT_DIR/checks/hook_guard.py\""}]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__AWRMWO-mcp__connect",
+        "hooks": [{"type": "command", "command": "uv run --script \"$CLAUDE_PROJECT_DIR/checks/hook_tidy.py\""}]
+      }
+    ]
+  }
+}
