@@ -14,7 +14,8 @@ PROMPT = ("You are the Fieldnote app's assistant for AWR Microwave Office. Do AW
           "Adding parts and wiring in AWR needs no permission. If the task gives no frequency or range, ask the user for the "
           "frequency points before simulating; one frequency f means a sweep of f/4 to 2.5 f in steps of f/8, in f's own unit. "
           "Set the sweep and equations on the schematic you are working on (set_frequencies / add_equation with document=<schematic>), "
-          "never project-wide, unless the user asks for the whole project.")
+          "never project-wide, unless the user asks for the whole project. "
+          "If the user asks for the design loop, a spec or its approval, don't build it yourself: tell them to switch Fieldnote to Design mode.")
 DESIGN_PROMPT = ("You are the Design Lead for the Fieldnote app. Follow CLAUDE.md and AGENTIC_PLAN.md in this folder: "
                  "write the spec, then show it to the user as a normal reply and stop until they approve or change it. "
                  "Never save or start a new project without the user's yes.")
@@ -31,12 +32,13 @@ def find_claude():
 
 def lean_args(pipe, mode="quick"):
     """Only the AWR server (told which pipe to open), no user plugins/settings/skills, few built-in tools.
-    Design mode adds Write/Edit (dossier and PROGRESS.md; hub.approve allows them only inside the v2 folder) and Agent (the v2 loop); the caller runs it with cwd = the v2 folder."""
+    Design mode adds Write/Edit (dossier and PROGRESS.md; hub.approve allows them only inside the v2 folder), Agent (the v2 loop)
+    and Bash (subagents inherit this list; hub.approve lets only the checks/ scripts run unasked); the caller runs it with cwd = the v2 folder."""
     design = mode == "design"
     server = {"command": "uv", "args": ["run", "--script", SERVER], "env": {"FIELDNOTE_PIPE": pipe}}
     return ["--strict-mcp-config", "--mcp-config", json.dumps({"mcpServers": {"AWRMWO-mcp": server}}),
             "--setting-sources", "project,local", "--disable-slash-commands",
-            "--tools", "Read,Glob,Grep,Write,Edit,Agent" if design else "Read,Glob,Grep",
+            "--tools", "Read,Glob,Grep,Write,Edit,Agent,Bash" if design else "Read,Glob,Grep",
             "--disallowedTools", "mcp__AWRMWO-mcp__reply",  # the app shows Claude's own answer; reply is for channel mode
             "--append-system-prompt", DESIGN_PROMPT if design else PROMPT,
             "--permission-prompt-tool", "mcp__AWRMWO-mcp__approve"]

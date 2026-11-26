@@ -11,6 +11,7 @@ import itertools
 import json
 import os
 import queue
+import re
 import sys
 import threading
 import time
@@ -49,6 +50,18 @@ def _writes_inside(name, inp):
         return (in_designs or os.path.normcase(p) in _LOOP_FILES) and not p.lower().endswith(".emp")
     except (TypeError, ValueError):  # not a string, or another drive
         return False
+
+
+# the loop's two scripted checks, one design folder or one schematic name; no shell characters can follow
+_CHECK_CMD = re.compile(r'(?:cd ("[^"]+"|\S+) && )?(?:uv run (?:--script )?|python )checks[/\\]'
+                        r'(?:check_spec\.py designs[/\\][\w-]+[/\\]?|check_tidy\.py [\w-]+)')
+
+
+def _runs_check(name, inp):
+    """Bash that only runs check_spec.py / check_tidy.py, from the v2 folder (or the session's cwd, which is it in Design mode)."""
+    cmd = (inp or {}).get("command") if name == "Bash" else None
+    m = _CHECK_CMD.fullmatch(cmd.strip()) if isinstance(cmd, str) else None
+    return bool(m) and (not m.group(1) or os.path.normcase(os.path.realpath(m.group(1).strip('"'))) == os.path.normcase(_ROOT))
 
 
 def _log(*a):
@@ -145,7 +158,7 @@ class HubMCP(FastMCP):
         always = name in _ALWAYS_ASK or name.startswith("delete_")
         always = always or (name in _PROJECT_WIDE and not (input or {}).get("document"))
         if not tool_name.startswith(_PREFIX):  # built-in tools: Bash, or a write outside the v2 folder, asks
-            always = always or not (tool_name in _SAFE_BUILTINS or _writes_inside(tool_name, input))
+            always = always or not (tool_name in _SAFE_BUILTINS or _writes_inside(tool_name, input) or _runs_check(tool_name, input))
         if not always:  # building in AWR (add parts, wire, simulate...) never asks; only save, new project and delete do
             return json.dumps({"behavior": "allow", "updatedInput": input})
         if not self._clients:

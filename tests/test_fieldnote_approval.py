@@ -62,6 +62,16 @@ for p in ("hub.py", ".claude/settings.json", "checks/hook_guard.py", "CLAUDE.md"
           "designs", "designs/../hub.py", "designs/x/model.emp"):  # the safety checks themselves always ask
     assert not hub._writes_inside("Edit", {"file_path": p}), p
 assert hub._writes_inside("Edit", {"file_path": "errors.md"}) and hub._writes_inside("Write", {"file_path": "designs/a/state.json"})
+# Bash: only the two check scripts on one design / schematic run unasked (E015); anything chained or elsewhere asks
+for cmd in ("uv run checks/check_spec.py designs/fn_rc_check", "python checks\\check_tidy.py v2_fn_rc_check",
+            f'cd "{hub._ROOT}" && uv run checks/check_spec.py designs/fn_rc_check/', f"cd {hub._ROOT.replace(os.sep, '/')} && uv run --script checks/check_tidy.py v2_x"):
+    assert json.loads(ask("Bash", {"command": cmd}).result(5))["behavior"] == "allow", cmd
+assert not waiting()
+for cmd in ("uv run checks/check_spec.py designs/../../x", "uv run checks/check_tidy.py x && del y", "uv run checks/check_tidy.py x; del y",
+            "uv run checks/check_tidy.py --fixture a.json", "uv run checks/promote.py x", "cd C:/ && uv run checks/check_tidy.py x",
+            "uv run checks/check_spec.py designs/a --data x.json", "uv run checks/check_tidy.py $(del y)"):
+    assert not hub._runs_check("Bash", {"command": cmd}), cmd
+assert not hub._runs_check("Write", {"command": "uv run checks/check_tidy.py x"}) and not hub._runs_check("Bash", {"command": 3})
 # the sweep and equations on one schematic never ask; project-wide ones (no document) do
 for tool, inp in (("set_frequencies", {"start_hz": 1e9, "stop_hz": 2e9, "points": 11, "document": "FN_RC"}),
                   ("add_equation", {"expression": "C1=1e-12", "document": "FN_RC"})):

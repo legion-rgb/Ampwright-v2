@@ -1,0 +1,10 @@
+{
+  "name": "fn_rc_check",
+  "class": "filter",
+  "schematic": "v2_fn_rc_check",
+  "goals": [
+    {"id": "s21_dc", "metric": "S21_dB", "graph": "v2_fn_rc_check_s", "measurement": "S(2,1)", "at": {"f": 1e7}, "op": "within", "value": -3.52, "tol": 0.05},
+    {"id": "s21_fc", "metric": "S21_dB", "graph": "v2_fn_rc_check_s", "measurement": "S(2,1)", "at": {"f": 1e9}, "op": "within", "value": -6.53, "tol": 0.25},
+    {"id": "s21_stop", "metric": "S21_dB", "graph": "v2_fn_rc_check_s", "measurement": "S(2,1)", "at": {"f": 1e10}, "op": "<=", "value": -22}
+  ]
+}

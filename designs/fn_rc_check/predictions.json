@@ -1,0 +1,5 @@
+{
+  "s21_dc": {"value": -3.522, "unit": "dB", "basis": "20log(2/3)/sqrt(1+0.01^2) at 10 MHz"},
+  "s21_fc": {"value": -6.532, "unit": "dB", "basis": "DC level minus 3.01 dB at w*tau=1, C=4.775 pF"},
+  "s21_stop": {"value": -23.57, "unit": "dB", "basis": "-3.522 - 10log10(1+10^2) at 10 GHz"}
+}

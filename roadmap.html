@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWRMWO-mcp Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1f0; --panel: #ffffff; --ink: #1b2730; --muted: #5a6b76; --line: #c9d3d6;
+  --done: #2f6f5e; --done-bg: #dcebe5; --here: #b7791f; --here-bg: #f7ead2;
+  --next: #2c5d8a; --next-bg: #dde8f3; --held: #8a4b5c; --held-bg: #f2e1e5; --later: #6b6f7a; --later-bg: #e6e7ea;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141b20; --panel: #1c252b; --ink: #e3e9ec; --muted: #9aabb5; --line: #33424b;
+    --done: #7cc4ad; --done-bg: #1f3a33; --here: #f0b54d; --here-bg: #3d3020;
+    --next: #8db8e2; --next-bg: #1f3245; --held: #e39aae; --held-bg: #3e2630; --later: #a7abb5; --later-bg: #2a3036;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141b20; --panel: #1c252b; --ink: #e3e9ec; --muted: #9aabb5; --line: #33424b;
+  --done: #7cc4ad; --done-bg: #1f3a33; --here: #f0b54d; --here-bg: #3d3020;
+  --next: #8db8e2; --next-bg: #1f3245; --held: #e39aae; --held-bg: #3e2630; --later: #a7abb5; --later-bg: #2a3036;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "IBM Plex Sans", system-ui, sans-serif; }
+main { max-width: 920px; margin: 0 auto; padding: 40px 16px 64px; }
+h1, h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; line-height: 1.2; }
+h1 { font-size: 2.2rem; margin: 0 0 8px; }
+h2 { font-size: 1.4rem; margin: 48px 0 16px; }
+p { max-width: 68ch; }
+.lede { color: var(--muted); margin: 0 0 28px; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: .88em; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+
+/* the signal path: the user's five items plus v3, with the marker on where we are */
+.path { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; margin: 8px 0 12px; }
+.stop { position: relative; padding-top: 34px; text-align: center; font-size: .82rem; color: var(--muted); }
+.stop::before { content: ""; position: absolute; top: 13px; left: 0; right: 0; height: 4px; background: var(--line); }
+.stop.done::before, .stop.here::before { background: var(--done); }
+.stop:first-child::before { left: 50%; } .stop:last-child::before { right: 50%; }
+.stop .dot { position: absolute; top: 4px; left: calc(50% - 11px); width: 22px; height: 22px; border-radius: 50%;
+  background: var(--panel); border: 4px solid var(--line); }
+.stop.done .dot { background: var(--done); border-color: var(--done); }
+.stop.here .dot { background: var(--here); border-color: var(--here); box-shadow: 0 0 0 6px var(--here-bg); }
+.stop b { display: block; color: var(--ink); font-weight: 600; font-size: .9rem; }
+.stop.here b { color: var(--here); }
+.youarehere { background: var(--here-bg); border-left: 4px solid var(--here); padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0 0; }
+.youarehere strong { color: var(--here); }
+
+/* stages */
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin: 12px 0; }
+.stage.here { border: 2px solid var(--here); }
+.stage header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; margin-bottom: 6px; }
+.stage h3 { margin: 0; font-size: 1.08rem; font-weight: 600; }
+.when { color: var(--muted); font-size: .85rem; }
+.chip { font-size: .78rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; }
+.chip.done { color: var(--done); background: var(--done-bg); }
+.chip.here { color: var(--here); background: var(--here-bg); }
+.chip.next { color: var(--next); background: var(--next-bg); }
+.chip.held { color: var(--held); background: var(--held-bg); }
+.chip.later { color: var(--later); background: var(--later-bg); }
+ul { margin: 6px 0 0; padding-left: 20px; }
+li { margin: 3px 0; }
+li.ok::marker { content: "✓  "; color: var(--done); }
+li.todo::marker { content: "○  "; color: var(--next); }
+li.ask::marker { content: "?  "; color: var(--held); font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; font-size: .92rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: .85rem; }
+tr:last-child td { border-bottom: 0; }
+.wrap { overflow-x: auto; }
+footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  .path { grid-template-columns: 1fr; }
+  .stop { padding: 0 0 14px 40px; text-align: left; }
+  .stop::before { top: 0; bottom: 0; left: 9px; right: auto; width: 4px; height: auto; }
+  .stop:first-child::before { left: 9px; top: 11px; } .stop:last-child::before { right: auto; bottom: calc(100% - 11px); }
+  .stop .dot { top: 0; left: 0; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>AWRMWO-mcp roadmap</h1>
+  <p class="lede">Claude Code designing RF circuits in AWR Microwave Office: the MCP server, the v2 agent team, and the Fieldnote desktop app. As of 26 Nov 2026.</p>
+
+  <div class="path" aria-label="The plan from 25 Nov, in order">
+    <div class="stop done"><span class="dot"></span><b>Base</b>v1 server, v2 loop, GUI in v2</div>
+    <div class="stop here"><span class="dot"></span><b>1 · Mode switch</b>Quick / Design</div>
+    <div class="stop"><span class="dot"></span><b>2 · Theory vs Sim</b>card in Fieldnote</div>
+    <div class="stop"><span class="dot"></span><b>3 · Inverses</b><code>*_design</code> in rf_theory</div>
+    <div class="stop"><span class="dot"></span><b>4 · Synthesis</b>Chebyshev, FET bias</div>
+    <div class="stop"><span class="dot"></span><b>5 · Open items</b>evals, EM, cleanup</div>
+    <div class="stop"><span class="dot"></span><b>v3</b>user's plans</div>
+  </div>
+
+  <div class="youarehere">
+    <strong>You are here:</strong> item 1 is built and was proven live today. A full Design-mode loop (<code>fn_rc_check</code>) passed in round 0, and subagent tool requests do reach Fieldnote's approval dialog. Today's three follow-up fixes are tested but not yet committed or re-run live. Item 2 is next.
+  </div>
+
+  <h2>Done</h2>
+
+  <section class="stage">
+    <header><h3>v1: the MCP server and Fieldnote</h3><span class="chip done">done</span></header>
+    <ul>
+      <li class="ok">AWRMWO-mcp server: schematics, parts, wiring, ports, sweeps, graphs, simulation, EM structures</li>
+      <li class="ok">Fieldnote, a desktop window that runs Claude Code on your subscription login, with an approval dialog for save, new project and delete</li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <header><h3>v2: the agent design team</h3><span class="when">21–22 Nov</span><span class="chip done">done</span></header>
+    <ul>
+      <li class="ok">The loop runs end to end in live AWR: spec, theory, build, evaluate, judge, fix, review, report, lessons</li>
+      <li class="ok">Guard hooks, plus scripted spec and tidiness checks (<code>check_spec.py</code>, <code>check_tidy.py</code>)</li>
+      <li class="ok">6 designs pass: rc_lpf, ne3508_bias, rc_lpf_fault (seeded fault fixed in 1 round), tl_qwt, rlc_notch, cheb5_lpf</li>
+      <li class="ok">Phase E: optimizer and sweep tools, a 4-block library, an eval suite (5 of 6 OK), topology comparison, a headless runner (built only)</li>
+      <li class="ok">The lesson-keeper and <code>errors.md</code>, now 15 entries</li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <header><h3>Fieldnote moved into v2</h3><span class="when">25 Nov</span><span class="chip done">done</span></header>
+    <ul>
+      <li class="ok">v1's server, hub and helpers replace v2's; the old desktop window is archived</li>
+      <li class="ok">AWR regression suite <code>validate</code>: 71/71, re-run on 25 Nov</li>
+    </ul>
+  </section>
+
+  <h2>Now</h2>
+
+  <section class="stage here">
+    <header><h3>Item 1: Quick / Design mode switch</h3><span class="when">25–26 Nov</span><span class="chip here">finishing</span></header>
+    <ul>
+      <li class="ok">A probe, then build steps 2–5: per-mode workspace and session, header switch, subagent rows nested in the feed</li>
+      <li class="ok">Two code reviews fixed. The approval rules: only writes to <code>designs/</code> and the three loop logs go through without asking; <code>.emp</code> files and the app's own code always ask</li>
+      <li class="ok">Live check: a Quick build in 31 s; Deny on a delete was respected; Design stopped at the spec</li>
+      <li class="ok">A project-wide sweep or equation now asks first (commit <code>d167cc6</code>)</li>
+      <li class="ok">The full Design loop on <code>fn_rc_check</code> passed in round 0, within 0.005 dB of theory. Subagent deletes showed the dialog</li>
+      <li class="ok">Today: Design mode can run the two check scripts without a dialog; Quick mode points loop requests to Design; E015 is recorded. All tests pass</li>
+      <li class="todo">Commit today's fixes</li>
+      <li class="todo">One more live Design run, to see <code>check_spec.py</code> actually run inside the evaluator</li>
+    </ul>
+  </section>
+
+  <h2>Next</h2>
+
+  <section class="stage">
+    <header><h3>Item 2: Theory vs Sim card</h3><span class="chip next">next</span></header>
+    <p>A Fieldnote card that reads a design's dossier and puts each goal's theory prediction next to its measured value and verdict, using <code>predictions.json</code>, <code>results.json</code> and <code>verdict.md</code>.</p>
+  </section>
+
+  <section class="stage">
+    <header><h3>Item 3: <code>*_design</code> inverses in rf_theory</h3><span class="chip next">planned</span></header>
+    <p>Go from a goal to part values (for example, cutoff to C) instead of only from values to response, so the theory agent computes rather than guesses.</p>
+  </section>
+
+  <section class="stage">
+    <header><h3>Item 4: Chebyshev synthesis and an FET bias solver</h3><span class="chip next">planned</span></header>
+    <p>Filter prototype values from ripple and order, and a bias-point solver. The ne3508 run showed the theory's Vgs guess was off.</p>
+  </section>
+
+  <section class="stage">
+    <header><h3>Item 5: open items</h3><span class="chip held">some need your yes</span></header>
+    <ul>
+      <li class="todo">Run eval <code>lmatch_opt</code>, the agents' first optimizer use. It needs a fresh untitled AWR project</li>
+      <li class="todo">The first real <code>evals/run_headless.py</code> run (only dry runs so far)</li>
+      <li class="ask"><code>validate_em</code> re-run: uses EM licenses</li>
+      <li class="ask">cheb5_lpf step check: MSTEPX needs EM, or widen the line to at least 275 µm and retune</li>
+      <li class="todo">Small fixes: <code>results.json</code> says "interpolation" at exact sweep points; the user-level CLAUDE.md costs tokens in both modes; Design mode has no ListAgents check; subagent nesting is indent-only</li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <header><h3>v3</h3><span class="chip later">later</span></header>
+    <ul>
+      <li>EM designs through the agent loop</li>
+      <li>Active circuits: amplifiers, stability, noise, harmonic balance</li>
+      <li>Touchstone import, standard part values and tolerance</li>
+      <li>Open-ended specs, and a wiring router that avoids visual crossings (today it only prevents shorts)</li>
+    </ul>
+  </section>
+
+  <h2>Waiting on you</h2>
+  <div class="wrap">
+  <table>
+    <tr><th>Decision</th><th>What it involves</th></tr>
+    <tr><td>Commit</td><td>Today's fixes, the <code>fn_rc_check</code> dossier, <code>errors.md</code>, <code>PROGRESS.md</code>, and the refreshed <code>tests/_out/*.txt</code> outputs</td></tr>
+    <tr><td>AWR cleanup</td><td>The unsaved project still holds <code>FN_QUICK_*</code>, <code>v2_fn_rc_check</code> and the <code>V_*</code> regression documents. <code>RC_LPF</code> is yours and stays</td></tr>
+    <tr><td>EM runs</td><td><code>validate_em</code> and the cheb5 step check both use EM licenses</td></tr>
+    <tr><td>Start item 2</td><td>The Theory vs Sim card: plan first, then build</td></tr>
+  </table>
+  </div>
+
+  <footer>Sources: <code>PROGRESS.md</code>, <code>errors.md</code>, <code>designs/fn_rc_check/report.md</code>, and Fieldnote's history from 26 Nov.</footer>
+</main>
+</body>
+</html>

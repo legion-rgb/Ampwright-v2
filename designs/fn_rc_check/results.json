@@ -1,0 +1,6 @@
+{
+  "s21_dc": {"measured": -3.5223, "unit": "dB", "how": "DB(|S(2,1)|) at 10 MHz from graph_data (full trace, 1000 pts)"},
+  "s21_fc": {"measured": -6.5324, "unit": "dB", "how": "DB(|S(2,1)|) at 1 GHz from graph_data (full trace, 1000 pts)"},
+  "s21_stop": {"measured": -23.5657, "unit": "dB", "how": "DB(|S(2,1)|) at 10 GHz from graph_data (last point)"},
+  "_sim": "ok"
+}
