@@ -4,6 +4,7 @@
 # ///
 """Fieldnote: a desktop front-end for Claude Code doing AWR work. Starts a hidden Claude Code session on the
 user's subscription, attaches to that session's AWRMWO-mcp hub pipe, and shows the open AWR project."""
+import ctypes
 import json
 import os
 import sys
@@ -24,6 +25,11 @@ HISTORY_MAX = 500  # items kept on disk
 TOOL_PREFIX = "mcp__AWRMWO-mcp__"
 APPROVE_WAIT = 120  # seconds; the server denies on its own after this (hub.APPROVE_TIMEOUT), so the dialog closes too
 POLL_S = 10  # project refresh; read-only pipe call, costs no Claude tokens
+
+
+class FLASHWINFO(ctypes.Structure):  # winuser.h, for FlashWindowEx
+    _fields_ = [("cbSize", ctypes.c_uint), ("hwnd", ctypes.c_void_p), ("dwFlags", ctypes.c_ulong),
+                ("uCount", ctypes.c_uint), ("dwTimeout", ctypes.c_ulong)]
 
 
 def build_page():
@@ -163,14 +169,20 @@ class Api:
         t = threading.Timer(APPROVE_WAIT, self._resolve, (rid, "expired"))
         t.daemon = True
         t.start()
-        w = self._window  # the user is probably in AWR: bring Fieldnote forward
-        if w:
-            try:
-                w.restore()
-                w.on_top = True
-                w.on_top = False
-            except Exception:
-                pass
+        if self._window:  # the user is probably in AWR. Own thread: a stuck window call must never block the pipe reader
+            threading.Thread(target=self._call_attention, args=(self._window,), daemon=True).start()
+
+    @staticmethod
+    def _call_attention(w):
+        # Not w.on_top: pywebview sets TopMost off the UI thread, which froze the window (25 Nov 2026)
+        try:
+            w.restore()  # pywebview marshals this onto the UI thread
+            hwnd = ctypes.windll.user32.FindWindowW(None, w.title)
+            if hwnd:  # flash caption and taskbar button until the window comes to the front (FLASHW_ALL | FLASHW_TIMERNOFG)
+                fi = FLASHWINFO(ctypes.sizeof(FLASHWINFO), hwnd, 0x3 | 0xC, 0, 0)
+                ctypes.windll.user32.FlashWindowEx(ctypes.byref(fi))
+        except Exception:
+            pass
 
     def answer(self, rid, behavior):
         if behavior not in ("allow", "deny"):

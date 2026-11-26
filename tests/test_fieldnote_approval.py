@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import tempfile
+import threading
 import time
 
 os.environ["APPDATA"] = tempfile.mkdtemp()
@@ -71,6 +72,26 @@ assert r["behavior"] == "deny"
 until(lambda: not waiting(), "dialog closes on timeout")
 assert [i["status"] for i in api.history() if i["kind"] == "approval"] == ["allowed", "denied", "expired"]
 api._close_client()
+
+
+# ---- (a2) a window call that never returns must not block the pipe reader (froze the live window, 25 Nov 2026) ----
+class StuckWindow:
+    title = "stuck"
+    on_top = property(lambda s: False, lambda s, v: threading.Event().wait())  # setting it never returns
+
+    def restore(self):
+        threading.Event().wait()  # never returns
+
+    def evaluate_js(self, _):
+        pass
+
+
+api._window = StuckWindow()
+t0 = time.time()
+api._ask({"request_id": "s1", "tool_name": "delete_graph", "input_preview": ""})
+assert time.time() - t0 < 1 and api.history()[-1]["status"] == "waiting", "approval blocked on a stuck window"
+api._window = None
+api._resolve("s1", "expired")
 
 # ---- (b) the dialog ----
 app.APPROVE_WAIT = 120
