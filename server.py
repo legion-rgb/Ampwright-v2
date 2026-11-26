@@ -376,8 +376,8 @@ async def create_graph(name: str, type: str = "rectangular") -> dict:
 
 @mcp.tool()
 async def tidy_graph(graph: str) -> dict:
-    """Make a graph read like an engineer's plot: round axis ends and 1/2/5 steps that cover every point (dB floor 80 dB
-    below the peak), axis titles with units, distinct colour-blind-safe trace colours, short legend text, no symbols on dense
+    """Make a graph read like an engineer's plot: round axis ends and 1/2/5 steps that cover every point (the y axis always
+    reaches the deepest dip or highest peak; only nulls >150 dB below the peak are cut as numerical noise), axis titles with units, distinct colour-blind-safe trace colours, short legend text, no symbols on dense
     traces, no stray second y axis. Needs simulated data; simulate(graph=...) already does this. Returns the axes set."""
     return await run(gr.tidy_graph_sync, graph)
 

@@ -31,6 +31,13 @@ Every schematic built through Ampwright must be tidy and easy to read:
 
 (Copied 26 Nov 2026 from the parent folder's CLAUDE.md, so the repo has it on its own.)
 
+## Graph scaling (user rule, 26 Nov 2026)
+Scale every graph so the feature the user cares about is fully visible and the steps are tidy:
+- The axis must reach the deepest dip (match null, notch) and the highest peak. Never let an axis clip a trace. A match that reaches -104 dB gets a y axis down to -120 dB, not -80 dB. Only numerical-noise nulls (>150 dB below the peak) may be cut.
+- Round ends and 1/2/5 steps, 4 to 10 gridlines (`tidy_graph` does this; `simulate(graph=...)` runs it).
+- When the user asks to see a dip or peak, scale to it and put a marker on it (`add_graph_marker`), then report the value.
+- Only `v2_` graphs are edited. A graph the user made needs their explicit yes first.
+
 ## Rules
 - Only one AWR-writing agent (`awr-builder`, `circuit-fixer`) runs at a time. Never start them in parallel or in the background together.
 - Give each subagent the dossier path and nothing it can read for itself. Ask for its short report; the details stay in the files.

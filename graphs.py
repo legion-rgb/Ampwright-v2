@@ -184,7 +184,7 @@ def set_graph_trace_sync(graph, trace=None, color=None, dash=None, symbol=None, 
 
 
 PALETTE = ["#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]  # Okabe-Ito: readable on white, colour-blind safe
-DB_FLOOR = 80  # dB below the peak; a deeper null would squash the pass band
+DB_FLOOR = 150  # dB below the peak: a match dip (-100 dB) must show; only numerical-noise nulls beyond this are cut
 
 
 def nice_axis(lo, hi, ticks=6):
