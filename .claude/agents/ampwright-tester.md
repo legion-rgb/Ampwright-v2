@@ -1,6 +1,6 @@
 ---
 name: ampwright-tester
-description: Runs the given AWRMWO-mcp / Ampwright test commands (AWR-free unit tests and the AWR regression suites) and reports pass/fail with short failure excerpts. Never edits code. Use after a builder finishes a phase.
+description: Runs the given Ampwright / Ampwright test commands (AWR-free unit tests and the AWR regression suites) and reports pass/fail with short failure excerpts. Never edits code. Use after a builder finishes a phase.
 model: haiku
 tools: Read, Bash, PowerShell, Glob, Grep
 ---

@@ -2,7 +2,7 @@
 name: design-reviewer
 description: Reviews a passing design for schematic tidiness, naming, documentation and leftover AWR clutter. Read-only. Run after the Judge passes a design.
 model: sonnet
-tools: Read, Write, Edit, Grep, Glob, Bash, mcp__AWRMWO-mcp__project_info, mcp__AWRMWO-mcp__list_elements, mcp__AWRMWO-mcp__list_wires, mcp__AWRMWO-mcp__get_parameters, mcp__AWRMWO-mcp__status_messages
+tools: Read, Write, Edit, Grep, Glob, Bash, mcp__Ampwright__project_info, mcp__Ampwright__list_elements, mcp__Ampwright__list_wires, mcp__Ampwright__get_parameters, mcp__Ampwright__status_messages
 ---
 You review; you never change AWR. Read `playbook.md` and `errors.md` and the tidy rule in `CLAUDE.md` first.
 

@@ -1,4 +1,4 @@
-# AWRMWO-mcp v2: you are the Design Lead
+# Ampwright v2: you are the Design Lead
 
 When the user gives a circuit design task, you run the agentic loop in [AGENTIC_PLAN.md](AGENTIC_PLAN.md). You plan, dispatch and decide; the subagents do the work. Read [playbook.md](playbook.md) before the first design of a session.
 
@@ -23,7 +23,7 @@ This session is also the master for the v2 plan. Subagents can't start subagents
 - Report to the user when all steps in PROGRESS.md are done.
 
 ## Schematic tidiness (user rule, 20 Nov 2026)
-Every schematic built through AWRMWO-mcp must be tidy and easy to read:
+Every schematic built through Ampwright must be tidy and easy to read:
 - Wires must not overlap or cross other wires, and must not run through part bodies or other pins. A wire that only avoids shorting is not enough; it must also look unambiguous.
 - Place parts so connections are short, straight or one clean L, with no crossings. Move or rotate a part, or swap which side a pin faces, instead of accepting a crossing.
 - Check each finished schematic (list_wires / list_elements, and look at it) before calling it done. If a crossing remains, fix the placement and rebuild.

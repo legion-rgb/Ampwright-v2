@@ -1,4 +1,4 @@
-"""Assert checks for the pure logic in helpers.py. No AWR needed: python AWRMWO-mcp/tests/test_pins.py"""
+"""Assert checks for the pure logic in helpers.py. No AWR needed: python Ampwright/tests/test_pins.py"""
 import sys
 from pathlib import Path
 

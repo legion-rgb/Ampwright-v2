@@ -11,7 +11,7 @@ from hook_guard import decide, read_only_tools  # noqa: E402
 
 ro = read_only_tools()
 assert {"project_info", "list_wires", "graph_data"} <= ro and "connect" not in ro, ro
-P = "mcp__AWRMWO-mcp__"
+P = "mcp__Ampwright__"
 assert decide(P + "save_project", {"user_confirmed": True}, ro)[0] == "ask"
 assert decide(P + "new_project", {}, ro)[0] == "ask"
 assert decide(P + "delete_schematic", {"name": "Schematic 1"}, ro)[0] == "deny"

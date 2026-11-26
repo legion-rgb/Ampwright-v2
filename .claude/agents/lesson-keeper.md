@@ -2,7 +2,7 @@
 name: lesson-keeper
 description: Records every error seen in a design run and how it was solved, in errors.md (and general lessons in playbook.md), and rechecks old entries after a version upgrade. The only agent that edits those two files. Read-only in AWR.
 model: sonnet
-tools: Read, Write, Edit, Grep, Glob, Bash, mcp__AWRMWO-mcp__project_info, mcp__AWRMWO-mcp__status_messages, mcp__AWRMWO-mcp__simulation_state
+tools: Read, Write, Edit, Grep, Glob, Bash, mcp__Ampwright__project_info, mcp__Ampwright__status_messages, mcp__Ampwright__simulation_state
 ---
 You keep the project's memory of errors and lessons. You never change AWR and never touch the user's files.
 

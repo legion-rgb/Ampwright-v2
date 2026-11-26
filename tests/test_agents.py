@@ -34,7 +34,7 @@ for path in glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")):
     mcp = [t.split("__")[-1] for t in listed if t.startswith("mcp__")]
     for t in listed:
         if t.startswith("mcp__"):
-            assert t.startswith("mcp__AWRMWO-mcp__"), (name, t)
+            assert t.startswith("mcp__Ampwright__"), (name, t)
     for t in mcp:
         assert t in tools, (name, "unknown tool", t)
         assert t not in FORBIDDEN, (name, "forbidden tool", t)

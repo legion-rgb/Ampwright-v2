@@ -1,7 +1,7 @@
 # /// script
 # dependencies = ["pywin32"]
 # ///
-"""PostToolUse hook after AWRMWO-mcp connect: runs the tidiness check and tells the agent about crossings.
+"""PostToolUse hook after Ampwright connect: runs the tidiness check and tells the agent about crossings.
 Never blocks; if AWR or the hub pipe can't be reached it stays silent."""
 import json
 import os

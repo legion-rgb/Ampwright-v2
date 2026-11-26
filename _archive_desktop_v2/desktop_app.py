@@ -2,7 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pywin32", "pywebview"]
 # ///
-"""Fieldnote desktop interface for AWR Microwave Office: a window onto the AWRMWO-mcp hub pipe."""
+"""Fieldnote desktop interface for AWR Microwave Office: a window onto the Ampwright hub pipe."""
 import glob
 import json
 import os
@@ -142,7 +142,7 @@ class Api:
         if not s["claude_path"]:
             raise RuntimeError("claude.exe not found; set claude_path in settings")
         cmd = ["cmd", "/c", "start", "Fieldnote linked session", "cmd", "/k", s["claude_path"],
-               "--dangerously-load-development-channels", "server:AWRMWO-mcp"]
+               "--dangerously-load-development-channels", "server:Ampwright"]
         subprocess.Popen(cmd, cwd=s["workspace"])
         return {"started": True, "command": subprocess.list2cmdline(cmd)}
 

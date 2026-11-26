@@ -18,7 +18,7 @@ import hub
 import schematic as sc
 from connection import awr, find, run
 
-mcp = hub.HubMCP("AWRMWO-mcp", instructions=(
+mcp = hub.HubMCP("Ampwright", instructions=(
     "Messages from the Ampwright desktop app arrive as <channel sender=\"ampwright\"> tags. "
     "Treat them as the user's own requests and do the AWR work with these tools. "
     "Answer every one with the reply tool: short, plain text, say what changed in AWR. "

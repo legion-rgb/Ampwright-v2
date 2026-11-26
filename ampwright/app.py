@@ -3,7 +3,7 @@
 # dependencies = ["pywin32", "pywebview"]
 # ///
 """Ampwright: a desktop front-end for Claude Code doing AWR work. Starts a hidden Claude Code session on the
-user's subscription, attaches to that session's AWRMWO-mcp hub pipe, and shows the open AWR project."""
+user's subscription, attaches to that session's Ampwright hub pipe, and shows the open AWR project."""
 import ctypes
 import json
 import os
@@ -24,7 +24,7 @@ SETTINGS = os.path.join(os.environ.get("APPDATA", HERE), "Ampwright", "settings.
 PIPE = r"\\.\pipe\AWRMWO-%s-ampwright-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
 HISTORY = os.path.join(os.path.dirname(SETTINGS), "history.json")
 HISTORY_MAX = 500  # items kept on disk
-TOOL_PREFIX = "mcp__AWRMWO-mcp__"
+TOOL_PREFIX = "mcp__Ampwright__"
 APPROVE_WAIT = 120  # seconds; the server denies on its own after this (hub.APPROVE_TIMEOUT), so the dialog closes too
 POLL_S = 10  # project refresh; read-only pipe call, costs no Claude tokens
 DENY_TEXTS = ("the user denied this in Ampwright", "timed out waiting for the user")  # hub.approve's deny messages

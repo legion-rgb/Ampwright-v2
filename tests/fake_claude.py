@@ -15,7 +15,7 @@ for line in sys.stdin:
     tid = "tu%d" % n
     out({"type": "assistant", "session_id": sid, "message": {"content": [
         {"type": "text", "text": "echo %s resume=%s" % (text, "--resume" in a)},
-        {"type": "tool_use", "id": tid, "name": "mcp__AWRMWO-mcp__create_schematic", "input": {"name": "rc_lpf"}}]}})
+        {"type": "tool_use", "id": tid, "name": "mcp__Ampwright__create_schematic", "input": {"name": "rc_lpf"}}]}})
     if text.startswith("hang"):
         time.sleep(600)
     bad = text.startswith("fail")

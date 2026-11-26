@@ -42,12 +42,12 @@ s.send("again")  # restarts and resumes the same conversation
 assert get("reply")["text"] == "echo again resume=True"
 s.stop()
 la = session.lean_args("pipe")  # the channel reply tool is hidden: the app shows Claude's own answer
-assert la[la.index("--disallowedTools") + 1] == "mcp__AWRMWO-mcp__reply", la
+assert la[la.index("--disallowedTools") + 1] == "mcp__Ampwright__reply", la
 assert la[la.index("--tools") + 1] == "Read,Glob,Grep" and la[la.index("--append-system-prompt") + 1] == session.PROMPT
 ld = session.lean_args("pipe", "design")  # Design mode: dossier writes + the agent loop, Design Lead prompt, same approvals
 assert ld[ld.index("--tools") + 1] == "Read,Glob,Grep,Write,Edit,Agent,Bash", ld
 assert ld[ld.index("--append-system-prompt") + 1] == session.DESIGN_PROMPT, ld
-assert ld[ld.index("--permission-prompt-tool") + 1] == "mcp__AWRMWO-mcp__approve", ld
+assert ld[ld.index("--permission-prompt-tool") + 1] == "mcp__Ampwright__approve", ld
 nested = queue.Queue()  # a subagent's step carries the id of the Agent call that started it
 n = session.Session(sys.executable, HERE, "pipe", nested.put, mode="design")
 n._handle({"type": "assistant", "parent_tool_use_id": "toolu_A", "message": {"content": [

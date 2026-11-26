@@ -9,7 +9,7 @@ Status (22 Nov 2026):
 
 ## What it is
 
-A desktop app that is the front-end for Claude Code in AWR work. You type a design task in the app. Claude Code, running hidden on your subscription, designs the circuit in AWR through AWRMWO-mcp. The app shows the AWR project, Claude's replies and every step. It is the base for version 3, where basic RF circuits become templates.
+A desktop app that is the front-end for Claude Code in AWR work. You type a design task in the app. Claude Code, running hidden on your subscription, designs the circuit in AWR through Ampwright. The app shows the AWR project, Claude's replies and every step. It is the base for version 3, where basic RF circuits become templates.
 
 ## Rules (user decisions)
 
@@ -27,7 +27,7 @@ Ampwright window ──prompt──▶ app backend ──stdin──▶ claude -
       ▲                          │  ▲                     │ starts
       │ events                   │  └──stdout: replies, tool calls
       │                          │                        ▼
-      └── project details ◀── pipe (fixed name) ◀── AWRMWO-mcp ──COM──▶ AWR
+      └── project details ◀── pipe (fixed name) ◀── Ampwright ──COM──▶ AWR
           approvals                                   (the only AWR owner)
 ```
 
@@ -85,11 +85,11 @@ The window, the styles and the layout are new.
 ## Files
 
 ```
-AWRMWO-mcp/ampwright/
+Ampwright/ampwright/
   app.py        window + backend (js_api), settings
   session.py    hidden claude -p session (from v1)
   pipe.py       pipe client (from v1)
   ui/index.html, ui/app.css, ui/app.js, ui/icons.svg   (inlined into the window)
-AWRMWO-mcp/hub.py            + fixed pipe name from an environment variable
-AWRMWO-mcp/tests/test_ampwright_ui.py
+Ampwright/hub.py            + fixed pipe name from an environment variable
+Ampwright/tests/test_ampwright_ui.py
 ```

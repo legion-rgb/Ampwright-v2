@@ -1,4 +1,4 @@
-# AWRMWO-mcp v2: agentic circuit design
+# Ampwright v2: agentic circuit design
 
 Status (21 Nov 2026):
 - **A done:** `test_agents` OK.

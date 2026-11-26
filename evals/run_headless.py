@@ -12,7 +12,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
-ALLOWED = ["mcp__AWRMWO-mcp", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "Agent"]
+ALLOWED = ["mcp__Ampwright", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "Agent"]
 PROMPT = ("Run agent eval task {t} as evals/README.md describes: copy evals/{t}/spec.md and spec.json into designs/{t}/, "
           "then run the design loop in CLAUDE.md. The spec is pre-approved, so don't stop at step 2. Follow eval.json "
           "(seed, max rounds). Never save the AWR project. Finish with designs/{t}/report.md and state.json.")

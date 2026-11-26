@@ -30,7 +30,7 @@ _TRUNC = 300
 APPROVE_TIMEOUT = 120  # seconds the GUI has to answer an approve request
 _ALWAYS_ASK = ("save_project", "new_project")  # plus every delete_*: never auto-allowed
 _PROJECT_WIDE = ("set_frequencies", "add_equation")  # without document: the project sweep / Global Definitions, so ask
-_PREFIX = "mcp__AWRMWO-mcp__"
+_PREFIX = "mcp__Ampwright__"
 _SAFE_BUILTINS = ("Read", "Glob", "Grep", "Agent", "Task")  # read-only, or starts a subagent whose steps come back here
 _ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)))  # the v2 folder: Design mode's dossiers live here
 
@@ -305,7 +305,7 @@ class HubMCP(FastMCP):
     def _serve_client(self, c):
         buf = b""
         try:
-            c.send({"event": "hello", "pid": os.getpid(), "server": "AWRMWO-mcp", "version": 1})
+            c.send({"event": "hello", "pid": os.getpid(), "server": "Ampwright", "version": 1})
             while True:
                 buf += read_some(c.h)
                 while b"\n" in buf:

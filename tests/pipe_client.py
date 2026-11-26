@@ -1,4 +1,4 @@
-"""Manual tool: connect to a running AWRMWO-mcp hub pipe and print its events.
+"""Manual tool: connect to a running Ampwright hub pipe and print its events.
 Usage: python tests/pipe_client.py [--pid N] [--seconds 30] [--chat "text"] [--answer allow|deny]
   --chat    sends the text into the linked Claude Code session (channel)
   --answer  replies to every permission_request with allow or deny (default: just print it)"""

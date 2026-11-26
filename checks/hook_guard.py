@@ -1,4 +1,4 @@
-"""PreToolUse hook for AWRMWO-mcp tools (see .claude/settings.json).
+"""PreToolUse hook for Ampwright tools (see .claude/settings.json).
 - save_project / new_project: always ask the user.
 - any other write tool whose target document is not named v2_*: deny.
 Read-only tools (readOnlyHint in server.py) pass. Set AWRMWO_GUARD=off to disable for manual work."""

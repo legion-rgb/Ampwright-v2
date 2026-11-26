@@ -1,4 +1,4 @@
-# AWRMWO-mcp v2 (Ampwright)
+# Ampwright v2 (Ampwright)
 
 An MCP server that lets Claude Code (or another MCP client) drive Cadence AWR Microwave Office. You describe a circuit, a layout or an analysis in plain language. Claude builds it in the AWR window you have open, simulates it and reads the results back.
 
@@ -12,7 +12,7 @@ As far as we know, no MCP server for AWR Microwave Office existed before this on
 ## How it works
 
 ```
-Claude Code ──MCP (stdio)──> AWRMWO-mcp (Python, run by uv) ──COM──> MWOffice.exe (your open AWR window)
+Claude Code ──MCP (stdio)──> Ampwright (Python, run by uv) ──COM──> MWOffice.exe (your open AWR window)
 ```
 
 The server attaches to the AWR window that is already running, so you watch every change happen and can take over at any point. It never starts AWR on its own. If AWR isn't open, it says so.
@@ -23,9 +23,9 @@ The server attaches to the AWR window that is already running, so you watch ever
 2. Open AWR with your project. Keep only one AWR window open.
 3. Open Claude Code in this folder (it holds `.mcp.json`). It already registers the server:
    ```json
-   {"mcpServers": {"AWRMWO-mcp": {"command": "uv", "args": ["run", "--script", "server.py"]}}}
+   {"mcpServers": {"Ampwright": {"command": "uv", "args": ["run", "--script", "server.py"]}}}
    ```
-4. Approve the `AWRMWO-mcp` server when Claude Code asks. Check it with `/mcp`.
+4. Approve the `Ampwright` server when Claude Code asks. Check it with `/mcp`.
 
 There is no separate install step for packages. `server.py` declares its own dependencies (`mcp<2`, `pywin32`, `matplotlib`), and uv installs them on first run.
 
@@ -62,7 +62,7 @@ spec (you approve) -> theory -> build -> evaluate -> judge --pass--> review -> r
 The server should also work with Copilot in Agent mode, but this is untested. Add `.vscode/mcp.json`:
 
 ```json
-{"servers": {"AWRMWO-mcp": {"type": "stdio", "command": "uv",
+{"servers": {"Ampwright": {"type": "stdio", "command": "uv",
   "args": ["run", "--script", "${workspaceFolder}/server.py"]}}}
 ```
 

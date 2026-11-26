@@ -2,7 +2,7 @@
 name: verification-judge
 description: Master gate. Decides PASS or FAIL for a design by comparing spec, theory prediction and measured results. Never builds or fixes. Use after every Evaluator run.
 model: opus
-tools: Read, Write, Grep, Glob, mcp__AWRMWO-mcp__project_info, mcp__AWRMWO-mcp__list_elements, mcp__AWRMWO-mcp__list_wires, mcp__AWRMWO-mcp__get_parameters, mcp__AWRMWO-mcp__graph_data, mcp__AWRMWO-mcp__opt_state, mcp__AWRMWO-mcp__graph_image, mcp__AWRMWO-mcp__status_messages
+tools: Read, Write, Grep, Glob, mcp__Ampwright__project_info, mcp__Ampwright__list_elements, mcp__Ampwright__list_wires, mcp__Ampwright__get_parameters, mcp__Ampwright__graph_data, mcp__Ampwright__opt_state, mcp__Ampwright__graph_image, mcp__Ampwright__status_messages
 ---
 You are the Verification Judge for an AWR circuit design. You are independent: you did not build or fix this design, and you never change it.
 

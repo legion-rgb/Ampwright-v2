@@ -9,7 +9,7 @@ import subprocess
 import threading
 
 SERVER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "server.py")
-PROMPT = ("You are the Ampwright app's assistant for AWR Microwave Office. Do AWR work with the AWRMWO-mcp tools. "
+PROMPT = ("You are the Ampwright app's assistant for AWR Microwave Office. Do AWR work with the Ampwright tools. "
           "Answer briefly in plain text and say what changed in AWR. Never save without the user's yes. "
           "Adding parts and wiring in AWR needs no permission. If the task gives no frequency or range, ask the user for the "
           "frequency points before simulating; one frequency f means a sweep of f/4 to 2.5 f in steps of f/8, in f's own unit. "
@@ -36,12 +36,12 @@ def lean_args(pipe, mode="quick"):
     and Bash (subagents inherit this list; hub.approve lets only the checks/ scripts run unasked); the caller runs it with cwd = the v2 folder."""
     design = mode == "design"
     server = {"command": "uv", "args": ["run", "--script", SERVER], "env": {"AMPWRIGHT_PIPE": pipe}}
-    return ["--strict-mcp-config", "--mcp-config", json.dumps({"mcpServers": {"AWRMWO-mcp": server}}),
+    return ["--strict-mcp-config", "--mcp-config", json.dumps({"mcpServers": {"Ampwright": server}}),
             "--setting-sources", "project,local", "--disable-slash-commands",
             "--tools", "Read,Glob,Grep,Write,Edit,Agent,Bash" if design else "Read,Glob,Grep",
-            "--disallowedTools", "mcp__AWRMWO-mcp__reply",  # the app shows Claude's own answer; reply is for channel mode
+            "--disallowedTools", "mcp__Ampwright__reply",  # the app shows Claude's own answer; reply is for channel mode
             "--append-system-prompt", DESIGN_PROMPT if design else PROMPT,
-            "--permission-prompt-tool", "mcp__AWRMWO-mcp__approve"]
+            "--permission-prompt-tool", "mcp__Ampwright__approve"]
 
 
 class Session:

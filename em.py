@@ -54,7 +54,7 @@ def _export_xml(em):
     import os
     import tempfile
     import xml.etree.ElementTree as ET
-    path = os.path.join(tempfile.gettempdir(), f"AWRMWO_mcp_{os.getpid()}_stackup.xml")
+    path = os.path.join(tempfile.gettempdir(), f"Ampwright_{os.getpid()}_stackup.xml")
     em.ExportEmInputDataXML(path)
     try:
         return ET.parse(path)
@@ -109,7 +109,7 @@ def _write_stackup(em, layers):
         elif l.get("Name") == "EMTop":
             l.set("Elevation", total)
     ET.register_namespace("mwo", "http://www.awr.com/mwo_link")
-    path = os.path.join(tempfile.gettempdir(), f"AWRMWO_mcp_{os.getpid()}_stackup_in.xml")
+    path = os.path.join(tempfile.gettempdir(), f"Ampwright_{os.getpid()}_stackup_in.xml")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     try:
         if not em.ImportEmInputData(path):
@@ -167,7 +167,7 @@ def _set_sides(em, want):
     for side, v in want.items():
         info["edges"][side][0].set("Material", EDGE_MAT[v])
     ET.register_namespace("mwo", "http://www.awr.com/mwo_link")
-    path = os.path.join(tempfile.gettempdir(), f"AWRMWO_mcp_{os.getpid()}_sides_in.xml")
+    path = os.path.join(tempfile.gettempdir(), f"Ampwright_{os.getpid()}_sides_in.xml")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     try:
         if not em.ImportEmInputData(path):

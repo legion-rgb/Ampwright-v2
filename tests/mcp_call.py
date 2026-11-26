@@ -2,11 +2,11 @@
 # requires-python = ">=3.10"
 # dependencies = ["mcp>=1.2,<2"]
 # ///
-"""Call AWRMWO-mcp tools over stdio, the way Claude Code does.
+"""Call Ampwright tools over stdio, the way Claude Code does.
 
-  uv run --script AWRMWO-mcp/tests/mcp_call.py <tool> '<json args>'
-  uv run --script AWRMWO-mcp/tests/mcp_call.py --batch steps.json   # [{"tool": ..., "args": {...}}, ...] in one session
-Images are saved to %TEMP%/AWRMWO-mcp/<tool>_<n>.png and their path is printed.
+  uv run --script Ampwright/tests/mcp_call.py <tool> '<json args>'
+  uv run --script Ampwright/tests/mcp_call.py --batch steps.json   # [{"tool": ..., "args": {...}}, ...] in one session
+Images are saved to %TEMP%/Ampwright/<tool>_<n>.png and their path is printed.
 """
 import asyncio
 import base64
@@ -21,7 +21,7 @@ from mcp.client.stdio import stdio_client
 
 SERVER = Path(__file__).resolve().parents[1] / "server.py"
 TOTAL_S = int(os.environ.get("AWR_CALL_TIMEOUT", 900))  # whole run; the server also caps each call at 15 min
-OUT = Path(tempfile.gettempdir()) / "AWRMWO-mcp"
+OUT = Path(tempfile.gettempdir()) / "Ampwright"
 
 
 def show(tool, n, result):

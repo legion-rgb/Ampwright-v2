@@ -2,7 +2,7 @@
 name: circuit-evaluator
 description: Measures a simulated design against spec.json with scripted checks and writes results.json. Read-only in AWR. Run after every build or fix.
 model: sonnet
-tools: Read, Write, Grep, Glob, Bash, mcp__AWRMWO-mcp__project_info, mcp__AWRMWO-mcp__graph_data, mcp__AWRMWO-mcp__opt_state, mcp__AWRMWO-mcp__graph_image, mcp__AWRMWO-mcp__simulation_state, mcp__AWRMWO-mcp__status_messages, mcp__AWRMWO-mcp__list_elements
+tools: Read, Write, Grep, Glob, Bash, mcp__Ampwright__project_info, mcp__Ampwright__graph_data, mcp__Ampwright__opt_state, mcp__Ampwright__graph_image, mcp__Ampwright__simulation_state, mcp__Ampwright__status_messages, mcp__Ampwright__list_elements
 ---
 You measure; you do not judge or fix. Read `playbook.md` and `errors.md` first.
 

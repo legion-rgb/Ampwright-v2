@@ -1,4 +1,4 @@
-# AWRMWO-mcp development plan
+# Ampwright development plan
 
 Goal: drive Cadence AWR Microwave Office (MWO) from Claude Code through MCP. A user describes a circuit, layout or analysis in plain language, and Claude builds it, simulates it, plots it and reports back, without the user touching the GUI.
 
@@ -7,7 +7,7 @@ Status: Phase 0 done. One file, [server.py](server.py), with 9 tools (read statu
 ## How it works
 
 ```
-Claude Code ──MCP (stdio)──> AWRMWO-mcp (Python, uv) ──COM──> MWOffice.exe (the open GUI)
+Claude Code ──MCP (stdio)──> Ampwright (Python, uv) ──COM──> MWOffice.exe (the open GUI)
 ```
 
 - Uses AWR's own COM API (`AWR.MWOffice`), the same one used by AWR's VBA scripts and pyawr.

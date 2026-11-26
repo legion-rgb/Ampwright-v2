@@ -47,7 +47,7 @@ api._client = pipe.PipeClient(hub.start(mcp), api._on_pipe)
 ask = lambda tool, inp: asyncio.run_coroutine_threadsafe(mcp.approve(tool, inp), mcp.loop)
 waiting = lambda: [i for i in api.history() if i["kind"] == "approval" and i["status"] == "waiting"]
 
-r = json.loads(ask("mcp__AWRMWO-mcp__add_element", {"model": "RES"}).result(5))  # building never asks
+r = json.loads(ask("mcp__Ampwright__add_element", {"model": "RES"}).result(5))  # building never asks
 assert r["behavior"] == "allow" and not waiting() and not api.history(), r
 assert json.loads(ask("Read", {"file_path": "x"}).result(5))["behavior"] == "allow"
 # Design mode: dossier writes inside the v2 folder never ask; .emp files, other folders and shell commands do
@@ -75,19 +75,19 @@ assert not hub._runs_check("Write", {"command": "uv run checks/check_tidy.py x"}
 # the sweep and equations on one schematic never ask; project-wide ones (no document) do
 for tool, inp in (("set_frequencies", {"start_hz": 1e9, "stop_hz": 2e9, "points": 11, "document": "FN_RC"}),
                   ("add_equation", {"expression": "C1=1e-12", "document": "FN_RC"})):
-    assert json.loads(ask("mcp__AWRMWO-mcp__" + tool, inp).result(5))["behavior"] == "allow", tool
+    assert json.loads(ask("mcp__Ampwright__" + tool, inp).result(5))["behavior"] == "allow", tool
 assert not waiting()
 for tool, inp in (("Write", {"file_path": r"C:\Users\me\MyDesign.emp"}), ("Bash", {"command": "del x"}),
-                  ("mcp__AWRMWO-mcp__set_frequencies", {"around_hz": 1e9}),
-                  ("mcp__AWRMWO-mcp__add_equation", {"expression": "C1=1e-12", "document": ""})):
+                  ("mcp__Ampwright__set_frequencies", {"around_hz": 1e9}),
+                  ("mcp__Ampwright__add_equation", {"expression": "C1=1e-12", "document": ""})):
     f = ask(tool, inp)
     it = until(waiting, tool + " request shown")[0]
-    assert it["tool"] == tool.removeprefix("mcp__AWRMWO-mcp__"), it
+    assert it["tool"] == tool.removeprefix("mcp__Ampwright__"), it
     api.answer(it["id"], "deny")
     assert json.loads(f.result(5))["behavior"] == "deny", tool
 api.clear_history()
 
-f = ask("mcp__AWRMWO-mcp__save_project", {"name": "x"})
+f = ask("mcp__Ampwright__save_project", {"name": "x"})
 it = until(waiting, "save request shown")[0]
 assert it["tool"] == "save_project" and "x" in it["preview"], it
 assert api.answer(it["id"], "maybe")["ok"] is False
@@ -95,13 +95,13 @@ assert api.answer(it["id"], "allow")["ok"] is True
 assert json.loads(f.result(5))["behavior"] == "allow"
 assert api.answer(it["id"], "allow")["ok"] is False  # already answered
 
-f = ask("mcp__AWRMWO-mcp__delete_graph", {"name": "g"})
+f = ask("mcp__Ampwright__delete_graph", {"name": "g"})
 it = until(waiting, "delete request shown")[0]
 assert api.answer(it["id"], "deny")["ok"] is True
 r = json.loads(f.result(5))
 assert r["behavior"] == "deny" and "denied" in r["message"], r
 
-f = ask("mcp__AWRMWO-mcp__new_project", {})  # nobody answers: the server denies, the dialog closes
+f = ask("mcp__Ampwright__new_project", {})  # nobody answers: the server denies, the dialog closes
 until(waiting, "new_project shown")
 r = json.loads(f.result(5))
 assert r["behavior"] == "deny"

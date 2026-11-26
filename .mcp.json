@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "AWRMWO-mcp": {
+    "Ampwright": {
       "command": "uv",
       "args": ["run", "--script", "server.py"]
     }

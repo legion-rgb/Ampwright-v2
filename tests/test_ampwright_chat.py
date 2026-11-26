@@ -68,7 +68,7 @@ assert b.clear_history() and app.Api().history() == []
 # a denied or unanswered approval is the user's choice: "denied", no error line; a real error stays "failed"
 for sid, text, want in (("d1", "the user denied this in Ampwright", "denied"), ("d2", "timed out waiting for the user", "denied"),
                         ("d3", "no such graph", "failed")):
-    b._on_session({"event": "tool_use", "id": sid, "tool": "mcp__AWRMWO-mcp__delete_graph", "input": {"name": "g"}})
+    b._on_session({"event": "tool_use", "id": sid, "tool": "mcp__Ampwright__delete_graph", "input": {"name": "g"}})
     b._on_session({"event": "tool_result", "id": sid, "is_error": True, "text": text})
     it = b.history()[-1]
     assert it["status"] == want and ("error" in it) == (want == "failed"), it
@@ -115,7 +115,7 @@ m.clear_history()
 m._on_session({"event": "tool_use", "id": "A1", "tool": "Agent", "parent": None,
                "input": {"subagent_type": "awr-builder", "description": "Build rc_lpf", "prompt": "long brief " * 50}})
 m._on_session({"event": "reply", "text": "subagent thinking aloud", "parent": "A1"})
-m._on_session({"event": "tool_use", "id": "s1", "tool": "mcp__AWRMWO-mcp__add_element", "input": {"name": "RES"}, "parent": "A1"})
+m._on_session({"event": "tool_use", "id": "s1", "tool": "mcp__Ampwright__add_element", "input": {"name": "RES"}, "parent": "A1"})
 m._on_session({"event": "tool_result", "id": "s1", "is_error": False, "text": "ok", "parent": "A1"})
 m._on_session({"event": "tool_result", "id": "A1", "is_error": False, "text": "built", "parent": None})
 m._on_session({"event": "reply", "text": "Built. Next the evaluator.", "parent": None})

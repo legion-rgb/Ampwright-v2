@@ -1,4 +1,4 @@
-"""Call one read-only tool on the running AWRMWO-mcp hub over its named pipe (no second COM owner)."""
+"""Call one read-only tool on the running Ampwright hub over its named pipe (no second COM owner)."""
 import json
 import os
 import sys
