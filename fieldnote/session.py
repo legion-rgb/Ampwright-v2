@@ -29,6 +29,7 @@ def lean_args(pipe):
     server = {"command": "uv", "args": ["run", "--script", SERVER], "env": {"FIELDNOTE_PIPE": pipe}}
     return ["--strict-mcp-config", "--mcp-config", json.dumps({"mcpServers": {"AWRMWO-mcp": server}}),
             "--setting-sources", "project,local", "--disable-slash-commands", "--tools", "Read,Glob,Grep",
+            "--disallowedTools", "mcp__AWRMWO-mcp__reply",  # the app shows Claude's own answer; reply is for channel mode
             "--append-system-prompt", PROMPT, "--permission-prompt-tool", "mcp__AWRMWO-mcp__approve"]
 
 

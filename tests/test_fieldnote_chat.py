@@ -64,4 +64,19 @@ a._update_step(a.history()[-1]["id"], status="running")
 b = app.Api()
 assert len(b.history()) == n and b.history()[-1]["status"] == "stopped"
 assert b.clear_history() and app.Api().history() == []
-print("OK: chat, step status (done, failed, stopped), stop and resume, history saved and cleared")
+
+# a denied or unanswered approval is the user's choice: "denied", no error line; a real error stays "failed"
+for sid, text, want in (("d1", "the user denied this in Fieldnote", "denied"), ("d2", "timed out waiting for the user", "denied"),
+                        ("d3", "no such graph", "failed")):
+    b._on_session({"event": "tool_use", "id": sid, "tool": "mcp__AWRMWO-mcp__delete_graph", "input": {"name": "g"}})
+    b._on_session({"event": "tool_result", "id": sid, "is_error": True, "text": text})
+    it = b.history()[-1]
+    assert it["status"] == want and ("error" in it) == (want == "failed"), it
+
+# summaries are cut at a word, with an ellipsis
+assert app.cut("Done. I added a graph called S11_dB showing", 30) == "Done. I added a graph called…"
+assert app.cut("short", 30) == "short" and app.cut("x" * 40, 10) == "x" * 9 + "…"
+s = app.summarize({"text": "Done. I added a graph called S11_dB showing DB(|S(1,1)|)", "graph": "S11_dB"})
+assert s == "text=Done. I added a graph called…, graph=S11_dB", s
+assert len(app.summarize({k: "word " * 20 for k in "abcd"})) <= 90
+print("OK: chat, step status (done, failed, stopped, denied), stop and resume, history saved and cleared, word-safe summaries")

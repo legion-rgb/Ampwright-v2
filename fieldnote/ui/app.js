@@ -40,7 +40,7 @@ function onState(s) {
 // ---- chat and progress feed: every change arrives as the full history ----
 const STEP_ICON = [[/graph|measurement/, "i-graph"], [/simulat|frequenc|optim|sweep|status/, "i-sim"], [/^(em_|.*_em_|.*em_structure)/, "i-em"],
                    [/schematic|element|shunt|port|ground|connect|parameter|equation/, "i-schematic"]];
-const STATUS_TEXT = { running: "Running", done: "Done", failed: "Failed", stopped: "Stopped" };
+const STATUS_TEXT = { running: "Running", done: "Done", failed: "Failed", stopped: "Stopped", denied: "Denied" };
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls || "", textContent: text ?? "" });
 
 function stepRow(it) {
@@ -174,7 +174,19 @@ $("stop").addEventListener("click", () => api("stop_turn"));
 $("apAllow").addEventListener("click", () => answerApproval("allow"));
 $("apDeny").addEventListener("click", () => answerApproval("deny"));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("approval").hidden) answerApproval("deny"); });
-$("clear").addEventListener("click", () => api("clear_history"));
+let clearTimer = null;  // Clear wipes the saved history: first click arms it, a second click within 4 s clears
+$("clear").addEventListener("click", () => {
+  const b = $("clear");
+  const disarm = () => { clearTimer = null; delete b.dataset.armed; b.textContent = "Clear"; b.title = "Clear the saved history"; };
+  if (!clearTimer) {
+    b.dataset.armed = "1"; b.textContent = "Clear all?"; b.title = "Click again to delete the whole history";
+    clearTimer = setTimeout(disarm, 4000);
+    return;
+  }
+  clearTimeout(clearTimer);
+  disarm();
+  api("clear_history");
+});
 $("theme").addEventListener("click", toggleTheme);
 $("reconnect").addEventListener("click", reconnect);
 $("bannerRetry").addEventListener("click", reconnect);

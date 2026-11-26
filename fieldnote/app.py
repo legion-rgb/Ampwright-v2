@@ -25,6 +25,7 @@ HISTORY_MAX = 500  # items kept on disk
 TOOL_PREFIX = "mcp__AWRMWO-mcp__"
 APPROVE_WAIT = 120  # seconds; the server denies on its own after this (hub.APPROVE_TIMEOUT), so the dialog closes too
 POLL_S = 10  # project refresh; read-only pipe call, costs no Claude tokens
+DENY_TEXTS = ("the user denied this in Fieldnote", "timed out waiting for the user")  # hub.approve's deny messages
 
 
 class FLASHWINFO(ctypes.Structure):  # winuser.h, for FlashWindowEx
@@ -66,13 +67,22 @@ def load_history():
     return items
 
 
+def cut(s, n):
+    """s cut to at most n characters at a word boundary, with an ellipsis; one long word is cut hard."""
+    if len(s) <= n:
+        return s
+    head = s[:n - 1]
+    word = head.rsplit(" ", 1)[0].rstrip(" ,;:") if " " in head else ""
+    return (word if len(word) >= n // 2 else head) + "…"
+
+
 def summarize(inp):
-    """'name=rc_lpf, model=RES' for a step row; long values are cut."""
+    """'name=rc_lpf, model=RES' for a step row; long values are cut at a word."""
     parts = []
     for k, v in (inp or {}).items():
         v = v if isinstance(v, (str, int, float, bool)) else json.dumps(v, default=str)
-        parts.append("%s=%s" % (k, str(v)[:30]))
-    return ", ".join(parts)[:90]
+        parts.append("%s=%s" % (k, cut(str(v), 30)))
+    return cut(", ".join(parts), 90)
 
 
 class Api:
@@ -311,6 +321,9 @@ class Api:
                        "summary": summarize(ev.get("input")), "status": "running"})
         elif k == "tool_result":
             bad = ev.get("is_error")
+            if bad and any(m in (ev.get("text") or "") for m in DENY_TEXTS):  # the user's choice, not an error
+                self._update_step(ev.get("id"), status="denied")
+                return
             self._update_step(ev.get("id"), status="failed" if bad else "done", **({"error": ev.get("text")} if bad else {}))
             if not bad:
                 self._refresh_async()

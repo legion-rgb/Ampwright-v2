@@ -128,6 +128,7 @@ svg { width: 18px; height: 18px; flex: none; }
 .composer #send:not(:disabled) { border-color: var(--t1); color: var(--t1); }
 .composer #stop { border-color: var(--t3); color: var(--t3); }
 .composer #clear { color: var(--dim); }
+.composer #clear[data-armed] { border-color: var(--t3); color: var(--t3); }
 .composer :disabled { opacity: .55; cursor: not-allowed; }
 
 /* chat and progress feed */
@@ -149,6 +150,7 @@ svg { width: 18px; height: 18px; flex: none; }
 .step[data-status="done"] { border-left-color: var(--t2); }
 .step[data-status="failed"] { border-left-color: var(--t3); }
 .step[data-status="failed"] .st { color: var(--t3); }
+.step[data-status="denied"] { border-left-color: var(--dim); border-left-style: dashed; }
 .working { position: relative; height: 3px; overflow: hidden; background: var(--grat-fine); }
 .working i { position: absolute; top: 0; height: 3px; width: 22%; background: var(--t1); box-shadow: var(--glow) var(--t1);
              animation: sweep 1.6s ease-in-out infinite; }

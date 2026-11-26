@@ -41,4 +41,6 @@ assert str(pid) not in os.popen('tasklist /FI "PID eq %d"' % pid).read(), "child
 s.send("again")  # restarts and resumes the same conversation
 assert get("reply")["text"] == "echo again resume=True"
 s.stop()
-print("OK: replies, tool calls, tool results (ok and error), stop kills the child, resume works")
+la = session.lean_args("pipe")  # the channel reply tool is hidden: the app shows Claude's own answer
+assert la[la.index("--disallowedTools") + 1] == "mcp__AWRMWO-mcp__reply", la
+print("OK: replies, tool calls, tool results (ok and error), stop kills the child, resume works, reply tool hidden")

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fieldnote window, tested live · State machine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --color-paper:#f5f5f5; --color-ink:#2d3142; --color-muted:#4f5d75; --color-soft:#5a6580; --color-rule:rgba(45,49,66,0.12); --color-accent:#bf4520; --font-sans:'Geist',system-ui,sans-serif; --font-serif:'Instrument Serif',serif; --font-mono:'Geist Mono',ui-monospace,monospace; }
+    body { font-family:var(--font-sans); background:var(--color-paper); color:var(--color-ink); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:3rem 2rem; }
+    .frame { max-width:1200px; width:100%; }
+    .scroll { overflow-x:auto; }
+    .eyebrow { font-family:var(--font-mono); font-size:0.66rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--color-muted); margin-bottom:0.5rem; }
+    h1 { font-family:var(--font-serif); font-size:clamp(1.5rem,2.4vw + 0.75rem,2rem); font-weight:400; letter-spacing:-0.02em; line-height:1.15; color:var(--color-ink); margin-bottom:1.5rem; }
+    svg { width:100%; min-width:1000px; display:block; }
+    svg text { font-family:'Geist',sans-serif; }
+    .cards { display:grid; grid-template-columns:1.15fr 1fr 0.95fr; gap:16px; margin-top:24px; }
+    .card { background:#fff; border:1px solid var(--color-rule); border-radius:6px; padding:16px 20px; }
+    .card h2 { font-family:var(--font-mono); font-size:0.66rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--color-muted); margin-bottom:8px; }
+    .card p.big { font-weight:600; font-size:1.05rem; margin-bottom:8px; }
+    .card.focal p.big { color:var(--color-accent); }
+    .card ul { list-style:none; font-size:0.86rem; line-height:1.55; color:var(--color-ink); }
+    .card li { padding-left:14px; position:relative; }
+    .card li::before { content:""; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background:var(--color-muted); }
+    .card.focal li::before { background:var(--color-accent); }
+    code { font-family:var(--font-mono); font-size:0.8rem; }
+    @media (max-width: 760px) { .cards { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">State · Fieldnote v2 · live window test, 25 Nov 2026</p>
+    <h1>Every button in the Fieldnote window, clicked live</h1>
+
+    <div class="scroll">
+    <svg viewBox="0 0 1000 568" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fieldnote-test-map-title fieldnote-test-map-desc">
+      <title id="fieldnote-test-map-title">Fieldnote window states, tested live</title>
+      <desc id="fieldnote-test-map-desc">State machine of the Fieldnote desktop window: Starting, Ready and Working on the main rail; Approval, Restarting and Error banner as wait and recovery states; Closed as the end state; every transition passed a live test with real Claude Code and AWR.</desc>
+      <defs>
+        <pattern id="fnmap-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/></pattern>
+        <marker id="fnmap-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
+        <marker id="fnmap-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#bf4520"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#f5f5f5"/>
+      <rect width="100%" height="100%" fill="url(#fnmap-dots)" opacity="0.55"/>
+      <rect x="24" y="44" width="952" height="120" rx="8" fill="rgba(79,93,117,0.035)" stroke="rgba(45,49,66,0.12)"/>
+      <rect x="24" y="400" width="952" height="104" rx="8" fill="rgba(45,49,66,0.035)" stroke="rgba(45,49,66,0.12)"/>
+      <text x="40" y="60" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.14em">WAIT / RECOVERY</text>
+      <text x="40" y="212" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.14em">MAIN</text>
+      <text x="40" y="420" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="0.14em">END</text>
+
+      <!-- Eleven transitions, drawn before states. -->
+      <line x1="40" y1="256" x2="88" y2="256" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="228" y1="256" x2="292" y2="256" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="432" y1="244" x2="552" y2="244" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="552" y1="268" x2="432" y2="268" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#fnmap-arrow)"/>
+      <line x1="596" y1="220" x2="596" y2="140" stroke="#bf4520" stroke-width="1.4" marker-end="url(#fnmap-arrow-accent)"/>
+      <line x1="648" y1="140" x2="648" y2="220" stroke="#bf4520" stroke-width="1.4" marker-end="url(#fnmap-arrow-accent)"/>
+      <path d="M572 220 V184 Q572 176 564 176 H460 Q452 176 452 168 V140" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="392" y1="140" x2="392" y2="220" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#fnmap-arrow)"/>
+      <path d="M316 220 V184 Q316 176 308 176 H168 Q160 176 160 168 V140" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="228" y1="104" x2="340" y2="104" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+      <line x1="364" y1="292" x2="364" y2="416" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fnmap-arrow)"/>
+
+      <!-- Labels on opaque masks, 6-8px clear of their strokes. -->
+      <g font-family="'Geist Mono',monospace" font-size="7" text-anchor="middle" letter-spacing="0.08em" fill="#4f5d75">
+        <rect x="44" y="238" width="40" height="12" rx="2" fill="#f5f5f5"/><text x="64" y="247">LAUNCH</text>
+        <rect x="228" y="238" width="64" height="12" rx="2" fill="#f5f5f5"/><text x="260" y="247">AWR FOUND</text>
+        <rect x="456" y="226" width="72" height="12" rx="2" fill="#f5f5f5"/><text x="492" y="235">SEND / ENTER</text>
+        <rect x="460" y="274" width="64" height="12" rx="2" fill="#f5f5f5"/><text x="492" y="283">TURN ENDS</text>
+        <rect x="604" y="174" width="36" height="12" rx="2" fill="#f5f5f5"/><text x="622" y="183" fill="#bf4520">ASKS</text>
+        <rect x="656" y="174" width="88" height="12" rx="2" fill="#f5f5f5"/><text x="700" y="183" fill="#bf4520">ALLOW/DENY/ESC</text>
+        <rect x="492" y="158" width="40" height="12" rx="2" fill="#f5f5f5"/><text x="512" y="167">STOP</text>
+        <rect x="340" y="186" width="44" height="12" rx="2" fill="#f5f5f5"/><text x="362" y="195">RESUME</text>
+        <rect x="200" y="158" width="80" height="12" rx="2" fill="#f5f5f5"/><text x="240" y="167">CLAUDE EXITS</text>
+        <rect x="264" y="86" width="40" height="12" rx="2" fill="#f5f5f5"/><text x="284" y="95">RETRY</text>
+        <rect x="372" y="348" width="76" height="12" rx="2" fill="#f5f5f5"/><text x="410" y="357">CLOSE WINDOW</text>
+      </g>
+
+      <circle cx="34" cy="256" r="6" fill="#2d3142"/>
+
+      <!-- Main rail. -->
+      <g font-family="'Geist',sans-serif" text-anchor="middle">
+        <g><rect x="88" y="220" width="140" height="72" rx="8" fill="#fff" stroke="#2d3142"/><text x="158" y="251" fill="#2d3142" font-size="12" font-weight="600">Starting</text><text x="158" y="270" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">ready in 8.6 s</text></g>
+        <g><rect x="292" y="220" width="140" height="72" rx="8" fill="#fff" stroke="#2d3142"/><text x="362" y="251" fill="#2d3142" font-size="12" font-weight="600">Ready</text><text x="362" y="270" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">project card live</text></g>
+        <g><rect x="552" y="220" width="140" height="72" rx="8" fill="#fff" stroke="#2d3142"/><text x="622" y="251" fill="#2d3142" font-size="12" font-weight="600">Working</text><text x="622" y="270" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">feed row per step</text></g>
+      </g>
+
+      <!-- Wait and recovery states. -->
+      <g text-anchor="middle">
+        <g><rect x="88" y="68" width="140" height="72" rx="8" fill="#f5f5f5" stroke="#4f5d75" stroke-dasharray="5,4"/><rect x="98" y="78" width="52" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.45)"/><text x="124" y="87" fill="#4f5d75" font-size="7" font-family="'Geist Mono',monospace">RECOVERY</text><text x="158" y="111" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist',sans-serif">Error banner</text><text x="158" y="126" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">says what broke</text></g>
+        <g><rect x="340" y="68" width="140" height="72" rx="8" fill="#f5f5f5" stroke="#4f5d75" stroke-dasharray="5,4"/><rect x="350" y="78" width="52" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.45)"/><text x="376" y="87" fill="#4f5d75" font-size="7" font-family="'Geist Mono',monospace">RECOVERY</text><text x="410" y="111" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist',sans-serif">Restarting</text><text x="410" y="126" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">same conversation</text></g>
+        <g><rect x="552" y="68" width="140" height="72" rx="8" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/><rect x="562" y="78" width="34" height="12" rx="2" fill="none" stroke="rgba(191,69,32,0.55)"/><text x="579" y="87" fill="#bf4520" font-size="7" font-family="'Geist Mono',monospace">WAIT</text><text x="622" y="111" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist',sans-serif">Approval</text><text x="622" y="126" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">Deny has focus</text></g>
+      </g>
+
+      <!-- Callout beside the focal state. -->
+      <g font-family="'Instrument Serif',serif" font-style="italic" font-size="14" fill="#2d3142">
+        <text x="716" y="92">The window froze here on the second</text>
+        <text x="716" y="110">approval. Fixed, with a regression</text>
+        <text x="716" y="128">test, in commit 982a0b1.</text>
+      </g>
+
+      <!-- End state. -->
+      <g text-anchor="middle">
+        <g><rect x="292" y="416" width="140" height="72" rx="8" fill="rgba(45,49,66,0.04)" stroke="#4f5d75"/><rect x="302" y="426" width="30" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.45)"/><text x="317" y="435" fill="#4f5d75" font-size="7" font-family="'Geist Mono',monospace">END</text><text x="362" y="459" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist',sans-serif">Closed</text><text x="362" y="474" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace">0 processes left</text></g>
+      </g>
+
+      <!-- Legend strip. -->
+      <g font-family="'Geist Mono',monospace" font-size="8" fill="#4f5d75">
+        <rect x="40" y="528" width="20" height="12" rx="3" fill="#fff" stroke="#2d3142"/><text x="68" y="537">STATE</text>
+        <rect x="128" y="528" width="20" height="12" rx="3" fill="#f5f5f5" stroke="#4f5d75" stroke-dasharray="4,3"/><text x="156" y="537">WAIT / RECOVERY</text>
+        <rect x="272" y="528" width="20" height="12" rx="3" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/><text x="300" y="537">BUG FOUND AND FIXED</text>
+        <line x1="440" y1="534" x2="468" y2="534" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4"/><text x="476" y="537">RETURN PATH</text>
+        <text x="960" y="537" text-anchor="end">EVERY ARROW PASSED LIVE · REAL CLAUDE CODE + AWR</text>
+      </g>
+    </svg>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Result</h2>
+        <p class="big">22 of 22 live checks pass</p>
+        <ul>
+          <li>RC low-pass task built in AWR, project card refreshed</li>
+          <li>Theme switch works and is remembered after a restart</li>
+          <li>Reconnect re-reads the project; empty Send is ignored</li>
+          <li>History comes back after a restart; Clear empties it</li>
+          <li>Closing leaves no Claude Code or server running</li>
+        </ul>
+      </div>
+      <div class="card focal">
+        <h2>Bug found</h2>
+        <p class="big">Window froze on an approval</p>
+        <ul>
+          <li>Bringing the window forward blocked the event reader</li>
+          <li>Now done on its own thread, with a taskbar flash</li>
+          <li>New test hangs on the old code and passes now</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Fresh-eye notes, fixed</h2>
+        <p class="big">4 rough edges smoothed</p>
+        <ul>
+          <li>No more <code>reply</code> rows repeating the answer</li>
+          <li>A Deny now shows as a neutral "Denied" step</li>
+          <li>Clear asks "Clear all?" before it wipes history</li>
+          <li>Step summaries cut at a word, with "…"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

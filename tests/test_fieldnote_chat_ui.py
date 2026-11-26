@@ -63,8 +63,12 @@ def run():
         out["stopped"] = q("[$('working').hidden, $('stop').hidden, !$('send').hidden, document.querySelector('.note').textContent].join('|')")
 
         before = q("document.querySelectorAll('#feed > *').length")
+        q("$('clear').click(); 1")  # first click only arms it
+        time.sleep(0.5)
+        out["armed"] = q("[!$('feed').hidden, $('clear').textContent, $('clear').dataset.armed].join('|')")
         q("$('clear').click(); 1")
         until("$('feed').hidden", "cleared")
+        out["disarmed"] = q("$('clear').textContent")
         out["cleared"] = [before > 8, q("!$('feedEmpty').hidden")]
         out["errors"] = q("$('bannerText').textContent")
     except Exception as e:
@@ -81,4 +85,5 @@ assert out["failed"] == "no such schematic", out
 assert out["working"] == "true|true|true|true", out
 assert out["stopped"].startswith("true|true|true|Stopped."), out
 assert out["cleared"] == [True, True] and out["errors"] == "", out
-print("OK: type a task, steps show done/failed/stopped, working bar and Stop, history clears")
+assert out["armed"] == "true|Clear all?|1" and out["disarmed"] == "Clear", out
+print("OK: type a task, steps show done/failed/stopped, working bar and Stop, Clear needs a second click")
