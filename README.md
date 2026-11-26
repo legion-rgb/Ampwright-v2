@@ -1,4 +1,4 @@
-# AWRMWO-mcp
+# AWRMWO-mcp v2 (Ampwright)
 
 An MCP server that lets Claude Code (or another MCP client) drive Cadence AWR Microwave Office. You describe a circuit, a layout or an analysis in plain language. Claude builds it in the AWR window you have open, simulates it and reads the results back.
 
@@ -6,7 +6,8 @@ As far as we know, no MCP server for AWR Microwave Office existed before this on
 
 - **AWR version:** AWR Design Environment v17 (22.1). Other versions are untested.
 - **Platform:** Windows only. It talks to AWR through COM.
-- **Status:** schematic and EM layout tools are built and checked against RF theory. Optimisation and tuning (Phase 5) are not started.
+- **Status (26 Nov 2026):** schematic, EM, optimizer and sweep tools are built and checked against RF theory. The agent design loop (below) passes 6 designs in live AWR. The Ampwright desktop app is moved in from v1. Theory training and the v3 power-amplifier plan are written but not started.
+- **Repo:** standalone, private. v1 is a separate project and is unchanged.
 
 ## How it works
 
@@ -20,18 +21,18 @@ The server attaches to the AWR window that is already running, so you watch ever
 
 1. Install AWR DE v17 with a license, and install [uv](https://docs.astral.sh/uv/).
 2. Open AWR with your project. Keep only one AWR window open.
-3. Open Claude Code in the folder that holds `.mcp.json`. It already registers the server:
+3. Open Claude Code in this folder (it holds `.mcp.json`). It already registers the server:
    ```json
-   {"mcpServers": {"AWRMWO-mcp": {"command": "uv", "args": ["run", "--script", "AWRMWO-mcp/server.py"]}}}
+   {"mcpServers": {"AWRMWO-mcp": {"command": "uv", "args": ["run", "--script", "server.py"]}}}
    ```
 4. Approve the `AWRMWO-mcp` server when Claude Code asks. Check it with `/mcp`.
 
 There is no separate install step for packages. `server.py` declares its own dependencies (`mcp<2`, `pywin32`, `matplotlib`), and uv installs them on first run.
 
-To check the server without Claude, run this from the folder above `AWRMWO-mcp`:
+To check the server without Claude, run this from this folder:
 
 ```
-uv run --script AWRMWO-mcp/tests/mcp_call.py project_info '{}'
+uv run --script tests/mcp_call.py project_info '{}'
 ```
 
 ### Ampwright desktop app
@@ -40,20 +41,36 @@ Ampwright is a desktop window for AWR work, brought over from v1 on 25 Nov 2026.
 
 Ampwright's hidden session starts in the workspace folder, so it uses the lean setup (AWR server only) and not this folder's agent loop or `v2_*` guard hooks. The agent loop still runs from a Claude Code session opened in this folder.
 
+## The agent design loop (v2)
+
+You give a circuit task in plain language. Claude Code, opened in this folder, acts as the Design Lead and runs a loop of subagents. Each agent has its own tool list; no agent can save or start a new project.
+
+```
+spec (you approve) -> theory -> build -> evaluate -> judge --pass--> review -> report (you approve any save)
+                                  ^                     | fail
+                                  +------- fix <--------+   (3 failed rounds, then it asks you)
+```
+
+- Agents: `circuit-theory`, `awr-builder`, `circuit-evaluator`, `verification-judge`, `circuit-fixer`, `design-reviewer`, `lesson-keeper`, `test-runner`, in [.claude/agents/](.claude/agents/). They talk through files in `designs/<slug>/`, not through chat.
+- Scripted checks in `checks/` (`check_spec.py`, `check_tidy.py`) and guard hooks stop unsafe or untidy AWR changes.
+- `errors.md` and `playbook.md` hold known errors and lessons; only `lesson-keeper` edits them.
+- Passed designs: `rc_lpf`, `ne3508_bias`, `rc_lpf_fault` (seeded fault fixed in 1 round), `tl_qwt`, `rlc_notch`, `cheb5_lpf`. Evals score 5 of 6 (`python evals/score.py`).
+- Rules and details: [CLAUDE.md](CLAUDE.md), [AGENTIC_PLAN.md](AGENTIC_PLAN.md).
+
 ### GitHub Copilot (VS Code)
 
 The server should also work with Copilot in Agent mode, but this is untested. Add `.vscode/mcp.json`:
 
 ```json
 {"servers": {"AWRMWO-mcp": {"type": "stdio", "command": "uv",
-  "args": ["run", "--script", "${workspaceFolder}/AWRMWO-mcp/server.py"]}}}
+  "args": ["run", "--script", "${workspaceFolder}/server.py"]}}}
 ```
 
 It only works from VS Code on the PC where AWR runs, not from Copilot's cloud agent.
 
 ## What it can do
 
-40 tools, grouped by job.
+46 tools, grouped by job.
 
 ### Project
 
@@ -154,15 +171,17 @@ The Renesas NE3508M04 HJ-FET was loaded from AWR's Renesas library as a netlist 
 
 ### Running the tests
 
-From the folder above `AWRMWO-mcp`:
+From this folder:
 
 ```
-python AWRMWO-mcp/tests/test_pins.py                    # wiring logic, no AWR needed
-python AWRMWO-mcp/tests/test_em.py                      # EM lint logic, no AWR needed
-uv run --script AWRMWO-mcp/tests/rf_theory.py           # the theory module's own self-checks
-uv run --with numpy AWRMWO-mcp/tests/validate.py        # schematic results against theory
-uv run --with numpy AWRMWO-mcp/tests/validate_em.py     # EM results against theory
+python tests/test_pins.py                    # wiring logic, no AWR needed
+python tests/test_em.py                      # EM lint logic, no AWR needed
+uv run --script tests/rf_theory.py           # the theory module's own self-checks
+uv run --with numpy tests/validate.py        # schematic results against theory
+uv run --with numpy tests/validate_em.py     # EM results against theory
 ```
+
+The other `tests/test_*.py` files (hub, hooks, checks, session, Ampwright app) need no AWR; 18 of them pass.
 
 The `validate` scripts compare saved results in `tests/_out/`. To refresh them, re-run the circuit batches in `tests/circuits/` with `tests/mcp_call.py --batch`, in a fresh untitled project.
 
@@ -206,12 +225,31 @@ These are worth knowing about if you script AWR yourself.
 | `optimize.py` | Optimizer goals, variables, runs, and parameter sweeps |
 | `em.py` | EM structures, stackup, shapes, ports, boundary |
 | `helpers.py` | Pure logic with no AWR: routing, placement, EM lint |
-| `PLAN.md` | Development plan, phase status and decisions |
+| `hub.py` | Approval hub: asks you before save, new project, delete and project-wide changes |
+| `ampwright/`, `Ampwright.bat` | The desktop app (see above) |
+| `.claude/` | Agent files and settings for the design loop |
+| `checks/` | Spec and tidiness checks, guard hooks |
+| `designs/` | One dossier per design (spec, theory, results, verdict, report) |
+| `library/`, `evals/` | Verified building blocks; scored eval tasks |
+| `errors.md`, `playbook.md` | Known errors and lessons |
 | `tests/` | Theory module, test harness, circuit batches, validation scripts |
+
+## Plans
+
+| File | What |
+|---|---|
+| [PROGRESS.md](PROGRESS.md) | Current state, open items, what to do next |
+| [AGENTIC_PLAN.md](AGENTIC_PLAN.md) | The agent loop (phases A-E done or in progress) |
+| [AMPWRIGHT_PLAN.md](AMPWRIGHT_PLAN.md) | The desktop app; phases 1-2 done, 3-4 not started |
+| [THEORY_PLAN.md](THEORY_PLAN.md), [THEORY_GOVERNANCE.md](THEORY_GOVERNANCE.md) | Theory training: sourced cards, verified design functions, drills. Proposed |
+| PROGRESS.md, "v3" section | RF power-amplifier workflow with its own loop. Proposed |
+| [PLAN.md](PLAN.md) | The original v1 server plan and decisions |
 
 ## Roadmap
 
-- **Phase 5:** optimiser goals, tuning and parameter sweeps.
-- **Library search:** find and load vendor parts by name.
+- **Theory training:** `rf_design.py` with goal-to-values functions (Chebyshev synthesis, FET bias solver), theory cards, drills.
+- **Ampwright phases 3 and 4**, then live checks of the mode switch with AWR open.
 - **Tidy layout:** routing that avoids crossings and part bodies.
-- **Phase 6:** move to the `mcp` 2.x SDK (currently pinned to v1), packaging, and more AWR versions.
+- **v3 power amplifiers:** HB, load-pull and power sweeps through the server, a PA diagnostician agent.
+- **Library search:** find and load vendor parts by name.
+- **Later:** the `mcp` 2.x SDK (currently pinned to v1), packaging, more AWR versions.
