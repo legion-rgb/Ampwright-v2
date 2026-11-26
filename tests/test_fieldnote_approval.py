@@ -50,6 +50,21 @@ waiting = lambda: [i for i in api.history() if i["kind"] == "approval" and i["st
 r = json.loads(ask("mcp__AWRMWO-mcp__add_element", {"model": "RES"}).result(5))  # building never asks
 assert r["behavior"] == "allow" and not waiting() and not api.history(), r
 assert json.loads(ask("Read", {"file_path": "x"}).result(5))["behavior"] == "allow"
+# Design mode: dossier writes inside the v2 folder never ask; .emp files, other folders and shell commands do
+for inp in ({"file_path": "designs/rc_lpf/spec.md"}, {"file_path": os.path.join(os.path.dirname(hub.__file__), "PROGRESS.md")}):
+    assert json.loads(ask("Write", inp).result(5))["behavior"] == "allow", inp
+assert json.loads(ask("Agent", {"subagent_type": "circuit-theory"}).result(5))["behavior"] == "allow"
+assert not waiting() and not api.history()
+assert not hub._writes_inside("Write", {"file_path": "../CLAUDE.md"}) and not hub._writes_inside("Edit", {"file_path": "x.EMP"})
+assert not hub._writes_inside("Write", {"file_path": r"D:\elsewhere\a.txt"}) and not hub._writes_inside("Write", {"file_path": 3})
+assert not hub._writes_inside("Write", {}) and not hub._writes_inside("Bash", {"file_path": "a.txt"})
+for tool, inp in (("Write", {"file_path": r"C:\Users\me\MyDesign.emp"}), ("Bash", {"command": "del x"})):
+    f = ask(tool, inp)
+    it = until(waiting, tool + " request shown")[0]
+    assert it["tool"] == tool, it
+    api.answer(it["id"], "deny")
+    assert json.loads(f.result(5))["behavior"] == "deny", tool
+api.clear_history()
 
 f = ask("mcp__AWRMWO-mcp__save_project", {"name": "x"})
 it = until(waiting, "save request shown")[0]

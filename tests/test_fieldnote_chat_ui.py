@@ -71,6 +71,26 @@ def run():
         out["disarmed"] = q("$('clear').textContent")
         out["cleared"] = [before > 8, q("!$('feedEmpty').hidden")]
         out["errors"] = q("$('bannerText').textContent")
+
+        # mode switch: Quick lit at start, locked during a turn, a click on Design switches and changes the empty-screen text
+        out["mode0"] = q("[document.querySelector('[data-mode=quick]').ariaPressed, $('emptyTitle').textContent].join('|')")
+        api._set(turn="working")
+        until("document.querySelector('[data-mode=design]').disabled", "mode locked mid-turn")
+        api._set(turn="idle")
+        until("!document.querySelector('[data-mode=design]').disabled", "mode unlocked")
+        q("document.querySelector('[data-mode=design]').click(); 1")
+        until("document.querySelector('[data-mode=design]').ariaPressed == 'true'", "design lit")
+        out["mode1"] = q("[document.querySelector('[data-mode=quick]').ariaPressed, $('emptyTitle').textContent,"
+                         " $('task').placeholder.startsWith('Describe a design goal')].join('|')")
+        out["saved_mode"] = app.load_settings()["mode"]
+
+        # a subagent row, with its step indented under it
+        api._on_session({"event": "tool_use", "id": "A1", "tool": "Agent", "input": {"subagent_type": "circuit-theory", "description": "Hand calcs"}})
+        api._on_session({"event": "tool_use", "id": "s1", "tool": "Write", "input": {"file_path": "theory.md"}, "parent": "A1"})
+        until("document.querySelector('.step.sub')", "nested step")
+        out["nested"] = q("[document.querySelector('.step.agent .tool').textContent, document.querySelector('.step.agent use').getAttribute('href'),"
+                          " document.querySelector('.step.sub .tool').textContent, document.querySelectorAll('.step.agent.sub').length,"
+                          " getComputedStyle(document.querySelector('.step.sub')).marginLeft].join('|')")
     except Exception as e:
         out["error"] = repr(e)
     api._session.stop()
@@ -86,4 +106,8 @@ assert out["working"] == "true|true|true|true", out
 assert out["stopped"].startswith("true|true|true|Stopped."), out
 assert out["cleared"] == [True, True] and out["errors"] == "", out
 assert out["armed"] == "true|Clear all?|1" and out["disarmed"] == "Clear", out
-print("OK: type a task, steps show done/failed/stopped, working bar and Stop, Clear needs a second click")
+assert out["mode0"] == "true|Describe a circuit", out
+assert out["mode1"] == "false|Describe a design goal|true" and out["saved_mode"] == "design", out
+assert out["nested"] == "circuit-theory|#i-source|Write|0|40px", out
+print("OK: type a task, steps show done/failed/stopped, working bar and Stop, Clear needs a second click, "
+      "mode switch (lit, locked mid-turn, saved), subagent row with nested step")

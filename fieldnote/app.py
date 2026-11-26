@@ -18,6 +18,8 @@ import session as session_mod
 
 UI = os.path.join(HERE, "ui")
 WORKSPACE = os.path.dirname(os.path.dirname(HERE))  # workspace: project CLAUDE.md rules load from here
+# Design mode runs in the v2 folder, so its CLAUDE.md (Design Lead loop), agents and hooks load
+WORKSPACES = {"quick": WORKSPACE, "design": os.path.dirname(HERE)}
 SETTINGS = os.path.join(os.environ.get("APPDATA", HERE), "Fieldnote", "settings.json")
 PIPE = r"\\.\pipe\AWRMWO-%s-fieldnote-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
 HISTORY = os.path.join(os.path.dirname(SETTINGS), "history.json")
@@ -44,12 +46,14 @@ def build_page():
 
 
 def load_settings():
-    s = {"theme": "dark", "model": ""}
+    s = {"theme": "dark", "model": "", "mode": "quick"}
     try:
         with open(SETTINGS, encoding="utf-8") as f:
             s.update(json.load(f))
     except (OSError, ValueError):
         pass
+    if s["mode"] not in WORKSPACES:  # a hand-edited or old file never starts an unknown setup
+        s["mode"] = "quick"
     return s
 
 
@@ -93,7 +97,9 @@ class Api:
         self._session = None
         self._client = None
         self._lock = threading.Lock()
-        self._state = {"claude": "off", "awr": "off", "detail": "Starting…", "project": None, "turn": "idle"}
+        self._state = {"claude": "off", "awr": "off", "detail": "Starting…", "project": None, "turn": "idle",
+                       "mode": load_settings()["mode"]}
+        self._sids = {}  # resume id per mode: each mode has its own tools, so its own conversation
         self._stop = threading.Event()
         self._history = load_history()
         self._hlock = threading.Lock()
@@ -263,10 +269,7 @@ class Api:
         if not (path and os.path.isfile(path)):
             return self._set(claude="error", detail="Claude Code wasn't found. Install the Claude Code extension in VS Code.")
         self._set(claude="connecting", awr="off", detail="Starting Claude Code…")
-        sid = self._session.session_id if self._session else None  # keep the conversation across restarts
-        self._session = session_mod.Session(path, WORKSPACE, PIPE, self._on_session, load_settings()["model"] or None,
-                                            self._extra_args)
-        self._session.session_id = sid
+        self._make_session(path)
         self._session.start()
         end = time.time() + 45
         while time.time() < end and not self._stop.is_set():
@@ -282,6 +285,32 @@ class Api:
             return self._set(claude="error", detail="The AWR server didn't start. Check that uv is installed.")
         self._set(claude="up", awr="connecting", detail="Reading the AWR project…")
         self._refresh()
+
+    def _make_session(self, path):
+        """A session for the saved mode, resuming that mode's conversation (kept across Stop and mode switches)."""
+        if self._session:
+            self._sids[self._session.mode] = self._session.session_id
+        s = load_settings()
+        self._session = session_mod.Session(path, WORKSPACES[s["mode"]], PIPE, self._on_session, s["model"] or None,
+                                            self._extra_args, mode=s["mode"])
+        self._session.session_id = self._sids.get(s["mode"])
+        self._set(mode=s["mode"])
+
+    def set_mode(self, mode):
+        """Quick or Design. Switching starts a new Claude Code session (its tools differ), never during a turn."""
+        if mode not in WORKSPACES:
+            return {"ok": False, "error": "Unknown mode: %s" % mode}
+        if self._state["turn"] == "working":
+            return {"ok": False, "error": "Wait for Claude to finish, or Stop it, before switching mode."}
+        if self._state["claude"] == "connecting":  # a restart is already on its way; a second one would orphan a session
+            return {"ok": False, "error": "Claude Code is still starting. Switch again when it is running."}
+        if mode == load_settings()["mode"] and self._session and self._session.mode == mode:
+            return {"ok": True}
+        self.save_settings({"mode": mode})
+        self._set(mode=mode, claude="connecting")
+        self._add({"kind": "note", "text": "Switched to %s mode." % mode.capitalize()})
+        threading.Thread(target=self._restart, daemon=True).start()
+        return {"ok": True}
 
     def _refresh(self):
         if not self._client:
@@ -315,10 +344,16 @@ class Api:
     def _on_session(self, ev):
         k = ev.get("event")
         if k == "reply":
-            self._add({"kind": "claude", "text": ev["text"]})
+            if not ev.get("parent"):  # a subagent's own notes; its report comes back to the lead, who answers the user
+                self._add({"kind": "claude", "text": ev["text"]})
         elif k == "tool_use":
-            self._add({"kind": "step", "id": ev.get("id"), "tool": (ev.get("tool") or "").removeprefix(TOOL_PREFIX),
-                       "summary": summarize(ev.get("input")), "status": "running"})
+            tool, inp = (ev.get("tool") or "").removeprefix(TOOL_PREFIX), ev.get("input") or {}
+            step = {"kind": "step", "id": ev.get("id"), "tool": tool, "summary": summarize(inp), "status": "running"}
+            if tool in ("Agent", "Task"):  # Design mode: one row per subagent, its own steps nest under it
+                step.update(tool=inp.get("subagent_type") or "agent", summary=cut(inp.get("description") or "", 90), agent=True)
+            if ev.get("parent"):
+                step["parent"] = ev["parent"]
+            self._add(step)
         elif k == "tool_result":
             bad = ev.get("is_error")
             if bad and any(m in (ev.get("text") or "") for m in DENY_TEXTS):  # the user's choice, not an error
@@ -379,7 +414,7 @@ class Api:
 
     def save_settings(self, obj):
         s = load_settings()
-        s.update({k: obj[k] for k in ("theme", "model") if k in obj})
+        s.update({k: obj[k] for k in ("theme", "model", "mode") if k in obj})
         os.makedirs(os.path.dirname(SETTINGS), exist_ok=True)
         with open(SETTINGS, "w", encoding="utf-8") as f:
             json.dump(s, f, indent=2)

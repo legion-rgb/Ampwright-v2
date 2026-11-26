@@ -43,4 +43,18 @@ assert get("reply")["text"] == "echo again resume=True"
 s.stop()
 la = session.lean_args("pipe")  # the channel reply tool is hidden: the app shows Claude's own answer
 assert la[la.index("--disallowedTools") + 1] == "mcp__AWRMWO-mcp__reply", la
-print("OK: replies, tool calls, tool results (ok and error), stop kills the child, resume works, reply tool hidden")
+assert la[la.index("--tools") + 1] == "Read,Glob,Grep" and la[la.index("--append-system-prompt") + 1] == session.PROMPT
+ld = session.lean_args("pipe", "design")  # Design mode: dossier writes + the agent loop, Design Lead prompt, same approvals
+assert ld[ld.index("--tools") + 1] == "Read,Glob,Grep,Write,Edit,Agent", ld
+assert ld[ld.index("--append-system-prompt") + 1] == session.DESIGN_PROMPT, ld
+assert ld[ld.index("--permission-prompt-tool") + 1] == "mcp__AWRMWO-mcp__approve", ld
+nested = queue.Queue()  # a subagent's step carries the id of the Agent call that started it
+n = session.Session(sys.executable, HERE, "pipe", nested.put, mode="design")
+n._handle({"type": "assistant", "parent_tool_use_id": "toolu_A", "message": {"content": [
+    {"type": "tool_use", "id": "t9", "name": "Read", "input": {}}]}})
+n._handle({"type": "user", "parent_tool_use_id": "toolu_A", "message": {"content": [
+    {"type": "tool_result", "tool_use_id": "t9", "content": "x"}]}})
+n._handle({"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_A", "name": "Agent", "input": {}}]}})
+assert [nested.get()["parent"] for _ in range(3)] == ["toolu_A", "toolu_A", None]
+print("OK: replies, tool calls, tool results (ok and error), stop kills the child, resume works, reply tool hidden, "
+      "Design args, subagent steps keep their parent")

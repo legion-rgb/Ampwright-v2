@@ -79,4 +79,50 @@ assert app.cut("short", 30) == "short" and app.cut("x" * 40, 10) == "x" * 9 + "â
 s = app.summarize({"text": "Done. I added a graph called S11_dB showing DB(|S(1,1)|)", "graph": "S11_dB"})
 assert s == "text=Done. I added a graph calledâ€¦, graph=S11_dB", s
 assert len(app.summarize({k: "word " * 20 for k in "abcd"})) <= 90
-print("OK: chat, step status (done, failed, stopped, denied), stop and resume, history saved and cleared, word-safe summaries")
+# Quick/Design mode: saved, refused mid-turn, a switch restarts; each mode keeps its own folder and conversation
+restarts.clear()
+m = make()
+assert m.state()["mode"] == "quick" and app.load_settings()["mode"] == "quick"
+assert m.set_mode("bogus")["ok"] is False
+m._set(turn="working")
+assert m.set_mode("design")["ok"] is False and app.load_settings()["mode"] == "quick"
+m._set(turn="idle")
+m._session.session_id = "q1"
+assert m.set_mode("design")["ok"] is True
+r2 = m.set_mode("quick")  # a second click while the first restart runs: refused, so no second session
+wait(lambda: restarts, "restart on mode switch")
+time.sleep(0.3)
+assert r2["ok"] is False and "still starting" in r2["error"] and len(restarts) == 1, (r2, restarts)
+assert app.load_settings()["mode"] == "design" and m.state()["mode"] == "design" and m.state()["claude"] == "connecting"
+m._set(claude="up")  # the stubbed _boot never gets there itself
+assert m.history()[-1]["text"] == "Switched to Design mode."
+m._make_session(sys.executable)
+assert m._session.mode == "design" and m._session.workspace == app.WORKSPACES["design"] and m._session.session_id is None
+assert os.path.isfile(os.path.join(m._session.workspace, "AGENTIC_PLAN.md"))  # really the v2 folder
+m._session.session_id = "d1"
+m.save_settings({"mode": "quick"})
+m._make_session(sys.executable)
+assert (m._session.mode, m._session.workspace, m._session.session_id) == ("quick", app.WORKSPACE, "q1")
+m.save_settings({"mode": "design"})
+m._make_session(sys.executable)
+assert m._session.session_id == "d1"
+assert m.set_mode("design")["ok"] is True and len(restarts) == 1  # already in it: no restart
+with open(app.SETTINGS, "w", encoding="utf-8") as f:
+    f.write('{"mode": "x"}')
+assert app.load_settings()["mode"] == "quick"  # an unknown saved mode falls back
+# Design mode: an Agent call is one row named after the subagent; its steps carry the parent; its own text stays out of the chat
+m.clear_history()
+m._on_session({"event": "tool_use", "id": "A1", "tool": "Agent", "parent": None,
+               "input": {"subagent_type": "awr-builder", "description": "Build rc_lpf", "prompt": "long brief " * 50}})
+m._on_session({"event": "reply", "text": "subagent thinking aloud", "parent": "A1"})
+m._on_session({"event": "tool_use", "id": "s1", "tool": "mcp__AWRMWO-mcp__add_element", "input": {"name": "RES"}, "parent": "A1"})
+m._on_session({"event": "tool_result", "id": "s1", "is_error": False, "text": "ok", "parent": "A1"})
+m._on_session({"event": "tool_result", "id": "A1", "is_error": False, "text": "built", "parent": None})
+m._on_session({"event": "reply", "text": "Built. Next the evaluator.", "parent": None})
+h = m.history()
+assert [i["kind"] for i in h] == ["step", "step", "claude"], h
+assert (h[0]["tool"], h[0]["summary"], h[0]["agent"], h[0]["status"], "parent" in h[0]) == ("awr-builder", "Build rc_lpf", True, "done", False), h[0]
+assert (h[1]["tool"], h[1]["parent"], h[1]["status"]) == ("add_element", "A1", "done"), h[1]
+assert h[2]["text"] == "Built. Next the evaluator."
+print("OK: chat, step status (done, failed, stopped, denied), stop and resume, history saved and cleared, word-safe summaries, "
+      "Quick/Design mode switch, subagent rows and nested steps")

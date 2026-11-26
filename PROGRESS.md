@@ -10,6 +10,15 @@
 
 **Next (user, 25 Nov):** plan in chat: (1) a Quick/Design mode switch so Fieldnote can run the v2 agent loop, (2) a Theory vs Sim card read from the dossier, (3) the `*_design` inverses in rf_theory, (4) Chebyshev synthesis and an FET bias solver in rf_theory, (5) the open items below. v3 comes after.
 
+**Mode switch (item 1), 25 Nov, lead:** planned in chat. Spec gate is reply-based (user). Design mode = cwd `AWRMWO-mcp-v2`, tools `Read,Glob,Grep,Write,Agent`, `DESIGN_PROMPT`, same AWR server + `approve`.
+- Step 1 probe done: headless session in v2 loads the v2 CLAUDE.md and all v2 agents; Agent works (init lists it as `Task`); subagent steps carry `parent_tool_use_id`, plus `task_started/progress/notification` system events. No AWR server in the probe, so subagent MCP calls and `approve` are not yet seen.
+- Step 2 done: `session.lean_args(pipe, mode)`, `Session(mode=...)`, events carry `parent`. `test_session`, `test_fieldnote_chat`, `test_fieldnote_approval` pass.
+- Step 3 done: `app.py` has `WORKSPACES` (quick = workspace, design = v2), a `mode` setting (unknown -> quick), `mode` in `state()`, `set_mode()` (refused mid-turn, no-op if already in it, else saves + note + restart), `_make_session()` with a resume id per mode (in memory only). All 5 Fieldnote tests pass via `uv run --script`.
+- Step 4 done (tests = step 5, done with it): Quick/Design softkey pair in the header (locked mid-turn, tooltip warns Design uses more of the plan), empty-screen text and placeholder per mode. An Agent call is one row named after the subagent (`agent: True`, Claude icon); its steps carry `parent` and are indented; a subagent's own text is kept out of the chat. Nesting is indent-only in arrival order (`shortcut:` in app.js). All 5 Fieldnote tests pass. Not yet looked at in a real window.
+- Review fixes (ponytail-review 1-4), 25 Nov: `hub.approve` now asks for built-in tools except Read/Glob/Grep/Agent/Task and Write/Edit inside the v2 folder (never `.emp`), so Bash or a write elsewhere shows the dialog; `set_mode` refuses while Claude is starting (no double restart), buttons locked then too; Design tools add Edit. All 18 AWR-free tests pass (`test_hub`, `test_client`, `test_channel` need `uv run --no-project --with "mcp>=1.2,<2" --with pywin32 python`).
+- Next: step 6 (live `rc_lpf` to the spec stop).
+- Side note: the user-level `~/.claude/CLAUDE.md` loads even with `--setting-sources project,local` (extra tokens in Quick mode too).
+
 **Done in v2 (details in the tables below):**
 - The agent loop works end to end in live AWR: theory -> build -> evaluate -> judge -> fix -> review -> report.
 - 6 designs PASS: rc_lpf, ne3508_bias, rc_lpf_fault (seeded fault fixed in 1 round), tl_qwt, rlc_notch, cheb5_lpf (2 GHz Chebyshev on FR4).

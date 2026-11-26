@@ -13,6 +13,9 @@ PROMPT = ("You are the Fieldnote app's assistant for AWR Microwave Office. Do AW
           "Answer briefly in plain text and say what changed in AWR. Never save without the user's yes. "
           "Adding parts and wiring in AWR needs no permission. If the task gives no frequency or range, ask the user for the "
           "frequency points before simulating; one frequency f means a sweep of f/4 to 2.5 f in steps of f/8, in f's own unit.")
+DESIGN_PROMPT = ("You are the Design Lead for the Fieldnote app. Follow CLAUDE.md and AGENTIC_PLAN.md in this folder: "
+                 "write the spec, then show it to the user as a normal reply and stop until they approve or change it. "
+                 "Never save or start a new project without the user's yes.")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 
@@ -24,18 +27,23 @@ def find_claude():
     return hits[-1] if hits else (shutil.which("claude") or "")
 
 
-def lean_args(pipe):
-    """Only the AWR server (told which pipe to open), no user plugins/settings/skills, few built-in tools."""
+def lean_args(pipe, mode="quick"):
+    """Only the AWR server (told which pipe to open), no user plugins/settings/skills, few built-in tools.
+    Design mode adds Write/Edit (dossier and PROGRESS.md; hub.approve allows them only inside the v2 folder) and Agent (the v2 loop); the caller runs it with cwd = the v2 folder."""
+    design = mode == "design"
     server = {"command": "uv", "args": ["run", "--script", SERVER], "env": {"FIELDNOTE_PIPE": pipe}}
     return ["--strict-mcp-config", "--mcp-config", json.dumps({"mcpServers": {"AWRMWO-mcp": server}}),
-            "--setting-sources", "project,local", "--disable-slash-commands", "--tools", "Read,Glob,Grep",
+            "--setting-sources", "project,local", "--disable-slash-commands",
+            "--tools", "Read,Glob,Grep,Write,Edit,Agent" if design else "Read,Glob,Grep",
             "--disallowedTools", "mcp__AWRMWO-mcp__reply",  # the app shows Claude's own answer; reply is for channel mode
-            "--append-system-prompt", PROMPT, "--permission-prompt-tool", "mcp__AWRMWO-mcp__approve"]
+            "--append-system-prompt", DESIGN_PROMPT if design else PROMPT,
+            "--permission-prompt-tool", "mcp__AWRMWO-mcp__approve"]
 
 
 class Session:
-    def __init__(self, claude_path, workspace, pipe, on_event, model=None, extra_args=None):
+    def __init__(self, claude_path, workspace, pipe, on_event, model=None, extra_args=None, mode="quick"):
         self.claude_path, self.workspace, self.pipe, self.on_event, self.model = claude_path, workspace, pipe, on_event, model
+        self.mode = mode
         self.extra_args = extra_args or []  # tests put a fake script here
         self.session_id = None
         self.stderr_tail = collections.deque(maxlen=50)
@@ -50,7 +58,7 @@ class Session:
             if self.running():
                 return
             cmd = [self.claude_path, *self.extra_args, "-p", "--input-format", "stream-json",
-                   "--output-format", "stream-json", "--verbose", *lean_args(self.pipe)]
+                   "--output-format", "stream-json", "--verbose", *lean_args(self.pipe, self.mode)]
             if self.model:
                 cmd += ["--model", self.model]
             if self.session_id:
@@ -83,19 +91,21 @@ class Session:
         if m.get("session_id"):
             self.session_id = m["session_id"]
         t = m.get("type")
+        parent = m.get("parent_tool_use_id")  # set on steps a subagent took; the id of the Agent call that started it
         if t == "assistant":
             for b in (m.get("message") or {}).get("content") or []:
                 if b.get("type") == "text" and b.get("text"):
-                    self.on_event({"event": "reply", "text": b["text"]})
+                    self.on_event({"event": "reply", "text": b["text"], "parent": parent})
                 elif b.get("type") == "tool_use":
-                    self.on_event({"event": "tool_use", "id": b.get("id"), "tool": b.get("name"), "input": b.get("input") or {}})
+                    self.on_event({"event": "tool_use", "id": b.get("id"), "tool": b.get("name"), "input": b.get("input") or {},
+                                   "parent": parent})
         elif t == "user":  # Claude Code echoes each tool's result back as a user message
             for b in (m.get("message") or {}).get("content") or []:
                 if isinstance(b, dict) and b.get("type") == "tool_result":
                     c = b.get("content")
                     text = c if isinstance(c, str) else " ".join(x.get("text", "") for x in c or [] if isinstance(x, dict))
                     self.on_event({"event": "tool_result", "id": b.get("tool_use_id"), "is_error": bool(b.get("is_error")),
-                                   "text": text[:400]})
+                                   "text": text[:400], "parent": parent})
         elif t == "result":
             self.on_event({"event": "turn_end", "is_error": bool(m.get("is_error")), "usage": m.get("usage")})
 

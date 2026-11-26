@@ -35,6 +35,31 @@ function onState(s) {
   $("stop").hidden = !working;
   $("send").hidden = working;
   $("task").disabled = $("send").disabled = s.claude !== "up" || working;
+  renderMode(s.mode || "quick", working || s.claude === "connecting");
+}
+
+// ---- Quick / Design mode: a switch restarts Claude Code, so it is locked during a turn ----
+const MODE_TEXT = {
+  quick: ["Describe a circuit", "Claude Code builds it in AWR. Each step shows up here as it happens, and the AWR window shows the result.",
+          "Describe a circuit, for example a 2 GHz low-pass filter on FR4"],
+  design: ["Describe a design goal", "Claude writes a spec and waits for you to approve it. Then the design team works out the theory, builds it in AWR, checks it against the spec and fixes what fails.",
+           "Describe a design goal, for example a 5th-order 2 GHz Chebyshev low-pass on FR4"],
+};
+
+function renderMode(mode, locked) {
+  for (const b of document.querySelectorAll(".mode button")) {
+    b.setAttribute("aria-pressed", String(b.dataset.mode === mode));
+    b.disabled = locked;
+  }
+  const [title, text, hint] = MODE_TEXT[mode] || MODE_TEXT.quick;
+  $("emptyTitle").textContent = title;
+  $("emptyText").textContent = text;
+  $("task").placeholder = hint;
+}
+
+async function setMode(mode) {
+  const r = await api("set_mode", mode);
+  if (!r.ok) showBanner(r.error);
 }
 
 // ---- chat and progress feed: every change arrives as the full history ----
@@ -44,9 +69,10 @@ const STATUS_TEXT = { running: "Running", done: "Done", failed: "Failed", stoppe
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls || "", textContent: text ?? "" });
 
 function stepRow(it) {
-  const row = el("div", "step");
+  // shortcut: nesting is by indent only, in arrival order; parallel subagents would interleave. Group by parent if that happens.
+  const row = el("div", "step" + (it.agent ? " agent" : "") + (it.parent ? " sub" : ""));
   row.dataset.status = it.status;
-  const icon = (STEP_ICON.find(([re]) => re.test(it.tool)) || [0, "i-netlist"])[1];
+  const icon = it.agent ? "i-source" : (STEP_ICON.find(([re]) => re.test(it.tool)) || [0, "i-netlist"])[1];
   row.innerHTML = `<svg><use href="#${icon}"/></svg>`;
   row.append(el("span", "tool", it.tool.replaceAll("_", " ")), el("span", "sum", it.summary), el("span", "st", STATUS_TEXT[it.status] || it.status),
              el("span", "tm", it.t));
@@ -58,6 +84,8 @@ function stepRow(it) {
 function approvalText(tool) {
   if (tool === "save_project") return ["Save the project?", "Claude wants to write the open AWR project to a file."];
   if (tool === "new_project") return ["Start a new project?", "This closes the open AWR project. Unsaved work in it is lost."];
+  if (tool === "Write" || tool === "Edit") return ["Change a file outside the design folder?", "Claude wants to write to this file. Fieldnote only allows that without asking inside AWRMWO-mcp-v2, and never for .emp files."];
+  if (tool === "Bash" || tool === "PowerShell") return ["Run a command?", "Claude wants to run this shell command on your PC."];
   if (tool.startsWith("delete_")) return [`Delete ${tool.slice(7).replaceAll("_", " ")}?`, "Claude wants to remove it from the AWR project."];
   return [`Run ${tool.replaceAll("_", " ")}?`, "Claude wants to run this tool."];
 }
@@ -187,6 +215,8 @@ $("clear").addEventListener("click", () => {
   disarm();
   api("clear_history");
 });
+for (const b of document.querySelectorAll(".mode button"))
+  b.addEventListener("click", () => { if (b.getAttribute("aria-pressed") !== "true") setMode(b.dataset.mode); });
 $("theme").addEventListener("click", toggleTheme);
 $("reconnect").addEventListener("click", reconnect);
 $("bannerRetry").addEventListener("click", reconnect);

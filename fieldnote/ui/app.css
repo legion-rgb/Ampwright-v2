@@ -72,6 +72,14 @@ svg { width: 18px; height: 18px; flex: none; }
 @keyframes lock { from { left: calc(100% - 13px); opacity: 1; transform: scaleX(1); } to { left: calc(100% - 13px); opacity: 0; transform: scaleX(3); } }
 
 .tools { display: flex; gap: 6px; }
+/* mode: a pair of analyzer softkeys; the lit one is the active mode */
+.mode { display: flex; margin-right: 8px; border: 1px solid var(--grat); border-radius: 6px; overflow: hidden; }
+.mode button { padding: 0 14px; height: 32px; border: 0; background: transparent; color: var(--dim); cursor: pointer; font-size: 14px; }
+.mode button + button { border-left: 1px solid var(--grat); }
+.mode button:hover:not(:disabled) { color: var(--text); }
+.mode button[aria-pressed="true"] { color: var(--t1); background: var(--grat-fine); box-shadow: inset 0 -2px 0 var(--t1); }
+.mode button:disabled { cursor: not-allowed; opacity: .55; }
+.mode button[aria-pressed="true"]:disabled { opacity: 1; }
 .icon-btn { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; cursor: pointer;
             border: 1px solid var(--grat); border-radius: 6px; background: transparent; color: var(--dim); }
 .icon-btn:hover { color: var(--text); border-color: var(--dim); }
@@ -151,6 +159,10 @@ svg { width: 18px; height: 18px; flex: none; }
 .step[data-status="failed"] { border-left-color: var(--t3); }
 .step[data-status="failed"] .st { color: var(--t3); }
 .step[data-status="denied"] { border-left-color: var(--dim); border-left-style: dashed; }
+/* Design mode: a subagent's row, and the steps it takes indented under it */
+.step.agent svg { color: var(--t1); }
+.step.agent .tool { font-size: 14.5px; }
+.step.sub { margin-left: 40px; padding-top: 4px; padding-bottom: 4px; font-size: 13px; }
 .working { position: relative; height: 3px; overflow: hidden; background: var(--grat-fine); }
 .working i { position: absolute; top: 0; height: 3px; width: 22%; background: var(--t1); box-shadow: var(--glow) var(--t1);
              animation: sweep 1.6s ease-in-out infinite; }

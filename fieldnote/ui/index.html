@@ -44,6 +44,10 @@
       </div>
     </div>
     <div class="tools">
+      <div class="mode" role="group" aria-label="Mode">
+        <button type="button" data-mode="quick" aria-pressed="true" title="Quick: Claude builds what you ask in AWR, step by step">Quick</button>
+        <button type="button" data-mode="design" aria-pressed="false" title="Design: the full agent loop (spec, theory, build, check, fix). It waits for you to approve the spec, and uses much more of your plan per task.">Design</button>
+      </div>
       <button class="icon-btn" id="reconnect" type="button" title="Reconnect" aria-label="Reconnect"><svg><use href="#i-reconnect"/></svg></button>
       <button class="icon-btn" id="theme" type="button" title="Switch to light theme" aria-label="Switch to light theme"><svg><use href="#i-theme"/></svg></button>
     </div>
@@ -88,8 +92,8 @@
         </g>
       </svg>
       <div class="screen-empty" id="feedEmpty">
-        <p class="screen-title">Describe a circuit</p>
-        <p>Claude Code builds it in AWR. Each step shows up here as it happens, and the AWR window shows the result.</p>
+        <p class="screen-title" id="emptyTitle">Describe a circuit</p>
+        <p id="emptyText">Claude Code builds it in AWR. Each step shows up here as it happens, and the AWR window shows the result.</p>
       </div>
       <div class="feed" id="feed" hidden></div>
       </div>
