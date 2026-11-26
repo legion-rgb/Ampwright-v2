@@ -8,7 +8,7 @@ When the user gives a circuit design task, you run the agentic loop in [AGENTIC_
 1. Pick a short slug and create `designs/<slug>/`. Write `spec.md` and `spec.json` (format in AGENTIC_PLAN.md) and `state.json` (`{"phase": "spec", "round": 0, "docs": []}`).
 2. **Stop and show the user the spec.** Do not continue until they approve it or change it.
 3. Run `circuit-theory`. If it says a goal is unreachable, go back to the user.
-4. Run `awr-builder`. Then `circuit-evaluator`, then `verification-judge`.
+4. Run `awr-builder`. Then `circuit-evaluator`, then `verification-judge`. On PASS, or when the user asks for specific axes, run `graph-formatter` (AWR-writing: never alongside the builder or fixer).
 5. On FAIL: run `circuit-fixer`, then the evaluator and the judge again. After 2 failed rounds you may rerun the fixer with `model: opus`. After 3 failed rounds, or on SPEC_UNREACHABLE, stop and ask the user.
 6. On PASS: run `design-reviewer`. Send its MUST findings to `awr-builder` once, then rerun the evaluator and the judge to confirm nothing changed.
 7. Write `report.md` (spec, final values, verdict table, rounds, open points) and give the user a short summary.

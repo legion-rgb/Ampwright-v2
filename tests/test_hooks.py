@@ -19,6 +19,8 @@ assert decide(P + "set_parameter", {"schematic": "test", "element": "R1"}, ro)[0
 assert decide(P + "add_measurement", {"graph": "v2_x_s", "source_doc": "mine"}, ro)[0] == "deny"
 assert decide(P + "set_parameter", {"schematic": "v2_rc", "element": "R1"}, ro) is None
 assert decide(P + "create_graph", {"name": "v2_rc_s"}, ro) is None
+assert decide(P + "set_graph_axis", {"graph": "v2_rc_s", "min": -60}, ro) is None
+assert decide(P + "set_graph_axis", {"graph": "mine", "min": -60}, ro)[0] == "deny"  # not a v2_ graph
 assert decide(P + "list_elements", {"schematic": "Schematic 1"}, ro) is None  # reads are fine
 assert decide(P + "simulate", {}, ro) is None
 assert decide(P + "set_frequencies", {"start_hz": 1, "stop_hz": 2}, ro)[0] == "deny"  # project-wide sweep

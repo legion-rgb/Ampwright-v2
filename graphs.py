@@ -99,6 +99,40 @@ def create_graph_sync(name, type="rectangular"):
     return {"graph": awr().Project.Graphs.Add(name, GRAPH_TYPE[type]).Name}
 
 
+AXIS = {"x": 1, "y": 2, "y2": 3}  # Graph.Axes(i): 1 = x, 2 = first y axis, 3 = second y axis (only if the graph has one)
+
+
+def set_graph_axis_sync(graph, axis="y", min=None, max=None, step=None, auto=False, label=None):
+    """Set an axis range, grid step and/or label. auto=True hands the axis back to AWR (min/max/step then ignored).
+    shortcut: log scale left out, the mwScaleType values are not documented here."""
+    if axis not in AXIS:
+        raise ValueError(f"axis must be one of {list(AXIS)}")
+    if not auto and min is not None and max is not None and min >= max:
+        raise ValueError("min must be below max")
+    g = find(awr().Project.Graphs, graph)
+    if AXIS[axis] > int(g.Axes.Count):
+        raise ValueError(f"'{graph}' has {g.Axes.Count} axes; no '{axis}'")
+    ax = g.Axes.Item(AXIS[axis])
+    if auto:
+        ax.AutoScale = True
+        ax.MajorGridlinesAutoStep = True
+    else:
+        if min is not None or max is not None:
+            ax.AutoScale = False
+            if min is not None:
+                ax.MinimumScale = min
+            if max is not None:
+                ax.MaximumScale = max
+        if step is not None:
+            ax.MajorGridlinesAutoStep = False
+            ax.MajorGridlinesStep = step
+    if label is not None:
+        ax.LabelVisible = True  # LabelText can only be set while the label is visible
+        ax.LabelText = label
+    return {"graph": graph, "axis": axis, "auto": bool(ax.AutoScale), "min": ax.MinimumScale, "max": ax.MaximumScale,
+            "step": ax.MajorGridlinesStep, "label": ax.LabelText}
+
+
 def _norm(s):
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 

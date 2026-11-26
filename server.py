@@ -375,6 +375,16 @@ async def create_graph(name: str, type: str = "rectangular") -> dict:
 
 
 @mcp.tool()
+async def set_graph_axis(graph: str, axis: str = "y", min: float | None = None, max: float | None = None,
+                         step: float | None = None, auto: bool = False, label: str | None = None) -> dict:
+    """Set a graph axis (axis: x, y or y2). min/max fix the range (e.g. min=-60, max=0 for a dB plot), step is the
+    major grid step (e.g. 10 gives ticks at 0, 10, 20...), label is the axis title. Values are in the graph's display
+    units (dB, GHz, mA...). auto=True gives the axis back to AWR. Run simulate first: AWR has no range before data exists.
+    Returns the axis as it now stands, so check it."""
+    return await run(gr.set_graph_axis_sync, graph, axis, min, max, step, auto, label)
+
+
+@mcp.tool()
 async def add_measurement(graph: str, source_doc: str, measurement: str, simulator: str | None = None) -> dict:
     """Add a measurement to a graph, e.g. source_doc='RC', measurement='DB(|S(2,1)|)' or 'DB(|S(1,1)|)'.
     simulator: omit for the default; models ending in _AP (APLAC) need an APLAC one, e.g. 'aplac_dc' for an IVCURVE

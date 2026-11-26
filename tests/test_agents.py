@@ -15,7 +15,7 @@ tools["reply"] = False  # registered in hub.py
 READ_ONLY_AGENTS = {"verification-judge", "circuit-evaluator", "design-reviewer", "test-runner", "lesson-keeper"}
 NO_AWR = {"circuit-theory"}
 FORBIDDEN = {"save_project", "new_project", "delete_schematic", "delete_em_structure", "delete_graph"}
-EXPECTED = READ_ONLY_AGENTS | NO_AWR | {"awr-builder", "circuit-fixer"}
+EXPECTED = READ_ONLY_AGENTS | NO_AWR | {"awr-builder", "circuit-fixer", "graph-formatter"}
 
 seen = set()
 for path in glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")):
