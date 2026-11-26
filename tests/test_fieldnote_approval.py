@@ -62,10 +62,17 @@ for p in ("hub.py", ".claude/settings.json", "checks/hook_guard.py", "CLAUDE.md"
           "designs", "designs/../hub.py", "designs/x/model.emp"):  # the safety checks themselves always ask
     assert not hub._writes_inside("Edit", {"file_path": p}), p
 assert hub._writes_inside("Edit", {"file_path": "errors.md"}) and hub._writes_inside("Write", {"file_path": "designs/a/state.json"})
-for tool, inp in (("Write", {"file_path": r"C:\Users\me\MyDesign.emp"}), ("Bash", {"command": "del x"})):
+# the sweep and equations on one schematic never ask; project-wide ones (no document) do
+for tool, inp in (("set_frequencies", {"start_hz": 1e9, "stop_hz": 2e9, "points": 11, "document": "FN_RC"}),
+                  ("add_equation", {"expression": "C1=1e-12", "document": "FN_RC"})):
+    assert json.loads(ask("mcp__AWRMWO-mcp__" + tool, inp).result(5))["behavior"] == "allow", tool
+assert not waiting()
+for tool, inp in (("Write", {"file_path": r"C:\Users\me\MyDesign.emp"}), ("Bash", {"command": "del x"}),
+                  ("mcp__AWRMWO-mcp__set_frequencies", {"around_hz": 1e9}),
+                  ("mcp__AWRMWO-mcp__add_equation", {"expression": "C1=1e-12", "document": ""})):
     f = ask(tool, inp)
     it = until(waiting, tool + " request shown")[0]
-    assert it["tool"] == tool, it
+    assert it["tool"] == tool.removeprefix("mcp__AWRMWO-mcp__"), it
     api.answer(it["id"], "deny")
     assert json.loads(f.result(5))["behavior"] == "deny", tool
 api.clear_history()

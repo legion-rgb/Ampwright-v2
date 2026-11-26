@@ -28,6 +28,7 @@ _source = contextvars.ContextVar("source", default="claude")
 _TRUNC = 300
 APPROVE_TIMEOUT = 120  # seconds the GUI has to answer an approve request
 _ALWAYS_ASK = ("save_project", "new_project")  # plus every delete_*: never auto-allowed
+_PROJECT_WIDE = ("set_frequencies", "add_equation")  # without document: the project sweep / Global Definitions, so ask
 _PREFIX = "mcp__AWRMWO-mcp__"
 _SAFE_BUILTINS = ("Read", "Glob", "Grep", "Agent", "Task")  # read-only, or starts a subagent whose steps come back here
 _ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)))  # the v2 folder: Design mode's dossiers live here
@@ -142,6 +143,7 @@ class HubMCP(FastMCP):
         name = tool_name[len(_PREFIX):] if tool_name.startswith(_PREFIX) else tool_name
         deny = lambda why: json.dumps({"behavior": "deny", "message": why})
         always = name in _ALWAYS_ASK or name.startswith("delete_")
+        always = always or (name in _PROJECT_WIDE and not (input or {}).get("document"))
         if not tool_name.startswith(_PREFIX):  # built-in tools: Bash, or a write outside the v2 folder, asks
             always = always or not (tool_name in _SAFE_BUILTINS or _writes_inside(tool_name, input))
         if not always:  # building in AWR (add parts, wire, simulate...) never asks; only save, new project and delete do

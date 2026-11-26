@@ -84,6 +84,8 @@ function stepRow(it) {
 function approvalText(tool) {
   if (tool === "save_project") return ["Save the project?", "Claude wants to write the open AWR project to a file."];
   if (tool === "new_project") return ["Start a new project?", "This closes the open AWR project. Unsaved work in it is lost."];
+  if (tool === "set_frequencies") return ["Change the sweep for the whole project?", "Claude wants to set the project frequencies. Every schematic that uses the project sweep changes too. Deny to make it use its own schematic's sweep."];
+  if (tool === "add_equation") return ["Add a project-wide equation?", "Claude wants to add this to Global Definitions, which every schematic sees. Deny to keep it in one schematic."];
   if (tool === "Write" || tool === "Edit") return ["Change this file?", "Claude wants to write to it. Fieldnote only allows that without asking for design dossiers (designs/) and the progress and lesson logs, never for .emp files or the app's own code and settings."];
   if (tool === "Bash" || tool === "PowerShell") return ["Run a command?", "Claude wants to run this shell command on your PC."];
   if (tool.startsWith("delete_")) return [`Delete ${tool.slice(7).replaceAll("_", " ")}?`, "Claude wants to remove it from the AWR project."];
