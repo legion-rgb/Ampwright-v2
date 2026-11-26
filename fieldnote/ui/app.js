@@ -84,7 +84,7 @@ function stepRow(it) {
 function approvalText(tool) {
   if (tool === "save_project") return ["Save the project?", "Claude wants to write the open AWR project to a file."];
   if (tool === "new_project") return ["Start a new project?", "This closes the open AWR project. Unsaved work in it is lost."];
-  if (tool === "Write" || tool === "Edit") return ["Change a file outside the design folder?", "Claude wants to write to this file. Fieldnote only allows that without asking inside AWRMWO-mcp-v2, and never for .emp files."];
+  if (tool === "Write" || tool === "Edit") return ["Change this file?", "Claude wants to write to it. Fieldnote only allows that without asking for design dossiers (designs/) and the progress and lesson logs, never for .emp files or the app's own code and settings."];
   if (tool === "Bash" || tool === "PowerShell") return ["Run a command?", "Claude wants to run this shell command on your PC."];
   if (tool.startsWith("delete_")) return [`Delete ${tool.slice(7).replaceAll("_", " ")}?`, "Claude wants to remove it from the AWR project."];
   return [`Run ${tool.replaceAll("_", " ")}?`, "Claude wants to run this tool."];

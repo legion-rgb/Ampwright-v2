@@ -58,6 +58,10 @@ assert not waiting() and not api.history()
 assert not hub._writes_inside("Write", {"file_path": "../CLAUDE.md"}) and not hub._writes_inside("Edit", {"file_path": "x.EMP"})
 assert not hub._writes_inside("Write", {"file_path": r"D:\elsewhere\a.txt"}) and not hub._writes_inside("Write", {"file_path": 3})
 assert not hub._writes_inside("Write", {}) and not hub._writes_inside("Bash", {"file_path": "a.txt"})
+for p in ("hub.py", ".claude/settings.json", "checks/hook_guard.py", "CLAUDE.md", ".claude/agents/awr-builder.md",
+          "designs", "designs/../hub.py", "designs/x/model.emp"):  # the safety checks themselves always ask
+    assert not hub._writes_inside("Edit", {"file_path": p}), p
+assert hub._writes_inside("Edit", {"file_path": "errors.md"}) and hub._writes_inside("Write", {"file_path": "designs/a/state.json"})
 for tool, inp in (("Write", {"file_path": r"C:\Users\me\MyDesign.emp"}), ("Bash", {"command": "del x"})):
     f = ask(tool, inp)
     it = until(waiting, tool + " request shown")[0]

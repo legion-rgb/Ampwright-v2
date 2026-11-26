@@ -33,13 +33,19 @@ _SAFE_BUILTINS = ("Read", "Glob", "Grep", "Agent", "Task")  # read-only, or star
 _ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)))  # the v2 folder: Design mode's dossiers live here
 
 
+_DESIGNS = os.path.join(_ROOT, "designs")
+_LOOP_FILES = {os.path.normcase(os.path.join(_ROOT, n)) for n in ("PROGRESS.md", "errors.md", "playbook.md")}
+
+
 def _writes_inside(name, inp):
-    """Write/Edit to a file in the v2 folder (relative paths are relative to it), never an AWR project file."""
+    """Write/Edit to what the agent loop writes: designs/ (dossiers) and its 3 log files. Never an AWR project file,
+    and never the rest of the v2 folder: hub.py, hooks, settings and agent files are the safety checks themselves."""
     if name not in ("Write", "Edit"):
         return False
     try:
         p = os.path.realpath(os.path.join(_ROOT, (inp or {}).get("file_path") or ""))
-        return os.path.commonpath([p, _ROOT]) == _ROOT and p != _ROOT and not p.lower().endswith(".emp")
+        in_designs = os.path.commonpath([p, _DESIGNS]) == _DESIGNS and p != _DESIGNS
+        return (in_designs or os.path.normcase(p) in _LOOP_FILES) and not p.lower().endswith(".emp")
     except (TypeError, ValueError):  # not a string, or another drive
         return False
 
