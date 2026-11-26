@@ -1,18 +1,3 @@
-Processing request of type CallToolRequest
-Processing request of type ListToolsRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
 --- create_schematic
 {
   "schematic": "V_MS_50"
@@ -178,7 +163,10 @@ Processing request of type CallToolRequest
   "document": "V_MS_50",
   "count": 351,
   "first_hz": 500000000.0,
-  "last_hz": 4000000000.0
+  "last_hz": 4000000000.0,
+  "unit": "GHz",
+  "first": 0.5,
+  "last": 4.0
 }
 --- create_graph
 {
@@ -187,17 +175,20 @@ Processing request of type CallToolRequest
 --- add_measurement
 {
   "graph": "V_MS_50_G",
-  "measurement": "V_MS_50:DB(|S(2,1)|)"
+  "measurement": "V_MS_50:DB(|S(2,1)|)",
+  "simulator": "default"
 }
 --- add_measurement
 {
   "graph": "V_MS_50_G",
-  "measurement": "V_MS_50:DB(|S(1,1)|)"
+  "measurement": "V_MS_50:DB(|S(1,1)|)",
+  "simulator": "default"
 }
 --- add_measurement
 {
   "graph": "V_MS_50_G",
-  "measurement": "V_MS_50:Ang(S(2,1))"
+  "measurement": "V_MS_50:Ang(S(2,1))",
+  "simulator": "default"
 }
 --- clear_status_messages
 {
@@ -220,6 +211,9 @@ Processing request of type CallToolRequest
 --- graph_data
 {
   "measurement": "V_MS_50:DB(|S(2,1)|)",
+  "label": "V_MS_50:DB(|S(2,1)|)",
+  "x_unit": "Hz",
+  "y_unit": "dB",
   "x": [
     500000000.0,
     510000000.0,
@@ -930,6 +924,9 @@ Processing request of type CallToolRequest
 }
 {
   "measurement": "V_MS_50:DB(|S(1,1)|)",
+  "label": "V_MS_50:DB(|S(1,1)|)",
+  "x_unit": "Hz",
+  "y_unit": "dB",
   "x": [
     500000000.0,
     510000000.0,
@@ -1640,6 +1637,9 @@ Processing request of type CallToolRequest
 }
 {
   "measurement": "V_MS_50:Ang(S(2,1))",
+  "label": "V_MS_50:Ang(S(2,1))",
+  "x_unit": "Hz",
+  "y_unit": "Rad",
   "x": [
     500000000.0,
     510000000.0,

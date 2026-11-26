@@ -1,24 +1,3 @@
-Processing request of type CallToolRequest
-Processing request of type ListToolsRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
-Processing request of type CallToolRequest
 --- create_schematic
 {
   "schematic": "V_RLC_SHN"
@@ -46,8 +25,8 @@ Processing request of type CallToolRequest
     },
     {
       "name": "F0",
-      "value": "1",
-      "unit": "GHz"
+      "value": "1000",
+      "unit": "MHz"
     }
   ],
   "pins": [
@@ -320,7 +299,10 @@ Processing request of type CallToolRequest
   "document": "V_RLC_SHN",
   "count": 1201,
   "first_hz": 1000000000.0,
-  "last_hz": 2200000000.0
+  "last_hz": 2200000000.0,
+  "unit": "MHz",
+  "first": 1000.0,
+  "last": 2200.0
 }
 --- create_graph
 {
@@ -329,17 +311,20 @@ Processing request of type CallToolRequest
 --- add_measurement
 {
   "graph": "V_RLC_SHN_G",
-  "measurement": "V_RLC_SHN:DB(|S(2,1)|)"
+  "measurement": "V_RLC_SHN:DB(|S(2,1)|)",
+  "simulator": "default"
 }
 --- add_measurement
 {
   "graph": "V_RLC_SHN_G",
-  "measurement": "V_RLC_SHN:DB(|S(1,1)|)"
+  "measurement": "V_RLC_SHN:DB(|S(1,1)|)",
+  "simulator": "default"
 }
 --- add_measurement
 {
   "graph": "V_RLC_SHN_G",
-  "measurement": "V_RLC_SHN:Ang(S(2,1))"
+  "measurement": "V_RLC_SHN:Ang(S(2,1))",
+  "simulator": "default"
 }
 --- clear_status_messages
 {
@@ -362,6 +347,9 @@ Processing request of type CallToolRequest
 --- graph_data
 {
   "measurement": "V_RLC_SHN:DB(|S(2,1)|)",
+  "label": "V_RLC_SHN:DB(|S(2,1)|)",
+  "x_unit": "Hz",
+  "y_unit": "dB",
   "x": [
     1000000000.0,
     1001000000.0,
@@ -2772,6 +2760,9 @@ Processing request of type CallToolRequest
 }
 {
   "measurement": "V_RLC_SHN:DB(|S(1,1)|)",
+  "label": "V_RLC_SHN:DB(|S(1,1)|)",
+  "x_unit": "Hz",
+  "y_unit": "dB",
   "x": [
     1000000000.0,
     1001000000.0,
@@ -5182,6 +5173,9 @@ Processing request of type CallToolRequest
 }
 {
   "measurement": "V_RLC_SHN:Ang(S(2,1))",
+  "label": "V_RLC_SHN:Ang(S(2,1))",
+  "x_unit": "Hz",
+  "y_unit": "Rad",
   "x": [
     1000000000.0,
     1001000000.0,
