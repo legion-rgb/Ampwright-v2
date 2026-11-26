@@ -89,6 +89,23 @@ def freq_list(start, stop, points=None, step=None, log=False):
     return [start + (stop - start) * i / (points - 1) for i in range(points)]
 
 
+UNITS = (("GHz", 1e9, 9), ("MHz", 1e6, 8), ("kHz", 1e3, 7), ("Hz", 1.0, 6))  # name, Hz per unit, AWR MultType
+
+
+def tidy_freqs(freqs, exact):
+    """Round to 2 decimals in the sweep's own unit (a 500 kHz sweep stays kHz), as (freqs, unit name, Hz per unit, MultType).
+    A finer unit is used only if rounding would move an endpoint, merge two points, or (exact: a step sweep) move any point."""
+    keep = freqs if exact else [freqs[0], freqs[-1]]
+    for name, scale, mult in UNITS:
+        if scale > max(freqs) and scale > 1:
+            continue
+        out = [round(f / scale, 2) for f in freqs]
+        if len(set(out)) == len(out) and all(abs(round(f / scale, 2) - f / scale) < 1e-6 for f in keep):
+            return [round(v * scale, 3) for v in out], name, scale, mult
+    out = [round(f, 2) for f in freqs]  # below 1 Hz: Hz with 2 decimals
+    return out, "Hz", 1.0, 6
+
+
 def summarize(xs, ys, samples=5):
     """min, max, x at each and a few evenly spaced points of one trace."""
     if not ys:

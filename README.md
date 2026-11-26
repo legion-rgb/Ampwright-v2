@@ -36,13 +36,9 @@ uv run --script AWRMWO-mcp/tests/mcp_call.py project_info '{}'
 
 ### Fieldnote desktop app
 
-Fieldnote is a standalone Windows desktop interface for designing and simulating circuits in the AWR project that is already open.
+Fieldnote is a desktop window for AWR work, brought over from v1 on 25 Nov 2026. Open AWR with your project, then double-click `AWRMWO-mcp-v2/Fieldnote.bat` (needs uv and Microsoft Edge WebView2). It starts Claude Code hidden, on your own subscription login with no API key, and shows the open AWR project. You chat with it, watch each step in the activity feed, stop a turn, and allow or deny save, new project and delete in a dialog. The plan is in [FIELDNOTE_PLAN.md](FIELDNOTE_PLAN.md). The older v2 window is archived in `_archive_desktop_v2/`.
 
-1. Install [uv](https://docs.astral.sh/uv/) and make sure Microsoft Edge WebView2 Runtime is available.
-2. Open AWR Microwave Office and the project you want to work on.
-3. Double-click `AWRMWO-mcp/launch_desktop.bat`, or run `uv run --script AWRMWO-mcp/desktop_app.py` from the workspace root.
-
-The first launch installs the Python dependencies declared by `desktop_app.py`. Fieldnote opens in its own desktop window, connects to the same AWR tools as the MCP server, and keeps project edits unsaved until you explicitly choose **Save project**. Its local tool bridge listens on `127.0.0.1` only. If AWR is closed, the app still opens and shows the connection state.
+Fieldnote's hidden session starts in the workspace folder, so it uses the lean setup (AWR server only) and not this folder's agent loop or `v2_*` guard hooks. The agent loop still runs from a Claude Code session opened in this folder.
 
 ### GitHub Copilot (VS Code)
 

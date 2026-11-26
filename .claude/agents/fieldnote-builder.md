@@ -1,6 +1,6 @@
 ---
 name: fieldnote-builder
-description: Implements one scoped phase of the Fieldnote / AWRMWO-mcp rebuild (UI_PLAN.md) from a precise brief written by the lead. Writes code and its small test, runs the AWR-free tests, reports a short diff summary. Use for coding work, not for planning or open-ended research.
+description: Implements one scoped phase of the Fieldnote / AWRMWO-mcp rebuild (FIELDNOTE_PLAN.md) from a precise brief written by the lead. Writes code and its small test, runs the AWR-free tests, reports a short diff summary. Use for coding work, not for planning or open-ended research.
 model: sonnet
 tools: Read, Edit, Write, Glob, Grep, Bash, PowerShell
 ---

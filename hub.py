@@ -14,6 +14,7 @@ import queue
 import sys
 import threading
 import time
+import uuid
 
 import pywintypes
 import win32api
@@ -25,6 +26,9 @@ from mcp.server.fastmcp import FastMCP
 
 _source = contextvars.ContextVar("source", default="claude")
 _TRUNC = 300
+APPROVE_TIMEOUT = 120  # seconds the GUI has to answer an approve request
+_ALWAYS_ASK = ("save_project", "new_project")  # plus every delete_*: never auto-allowed
+_PREFIX = "mcp__AWRMWO-mcp__"
 
 
 def _log(*a):
@@ -102,6 +106,10 @@ class HubMCP(FastMCP):
         self.loop = None
         self._out = None
         self._mcp_loop = None
+        self._pending = {}  # request_id -> (loop, future) for approve calls waiting on the GUI
+        self.add_tool(self.approve, name="approve", description=(
+            "Claude Code's --permission-prompt-tool: asks the Fieldnote window to allow or deny a tool call. "
+            "Not for direct use."), structured_output=False)  # Claude Code needs the bare JSON text, not {"result": ...}
         self.add_tool(self.reply, name="reply", description=(
             "Send your answer to the user in the Fieldnote desktop app. Use it to answer every message "
             "that arrived as a <channel sender=\"fieldnote\"> tag; the user does not see the terminal."))
@@ -110,6 +118,29 @@ class HubMCP(FastMCP):
         n = len(self._clients)
         self._broadcast({"event": "reply", "text": text})
         return {"delivered_to": n} if n else {"delivered_to": 0, "note": "no Fieldnote window is connected"}
+
+    async def approve(self, tool_name: str, input: dict, tool_use_id: str | None = None) -> str:
+        name = tool_name[len(_PREFIX):] if tool_name.startswith(_PREFIX) else tool_name
+        deny = lambda why: json.dumps({"behavior": "deny", "message": why})
+        always = name in _ALWAYS_ASK or name.startswith("delete_")
+        if not always:  # building in AWR (add parts, wire, simulate...) never asks; only save, new project and delete do
+            return json.dumps({"behavior": "allow", "updatedInput": input})
+        if not self._clients:
+            return deny("no Fieldnote window is connected to approve this")
+        rid = uuid.uuid4().hex
+        fut = asyncio.get_running_loop().create_future()
+        self._pending[rid] = (asyncio.get_running_loop(), fut)
+        self._broadcast({"event": "permission_request", "request_id": rid, "tool_name": name,
+                         "description": "Claude wants to run " + name, "input_preview": _cut(json.dumps(input, default=str))})
+        try:
+            beh = await asyncio.wait_for(fut, APPROVE_TIMEOUT)
+        except asyncio.TimeoutError:
+            return deny("timed out waiting for the user")
+        finally:
+            self._pending.pop(rid, None)
+        if beh == "allow":
+            return json.dumps({"behavior": "allow", "updatedInput": input})
+        return deny("the user denied this in Fieldnote")
 
     # ---- Claude Code channel (research preview) ----
     async def run_streams(self, read_stream, write_stream):
@@ -222,6 +253,11 @@ class HubMCP(FastMCP):
             rid, beh = args.get("request_id"), args.get("behavior")
             if not isinstance(rid, str) or not rid or beh not in ("allow", "deny"):
                 raise ValueError("need request_id (str) and behavior 'allow' or 'deny'")
+            p = self._pending.get(rid)
+            if p:  # answer to an approve() call (app session), not a channel request
+                loop, fut = p
+                loop.call_soon_threadsafe(lambda: fut.done() or fut.set_result(beh))
+                return {"sent": True}
             self._notify("notifications/claude/channel/permission", {"request_id": rid, "behavior": beh})
             return {"sent": True}
         tool = self._tool_manager.get_tool(call)
@@ -293,6 +329,9 @@ class HubMCP(FastMCP):
 
     def start_hub(self):
         name = r"\\.\pipe\AWRMWO-%s-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
+        fixed = os.environ.get("FIELDNOTE_PIPE", "")  # Fieldnote starts this server and names its pipe, so no discovery
+        if fixed.startswith(name.rsplit("-", 1)[0] + "-fieldnote-"):
+            name = fixed
         ready = threading.Event()
 
         def run_loop():

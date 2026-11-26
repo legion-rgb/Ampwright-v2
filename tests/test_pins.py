@@ -54,6 +54,14 @@ f = h.freq_list(1e4, 1e7, points=4, log=True)
 assert len(f) == 4 and abs(f[1] - 1e5) < 1e-6 and abs(f[-1] - 1e7) < 1e-3
 assert h.freq_list(1e9, 2e9, step=0.25e9) == [1e9, 1.25e9, 1.5e9, 1.75e9, 2e9]
 assert h.freq_list(1e9, 2e9, points=3) == [1e9, 1.5e9, 2e9]
+# tidy_freqs: 2 decimals in the span's own unit; a finer unit only when rounding would move something
+f = h.freq_list(50e3, 500e3, step=25e3)  # 200 kHz asked for: 50..500 kHz step 25 kHz stays kHz
+assert len(f) == 19 and h.tidy_freqs(f, True)[1:3] == ("kHz", 1e3) and h.tidy_freqs(f, True)[0] == f
+assert h.tidy_freqs(h.freq_list(1.99e9, 2.01e9, step=1e6), True)[1] == "MHz"  # GHz would move 1.991
+assert h.tidy_freqs(h.freq_list(1.5915e9, 3e9, points=5), False)[1] == "MHz"  # GHz would move the start
+g, unit, *_ = h.tidy_freqs(h.freq_list(1e4, 1e7, points=5, log=True), False)
+assert unit == "MHz" and g[0] == 1e4 and g[-1] == 1e7 and g[1] == 60000.0, (g, unit)
+assert h.tidy_freqs([1000.0, 1000.004], False)[1] == "Hz"
 for kw in ({}, {"points": 3, "step": 1.0}, {"step": 1.0, "log": True}):
     try:
         h.freq_list(1e9, 2e9, **kw)

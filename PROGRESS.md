@@ -1,7 +1,14 @@
 # v2 plan progress
 
-## Resume here (last updated 22 Nov 2026)
-**State:** paused at the user's request. The user is preparing plans for a **version 3** (v3). Wait for those plans before building anything new. Don't merge v1 into v2 (user, 21 Nov).
+## Resume here (last updated 25 Nov 2026)
+**State:** v2 was held while the Fieldnote GUI was built in v1. On 25 Nov the GUI was moved into v2 (user: "integrate the gui to v2 working condition"):
+- v1's `server.py`, `graphs.py`, `hub.py` and `helpers.py` replaced v2's. v1 was a strict superset: the `approve` tool, the fixed Fieldnote pipe, and frequency sweeps in their own unit (`around_hz`).
+- `fieldnote/`, `Fieldnote.bat`, `FIELDNOTE_PLAN.md` and the Fieldnote, session and tidy tests came over. v2's `check_tidy.py` was kept (it adds live mode).
+- The transmission-line circuit fixtures now take EL in radians (v1's fix). The old `"90"` strings are read as SI radians since the `_set_param` change.
+- The old window (`desktop_app.py`, `launch_desktop.bat`, `ui/`, `UI_PLAN.md`) is in `_archive_desktop_v2/`. `fieldnote_client.py` stays: `checks/_awr.py` uses it.
+- Checked: 18/18 AWR-free tests, `validate` 71/71, `validate_em` 21/21, and the server starts. Not yet checked live with AWR open: open AWR, run `Fieldnote.bat`, and do the Phase 2 demo (RC low-pass, then delete a graph and Deny).
+
+**Next (user, 25 Nov):** plan in chat: (1) a Quick/Design mode switch so Fieldnote can run the v2 agent loop, (2) a Theory vs Sim card read from the dossier, (3) the `*_design` inverses in rf_theory, (4) Chebyshev synthesis and an FET bias solver in rf_theory, (5) the open items below. v3 comes after.
 
 **Done in v2 (details in the tables below):**
 - The agent loop works end to end in live AWR: theory -> build -> evaluate -> judge -> fix -> review -> report.

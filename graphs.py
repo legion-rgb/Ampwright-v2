@@ -67,8 +67,16 @@ def simulation_state_sync():
     return {"state": ANALYZE_STATE.get(state, state), "error_count": len(errors), "errors": errors}
 
 
-def set_frequencies_sync(start_hz, stop_hz, points=None, step=None, log=False, document=None):
-    freqs = h.freq_list(start_hz, stop_hz, points, step, log)
+def set_frequencies_sync(start_hz=None, stop_hz=None, points=None, step=None, log=False, document=None, around_hz=None):
+    if around_hz is not None:  # one frequency asked for: f/4 to 2.5 f in steps of f/8 (200 kHz -> 50 to 500 kHz, step 25 kHz)
+        if any(v is not None for v in (start_hz, stop_hz, points, step)) or log:
+            raise ValueError("around_hz stands alone: don't pass start_hz, stop_hz, points, step_hz or log")
+        if around_hz <= 0:
+            raise ValueError("around_hz must be > 0")
+        start_hz, stop_hz, step = around_hz / 4, around_hz * 2.5, around_hz / 8
+    elif start_hz is None or stop_hz is None:
+        raise ValueError("Give start_hz and stop_hz, or around_hz")
+    freqs, unit, scale, mult = h.tidy_freqs(h.freq_list(start_hz, stop_hz, points, step, log), exact=step is not None)
     if document:
         try:
             doc = find(awr().Project.Schematics, document)
@@ -80,7 +88,9 @@ def set_frequencies_sync(start_hz, stop_hz, points=None, step=None, log=False, d
         coll = awr().Project.Frequencies
     coll.Clear()
     coll.AddMultiple(freqs)
-    return {"document": document or "project", "count": coll.Count, "first_hz": freqs[0], "last_hz": freqs[-1]}
+    next(u for u in awr().Project.Units if int(u.Type) == 1).MultType = mult  # AWR shows frequency in the sweep's unit too
+    return {"document": document or "project", "count": coll.Count, "first_hz": freqs[0], "last_hz": freqs[-1],
+            "unit": unit, "first": freqs[0] / scale, "last": freqs[-1] / scale}
 
 
 def create_graph_sync(name, type="rectangular"):

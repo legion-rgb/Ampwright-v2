@@ -356,11 +356,16 @@ async def import_netlist(name: str, text: str) -> dict:
 # ---- MCP tools: simulate and plot ----
 
 @mcp.tool()
-async def set_frequencies(start_hz: float, stop_hz: float, points: int | None = None, step_hz: float | None = None,
-                          log: bool = False, document: str | None = None) -> dict:
-    """Set the sweep: give points (linear, or log=True for log spacing) or step_hz (linear).
+async def set_frequencies(start_hz: float | None = None, stop_hz: float | None = None, points: int | None = None,
+                          step_hz: float | None = None, log: bool = False, document: str | None = None,
+                          around_hz: float | None = None) -> dict:
+    """Set the sweep: give start_hz and stop_hz with points (linear, or log=True for log spacing) or step_hz (linear).
+    If the user gave no frequency or range at all, ask them for the frequency points (start, stop, step) before calling
+    this; never guess a sweep. If the user names one frequency f, pass only around_hz=f: the sweep is f/4 to 2.5 f in steps of f/8 (200 kHz gives
+    50 to 500 kHz, step 25 kHz). Points are rounded to 2 decimals in the sweep's own unit (kHz stays kHz, never MHz or
+    GHz) and AWR's frequency unit is switched to match; the result's unit/first/last are in that unit.
     Project frequencies by default; with document (a schematic or EM structure name) only that document gets its own sweep."""
-    return await run(gr.set_frequencies_sync, start_hz, stop_hz, points, step_hz, log, document)
+    return await run(gr.set_frequencies_sync, start_hz, stop_hz, points, step_hz, log, document, around_hz)
 
 
 @mcp.tool()

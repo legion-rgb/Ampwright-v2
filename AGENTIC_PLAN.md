@@ -6,7 +6,7 @@ Status (21 Nov 2026):
 - **C done:** `hook_guard`, `hook_tidy`, `.claude/settings.json`, `test_hooks` OK, and live: a session in this folder had `add_equation` refused for a non-`v2_*` document and for a missing `document` (project-wide). Progress is tracked in [PROGRESS.md](PROGRESS.md).
 - **D done (21 Nov):** rc_lpf and ne3508_bias reached PASS with complete dossiers; a seeded 10x C1 fault was caught and fixed in 1 round. See PROGRESS.md.
 - **E in progress (21 Nov):** E.1 tools done and tested live (eval `lmatch_opt` waits for an MCP restart); E.2 library (4 blocks), E.3 evals (5/6 OK, 1 not run), E.4 prompt, E.5 playbook note, E.6 `run_headless.py` built. See PROGRESS.md.
-v1 (`../AWRMWO-mcp`) carries the Fieldnote GUI work; it is merged into v2 later.
+The Fieldnote GUI was built in v1 (`../AWRMWO-mcp`) and moved into v2 on 25 Nov 2026 (see PROGRESS.md).
 
 ## Goal
 

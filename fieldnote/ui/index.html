@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fieldnote</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Fieldnote: a screen showing a swept trace -->
+      <symbol id="i-app" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 13c1.6 0 1.8-5 3.4-5s1.8 6 3.4 6 1.8-4 3.4-4 1.4 2 2.8 2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9 20.5h6" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <!-- Claude Code: a signal source -->
+      <symbol id="i-source" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.2 12c1.2-3.2 3.6-3.2 4.8 0s3.6 3.2 4.8 0" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <!-- AWR: a Smith chart -->
+      <symbol id="i-smith" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="18" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1"/><path d="M3 12h18M21 12a9 9 0 0 0-9-9M21 12a9 9 0 0 1-9 9" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+      <symbol id="i-schematic" viewBox="0 0 24 24"><path d="M2 12h4l1.5-3 3 6 3-6 3 6 1.5-3h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-graph" viewBox="0 0 24 24"><path d="M3 3v18h18" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 8c3 0 4 9 7 9s3-6 7-6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-em" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 9V5M16 9V5M8 15v4M16 15v4" stroke="currentColor" stroke-width="1.4"/></symbol>
+      <symbol id="i-netlist" viewBox="0 0 24 24"><path d="M5 5h14M5 10h10M5 15h14M5 20h8" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-sim" viewBox="0 0 24 24"><path d="M4 12h3l2-6 3 12 2-6h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></symbol>
+      <symbol id="i-reconnect" viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="strip">
+    <div class="brand">Fieldnote</div>
+    <div class="line" role="status" aria-live="polite">
+      <div class="port" data-port="app" data-state="up">
+        <svg class="port-icon"><use href="#i-app"/></svg>
+        <span class="port-name">Fieldnote</span><span class="port-state">Open</span>
+      </div>
+      <div class="seg" data-seg="claude" data-state="off"><i class="pulse"></i></div>
+      <div class="port" data-port="claude" data-state="off">
+        <svg class="port-icon"><use href="#i-source"/></svg>
+        <span class="port-name">Claude Code</span><span class="port-state" id="claudeState">Waiting</span>
+      </div>
+      <div class="seg" data-seg="awr" data-state="off"><i class="pulse"></i></div>
+      <div class="port" data-port="awr" data-state="off">
+        <svg class="port-icon"><use href="#i-smith"/></svg>
+        <span class="port-name">AWR</span><span class="port-state" id="awrState">Waiting</span>
+      </div>
+    </div>
+    <div class="tools">
+      <button class="icon-btn" id="reconnect" type="button" title="Reconnect" aria-label="Reconnect"><svg><use href="#i-reconnect"/></svg></button>
+      <button class="icon-btn" id="theme" type="button" title="Switch to light theme" aria-label="Switch to light theme"><svg><use href="#i-theme"/></svg></button>
+    </div>
+  </header>
+  <p class="detail" id="detail">Starting…</p>
+  <div class="banner" id="banner" role="alert" hidden><span id="bannerText"></span><button type="button" id="bannerRetry">Reconnect</button></div>
+
+  <main class="bench">
+    <aside class="project" aria-label="AWR project">
+      <div id="projectEmpty" class="project-empty">
+        <svg class="big-icon"><use href="#i-smith"/></svg>
+        <p>No project yet</p>
+        <small id="projectEmptyText">Fieldnote shows the project that is open in AWR.</small>
+      </div>
+      <div id="projectCard" hidden>
+        <h1 id="projectName"></h1>
+        <p class="file" id="projectFile"></p>
+        <p class="saved" id="projectSaved"></p>
+        <dl class="readout">
+          <div><dt><svg><use href="#i-schematic"/></svg>Schematics</dt><dd id="nSchematics">0</dd></div>
+          <div><dt><svg><use href="#i-graph"/></svg>Graphs</dt><dd id="nGraphs">0</dd></div>
+          <div><dt><svg><use href="#i-em"/></svg>EM structures</dt><dd id="nEm">0</dd></div>
+          <div><dt><svg><use href="#i-netlist"/></svg>Netlists</dt><dd id="nNetlists">0</dd></div>
+        </dl>
+        <section class="docs"><h2>Schematics</h2><ul id="listSchematics"></ul></section>
+        <section class="docs"><h2>Graphs</h2><ul id="listGraphs"></ul></section>
+        <section class="docs"><h2>EM structures</h2><ul id="listEm"></ul></section>
+        <section class="docs"><h2>Netlists</h2><ul id="listNetlists"></ul></section>
+      </div>
+    </aside>
+
+    <section class="screen" aria-label="Design chat">
+      <div class="scope">
+      <svg class="smith-art" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><clipPath id="smithClip"><circle cx="100" cy="100" r="96"/></clipPath></defs>
+        <circle cx="100" cy="100" r="96"/><circle cx="124" cy="100" r="72"/><circle cx="148" cy="100" r="48"/><circle cx="172" cy="100" r="24"/>
+        <path d="M4 100h192"/>
+        <g clip-path="url(#smithClip)"><!-- reactance circles x = 0.5, 1, 2: centre (1, ±1/x), radius 1/x -->
+          <circle cx="196" cy="-92" r="192"/><circle cx="196" cy="292" r="192"/>
+          <circle cx="196" cy="4" r="96"/><circle cx="196" cy="196" r="96"/>
+          <circle cx="196" cy="52" r="48"/><circle cx="196" cy="148" r="48"/>
+        </g>
+      </svg>
+      <div class="screen-empty" id="feedEmpty">
+        <p class="screen-title">Describe a circuit</p>
+        <p>Claude Code builds it in AWR. Each step shows up here as it happens, and the AWR window shows the result.</p>
+      </div>
+      <div class="feed" id="feed" hidden></div>
+      </div>
+      <div class="working" id="working" hidden><i></i><span>Claude is working in AWR…</span></div>
+      <form class="composer" id="composer">
+        <input type="text" id="task" autocomplete="off" disabled placeholder="Describe a circuit, for example a 2 GHz low-pass filter on FR4" aria-label="Design task">
+        <button type="submit" id="send" disabled>Send</button>
+        <button type="button" id="stop" hidden>Stop</button>
+        <button type="button" id="clear" title="Clear the saved history" aria-label="Clear history">Clear</button>
+      </form>
+    </section>
+  </main>
+  <div class="approval" id="approval" role="alertdialog" aria-modal="true" aria-labelledby="apTitle" hidden>
+    <div class="ap-box">
+      <h2 id="apTitle"></h2>
+      <p id="apText"></p>
+      <pre id="apPreview"></pre>
+      <p class="ap-note" id="apNote">If you don't answer, Fieldnote denies it after 2 minutes.</p>
+      <div class="ap-actions"><button type="button" id="apDeny">Deny</button><button type="button" id="apAllow">Allow</button></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
