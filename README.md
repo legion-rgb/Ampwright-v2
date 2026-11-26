@@ -36,7 +36,7 @@ uv run --script AWRMWO-mcp/tests/mcp_call.py project_info '{}'
 
 ### Ampwright desktop app
 
-Ampwright (called Fieldnote in v1) is a desktop window for AWR work, brought over from v1 on 25 Nov 2026. Open AWR with your project, then double-click `AWRMWO-mcp-v2/Ampwright.bat` (needs uv and Microsoft Edge WebView2). It starts Claude Code hidden, on your own subscription login with no API key, and shows the open AWR project. You chat with it, watch each step in the activity feed, stop a turn, and allow or deny save, new project and delete in a dialog. The plan is in [AMPWRIGHT_PLAN.md](AMPWRIGHT_PLAN.md). The older v2 window is archived in `_archive_desktop_v2/`.
+Ampwright (called Fieldnote in v1) is a desktop window for AWR work, brought over from v1 on 25 Nov 2026. Open AWR with your project, then double-click `Ampwright.bat` in this folder (needs uv and Microsoft Edge WebView2). It starts Claude Code hidden, on your own subscription login with no API key, and shows the open AWR project. You chat with it, watch each step in the activity feed, stop a turn, and allow or deny save, new project and delete in a dialog. The plan is in [AMPWRIGHT_PLAN.md](AMPWRIGHT_PLAN.md). The older v2 window is archived in `_archive_desktop_v2/`.
 
 Ampwright's hidden session starts in the workspace folder, so it uses the lean setup (AWR server only) and not this folder's agent loop or `v2_*` guard hooks. The agent loop still runs from a Claude Code session opened in this folder.
 

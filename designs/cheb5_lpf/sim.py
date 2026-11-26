@@ -1,5 +1,5 @@
-import sys, numpy as np
-sys.path.insert(0, r"c:\Users\acnb7\Documents\RA_Work\workspace\AWRMWO-mcp-v2\tests")
+import os, sys, numpy as np
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "tests"))
 import rf_theory as rt
 from scipy.optimize import minimize
 H=0.8e-3; ER=4.4; TD=0.02; T=35e-6; C0=299792458.0
