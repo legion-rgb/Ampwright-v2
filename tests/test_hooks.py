@@ -21,6 +21,9 @@ assert decide(P + "set_parameter", {"schematic": "v2_rc", "element": "R1"}, ro) 
 assert decide(P + "create_graph", {"name": "v2_rc_s"}, ro) is None
 assert decide(P + "set_graph_axis", {"graph": "v2_rc_s", "min": -60}, ro) is None
 assert decide(P + "set_graph_axis", {"graph": "mine", "min": -60}, ro)[0] == "deny"  # not a v2_ graph
+assert decide(P + "set_graph_trace", {"graph": "mine", "color": "#ff0000"}, ro)[0] == "deny"
+assert decide(P + "add_graph_marker", {"graph": "v2_rc_s", "measurement": 1, "x": 1e9}, ro) is None
+assert decide(P + "clear_graph_markers", {"graph": "LMatch_Response"}, ro)[0] == "deny"
 assert decide(P + "list_elements", {"schematic": "Schematic 1"}, ro) is None  # reads are fine
 assert decide(P + "simulate", {}, ro) is None
 assert decide(P + "set_frequencies", {"start_hz": 1, "stop_hz": 2}, ro)[0] == "deny"  # project-wide sweep

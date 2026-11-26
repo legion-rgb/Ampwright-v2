@@ -385,6 +385,29 @@ async def set_graph_axis(graph: str, axis: str = "y", min: float | None = None, 
 
 
 @mcp.tool()
+async def set_graph_trace(graph: str, trace: str | int | None = None, color: str | None = None, dash: str | None = None,
+                          symbol: str | None = None, symbol_size: int | None = None, legend: str | None = None) -> dict:
+    """Style traces on a graph. trace: omit for all, a 1-based index, or part of a measurement name ('S(2,1)').
+    color: '#RRGGBB'. dash: solid, thick, thin or thick_thin. symbol: none, triangle, square, diamond, x, horizontal_bar,
+    vertical_bar, forward_slash, back_slash, arrow, circle, small_x or cross. symbol_size: AWR default is 5.
+    legend: legend text. Returns each trace as it now stands."""
+    return await run(gr.set_graph_trace_sync, graph, trace, color, dash, symbol, symbol_size, legend)
+
+
+@mcp.tool()
+async def add_graph_marker(graph: str, measurement: str | int, x: float) -> dict:
+    """Put a marker on a graph at x (sweep value in base units, e.g. 2e9 for 2 GHz). measurement: its 1-based index or
+    part of its name ('S(2,1)'). Needs simulated data. Returns the marker's sweep value and the data value read there."""
+    return await run(gr.add_graph_marker_sync, graph, measurement, x)
+
+
+@mcp.tool()
+async def clear_graph_markers(graph: str) -> dict:
+    """Remove every marker from a graph."""
+    return await run(gr.clear_graph_markers_sync, graph)
+
+
+@mcp.tool()
 async def add_measurement(graph: str, source_doc: str, measurement: str, simulator: str | None = None) -> dict:
     """Add a measurement to a graph, e.g. source_doc='RC', measurement='DB(|S(2,1)|)' or 'DB(|S(1,1)|)'.
     simulator: omit for the default; models ending in _AP (APLAC) need an APLAC one, e.g. 'aplac_dc' for an IVCURVE

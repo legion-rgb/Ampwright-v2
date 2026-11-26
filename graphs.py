@@ -133,6 +133,69 @@ def set_graph_axis_sync(graph, axis="y", min=None, max=None, step=None, auto=Fal
             "step": ax.MajorGridlinesStep, "label": ax.LabelText}
 
 
+DASH = {"solid": 1, "thick": 2, "thin": 3, "thick_thin": 4}  # mwDashStyle
+SYMBOL = {"triangle": 1, "square": 2, "diamond": 3, "x": 4, "horizontal_bar": 5, "vertical_bar": 6, "forward_slash": 7,
+          "back_slash": 8, "arrow": 9, "circle": 10, "small_x": 11, "cross": 12}  # mwTraceSymbols; "none" hides the symbol
+
+
+def _traces(g, trace):
+    """trace: None = all, a 1-based index, or part of a measurement name ('S(2,1)')."""
+    ts = list(g.Traces)
+    hits = ts if trace is None else [ts[trace - 1]] if isinstance(trace, int) and 1 <= trace <= len(ts) else \
+        [t for t in ts if isinstance(trace, str) and trace in t.Name]
+    if not hits:
+        raise ValueError(f"No trace '{trace}' on '{g.Name}'. Have: {[t.Name for t in ts]}")
+    return hits
+
+
+def set_graph_trace_sync(graph, trace=None, color=None, dash=None, symbol=None, symbol_size=None, legend=None):
+    """color '#RRGGBB'; dash solid|thick|thin|thick_thin; symbol none|<SYMBOL name>; legend = legend text."""
+    if dash is not None and dash not in DASH:
+        raise ValueError(f"dash must be one of {list(DASH)}")
+    if symbol is not None and symbol != "none" and symbol not in SYMBOL:
+        raise ValueError(f"symbol must be 'none' or one of {list(SYMBOL)}")
+    if color is not None and not re.fullmatch(r"#[0-9a-fA-F]{6}", color):
+        raise ValueError("color must look like '#RRGGBB'")
+    out = []
+    for t in _traces(find(awr().Project.Graphs, graph), trace):
+        if color is not None:
+            r, gn, b = (int(color[i:i + 2], 16) for i in (1, 3, 5))
+            t.Color = r | gn << 8 | b << 16  # AWR colours are BGR longs
+        if dash is not None:
+            t.DashStyle = DASH[dash]
+        if symbol == "none":
+            t.SymbolVisible = False
+        elif symbol is not None:
+            t.Symbol = SYMBOL[symbol]
+            t.SymbolVisible = True
+        if symbol_size is not None:
+            t.SymbolSize = symbol_size
+        if legend is not None:
+            t.UseDefaultLegendText = False
+            t.LegendText = legend
+        c = int(t.Color)
+        out.append({"trace": t.Name, "color": f"#{c & 255:02x}{c >> 8 & 255:02x}{c >> 16 & 255:02x}", "dash": int(t.DashStyle),
+                    "symbol": int(t.Symbol), "symbol_visible": bool(t.SymbolVisible), "symbol_size": int(t.SymbolSize)})
+    return out
+
+
+def add_graph_marker_sync(graph, measurement, x):
+    """A marker at x (the sweep value in base units, e.g. Hz) on a measurement: its 1-based index or part of its name."""
+    g = find(awr().Project.Graphs, graph)
+    names = [t.Name for t in g.Traces]
+    i = measurement if isinstance(measurement, int) else next((k + 1 for k, n in enumerate(names) if measurement in n), 0)
+    if not 1 <= i <= len(names):
+        raise ValueError(f"No measurement '{measurement}' on '{graph}'. Have: {names}")
+    m = g.Markers.Add(names[i - 1], 1, x)
+    return {"graph": graph, "marker": m.Name, "measurement": names[i - 1], "sweep": m.SweepValue, "value": m.DataValue(int(m.NumDataValueDim))}  # a method in COM; dimension 1 is x, the last one is y (re/im for complex)
+
+
+def clear_graph_markers_sync(graph):
+    g = find(awr().Project.Graphs, graph)
+    g.Markers.RemoveAll()
+    return {"graph": graph, "markers": int(g.Markers.Count)}
+
+
 def _norm(s):
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 

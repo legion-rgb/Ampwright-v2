@@ -106,6 +106,8 @@ You and Claude work in part IDs and pin names. Coordinates stay inside the serve
 | `create_graph`, `delete_graph` | Rectangular, polar, Smith, tabular and other graph types |
 | `add_measurement`, `delete_measurement` | For example `DB(\|S(2,1)\|)`, `IVCurve(IV1)` or `IDC(DCVS.VD,1)`. `simulator` picks the engine, such as `aplac_dc` for APLAC models |
 | `set_graph_axis` | Axis range, grid step and label for `x`, `y` or `y2`; `auto=True` gives the axis back to AWR. Needs simulated data first |
+| `set_graph_trace` | Trace color (`#RRGGBB`), dash, symbol, symbol size and legend text; one trace or all |
+| `add_graph_marker`, `clear_graph_markers` | A marker at a sweep value, returning the data value read there; or remove all markers |
 | `simulate` | Whole project (returns at once), or one graph only (waits for it), so a broken schematic elsewhere doesn't stop you |
 | `wait_for_simulation`, `simulation_state` | Waits for a run, or reports its state and errors |
 | `graph_data` | Results in SI units, with trace labels and units. `summary=True` gives min, max and where they occur |
