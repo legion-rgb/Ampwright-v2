@@ -1,8 +1,10 @@
-# Fieldnote 2: plan
+# Ampwright 2: plan
+
+Named Fieldnote until 26 Nov 2026 (and still Fieldnote in v1); the user renamed it Ampwright. Older entries below keep the history as it happened.
 
 Status (22 Nov 2026):
-- **Phase 1 done.** `tests/test_fieldnote_ui.py` passes. Live, the app started Claude Code hidden, attached to its fixed pipe and showed the open AWR project in 4.4 s. No prompt was sent, so no usage was spent, and no process was left behind on close. Run it with `Fieldnote.bat`.
-- **Phase 2 done (24 Nov, in v1):** chat, step timeline, Stop, saved history, the approval dialog (only save, new project and delete ask), and frequency sweeps in the sweep's own unit. Tests: `test_fieldnote_chat`, `test_fieldnote_chat_ui`, `test_fieldnote_approval`, `test_session`.
+- **Phase 1 done.** `tests/test_ampwright_ui.py` passes. Live, the app started Claude Code hidden, attached to its fixed pipe and showed the open AWR project in 4.4 s. No prompt was sent, so no usage was spent, and no process was left behind on close. Run it with `Ampwright.bat`.
+- **Phase 2 done (24 Nov, in v1):** chat, step timeline, Stop, saved history, the approval dialog (only save, new project and delete ask), and frequency sweeps in the sweep's own unit. Tests: `test_ampwright_chat`, `test_ampwright_chat_ui`, `test_ampwright_approval`, `test_session`.
 - **Moved into v2 on 25 Nov.** All 18 AWR-free tests pass here. Phases 3 and 4 are not started. The first app is archived in v1's `_archive_fieldnote_v1/`, and v2's older window in `_archive_desktop_v2/`.
 
 ## What it is
@@ -21,7 +23,7 @@ A desktop app that is the front-end for Claude Code in AWR work. You type a desi
 ## How it works
 
 ```
-Fieldnote window ──prompt──▶ app backend ──stdin──▶ claude -p (hidden, your login)
+Ampwright window ──prompt──▶ app backend ──stdin──▶ claude -p (hidden, your login)
       ▲                          │  ▲                     │ starts
       │ events                   │  └──stdout: replies, tool calls
       │                          │                        ▼
@@ -83,11 +85,11 @@ The window, the styles and the layout are new.
 ## Files
 
 ```
-AWRMWO-mcp/fieldnote/
+AWRMWO-mcp/ampwright/
   app.py        window + backend (js_api), settings
   session.py    hidden claude -p session (from v1)
   pipe.py       pipe client (from v1)
   ui/index.html, ui/app.css, ui/app.js, ui/icons.svg   (inlined into the window)
 AWRMWO-mcp/hub.py            + fixed pipe name from an environment variable
-AWRMWO-mcp/tests/test_fieldnote_ui.py
+AWRMWO-mcp/tests/test_ampwright_ui.py
 ```

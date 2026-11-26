@@ -1,4 +1,4 @@
-// Fieldnote window. The backend owns the state; this page renders it. No browser storage: the html= page has none.
+// Ampwright window. The backend owns the state; this page renders it. No browser storage: the html= page has none.
 const $ = (id) => document.getElementById(id);
 
 const PORT_TEXT = {
@@ -8,7 +8,7 @@ const PORT_TEXT = {
 
 function api(method, ...args) {
   const fn = window.pywebview?.api?.[method];
-  return fn ? fn(...args) : Promise.reject(new Error("The Fieldnote backend isn't ready."));
+  return fn ? fn(...args) : Promise.reject(new Error("The Ampwright backend isn't ready."));
 }
 
 function showBanner(text) {
@@ -86,7 +86,7 @@ function approvalText(tool) {
   if (tool === "new_project") return ["Start a new project?", "This closes the open AWR project. Unsaved work in it is lost."];
   if (tool === "set_frequencies") return ["Change the sweep for the whole project?", "Claude wants to set the project frequencies. Every schematic that uses the project sweep changes too. Deny to make it use its own schematic's sweep."];
   if (tool === "add_equation") return ["Add a project-wide equation?", "Claude wants to add this to Global Definitions, which every schematic sees. Deny to keep it in one schematic."];
-  if (tool === "Write" || tool === "Edit") return ["Change this file?", "Claude wants to write to it. Fieldnote only allows that without asking for design dossiers (designs/) and the progress and lesson logs, never for .emp files or the app's own code and settings."];
+  if (tool === "Write" || tool === "Edit") return ["Change this file?", "Claude wants to write to it. Ampwright only allows that without asking for design dossiers (designs/) and the progress and lesson logs, never for .emp files or the app's own code and settings."];
   if (tool === "Bash" || tool === "PowerShell") return ["Run a command?", "Claude wants to run this shell command on your PC."];
   if (tool.startsWith("delete_")) return [`Delete ${tool.slice(7).replaceAll("_", " ")}?`, "Claude wants to remove it from the AWR project."];
   return [`Run ${tool.replaceAll("_", " ")}?`, "Claude wants to run this tool."];
@@ -104,7 +104,7 @@ function renderApproval(items) {
   $("apTitle").textContent = title;
   $("apText").textContent = text;
   $("apPreview").textContent = it.preview;
-  $("apNote").textContent = "If you don't answer, Fieldnote denies it after 2 minutes." + (waiting.length > 1 ? ` ${waiting.length - 1} more waiting.` : "");
+  $("apNote").textContent = "If you don't answer, Ampwright denies it after 2 minutes." + (waiting.length > 1 ? ` ${waiting.length - 1} more waiting.` : "");
   dlg.dataset.id = it.id;
   if (shownApproval !== it.id) {
     shownApproval = it.id;
@@ -153,7 +153,7 @@ function renderProject(p, problem) {
   $("projectEmpty").hidden = !!p;
   $("projectCard").hidden = !p;
   if (!p) {
-    $("projectEmptyText").textContent = problem || "Fieldnote shows the project that is open in AWR.";
+    $("projectEmptyText").textContent = problem || "Ampwright shows the project that is open in AWR.";
     return;
   }
   $("projectName").textContent = projectTitle(p);
@@ -198,7 +198,7 @@ async function startUp() {
   onHistory(await api("history"));
 }
 
-window.fieldnote = { onState, onHistory };
+window.ampwright = { onState, onHistory };
 $("composer").addEventListener("submit", (e) => { e.preventDefault(); send(); });
 $("stop").addEventListener("click", () => api("stop_turn"));
 $("apAllow").addEventListener("click", () => answerApproval("allow"));

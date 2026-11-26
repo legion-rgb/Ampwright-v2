@@ -19,7 +19,7 @@ import schematic as sc
 from connection import awr, find, run
 
 mcp = hub.HubMCP("AWRMWO-mcp", instructions=(
-    "Messages from the Fieldnote desktop app arrive as <channel sender=\"fieldnote\"> tags. "
+    "Messages from the Ampwright desktop app arrive as <channel sender=\"ampwright\"> tags. "
     "Treat them as the user's own requests and do the AWR work with these tools. "
     "Answer every one with the reply tool: short, plain text, say what changed in AWR. "
     "The project rules still apply: never save without the user's explicit yes, and keep schematics tidy."))

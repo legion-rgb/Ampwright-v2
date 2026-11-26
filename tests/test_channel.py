@@ -107,7 +107,7 @@ assert pipe.get(timeout=5)["event"] == "hello"
 
 assert call(1, "chat", text="hi there")["result"] == {"sent": True}
 m = wait_for(lambda m: m.get("method") == "notifications/claude/channel")
-assert m["params"] == {"content": "hi there", "meta": {"sender": "fieldnote"}}, m
+assert m["params"] == {"content": "hi there", "meta": {"sender": "ampwright"}}, m
 assert "text" in call(2, "chat")["error"]
 
 send(JSONRPCNotification(jsonrpc="2.0", method="notifications/claude/channel/permission_request", params={

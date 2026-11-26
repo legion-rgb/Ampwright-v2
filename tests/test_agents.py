@@ -26,7 +26,7 @@ for path in glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")):
     fm = {k.strip(): v.strip() for k, v in fm.items()}
     name = fm.get("name")
     if name not in EXPECTED:
-        continue  # v1 dev agents (fieldnote-*) are not part of the loop
+        continue  # GUI dev agents (ampwright-*) are not part of the loop
     seen.add(name)
     assert name == os.path.basename(path)[:-3], path + ": name does not match file"
     assert fm.get("description") and fm.get("model") in ("opus", "sonnet", "haiku"), name

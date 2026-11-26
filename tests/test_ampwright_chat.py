@@ -9,7 +9,7 @@ import time
 
 os.environ["APPDATA"] = tempfile.mkdtemp()  # never touch the user's history
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "fieldnote"))
+sys.path.insert(0, os.path.join(HERE, "..", "ampwright"))
 import app
 import session
 
@@ -66,7 +66,7 @@ assert len(b.history()) == n and b.history()[-1]["status"] == "stopped"
 assert b.clear_history() and app.Api().history() == []
 
 # a denied or unanswered approval is the user's choice: "denied", no error line; a real error stays "failed"
-for sid, text, want in (("d1", "the user denied this in Fieldnote", "denied"), ("d2", "timed out waiting for the user", "denied"),
+for sid, text, want in (("d1", "the user denied this in Ampwright", "denied"), ("d2", "timed out waiting for the user", "denied"),
                         ("d3", "no such graph", "failed")):
     b._on_session({"event": "tool_use", "id": sid, "tool": "mcp__AWRMWO-mcp__delete_graph", "input": {"name": "g"}})
     b._on_session({"event": "tool_result", "id": sid, "is_error": True, "text": text})

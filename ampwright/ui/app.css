@@ -1,4 +1,4 @@
-/* Fieldnote. Dark = a VNA screen; light = a datasheet. The trace colours carry meaning, as on an analyzer:
+/* Ampwright. Dark = a VNA screen; light = a datasheet. The trace colours carry meaning, as on an analyzer:
    yellow = the Claude link, cyan = AWR, magenta = a fault. */
 :root, [data-theme="dark"] {
   --screen: #0c1a1f;

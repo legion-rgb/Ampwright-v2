@@ -87,12 +87,12 @@ footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
 <body>
 <main>
   <h1>AWRMWO-mcp roadmap</h1>
-  <p class="lede">Claude Code designing RF circuits in AWR Microwave Office: the MCP server, the v2 agent team, and the Fieldnote desktop app. As of 26 Nov 2026.</p>
+  <p class="lede">Claude Code designing RF circuits in AWR Microwave Office: the MCP server, the v2 agent team, and the Ampwright desktop app. As of 26 Nov 2026.</p>
 
   <div class="path" aria-label="The plan from 25 Nov, in order">
     <div class="stop done"><span class="dot"></span><b>Base</b>v1 server, v2 loop, GUI in v2</div>
     <div class="stop here"><span class="dot"></span><b>1 · Mode switch</b>Quick / Design</div>
-    <div class="stop"><span class="dot"></span><b>2 · Theory vs Sim</b>card in Fieldnote</div>
+    <div class="stop"><span class="dot"></span><b>2 · Theory vs Sim</b>card in Ampwright</div>
     <div class="stop"><span class="dot"></span><b>3 · Inverses</b><code>*_design</code> in rf_theory</div>
     <div class="stop"><span class="dot"></span><b>4 · Synthesis</b>Chebyshev, FET bias</div>
     <div class="stop"><span class="dot"></span><b>5 · Open items</b>evals, EM, cleanup</div>
@@ -100,16 +100,16 @@ footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
   </div>
 
   <div class="youarehere">
-    <strong>You are here:</strong> item 1 is built and was proven live today. A full Design-mode loop (<code>fn_rc_check</code>) passed in round 0, and subagent tool requests do reach Fieldnote's approval dialog. Today's three follow-up fixes are tested but not yet committed or re-run live. Item 2 is next.
+    <strong>You are here:</strong> item 1 is built and was proven live today. A full Design-mode loop (<code>fn_rc_check</code>) passed in round 0, and subagent tool requests do reach Ampwright's approval dialog. Today's three follow-up fixes are tested but not yet committed or re-run live. Item 2 is next.
   </div>
 
   <h2>Done</h2>
 
   <section class="stage">
-    <header><h3>v1: the MCP server and Fieldnote</h3><span class="chip done">done</span></header>
+    <header><h3>v1: the MCP server and Fieldnote (now Ampwright)</h3><span class="chip done">done</span></header>
     <ul>
       <li class="ok">AWRMWO-mcp server: schematics, parts, wiring, ports, sweeps, graphs, simulation, EM structures</li>
-      <li class="ok">Fieldnote, a desktop window that runs Claude Code on your subscription login, with an approval dialog for save, new project and delete</li>
+      <li class="ok">Ampwright, a desktop window that runs Claude Code on your subscription login, with an approval dialog for save, new project and delete</li>
     </ul>
   </section>
 
@@ -125,7 +125,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
   </section>
 
   <section class="stage">
-    <header><h3>Fieldnote moved into v2</h3><span class="when">25 Nov</span><span class="chip done">done</span></header>
+    <header><h3>Ampwright moved into v2</h3><span class="when">25 Nov</span><span class="chip done">done</span></header>
     <ul>
       <li class="ok">v1's server, hub and helpers replace v2's; the old desktop window is archived</li>
       <li class="ok">AWR regression suite <code>validate</code>: 71/71, re-run on 25 Nov</li>
@@ -152,7 +152,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
 
   <section class="stage">
     <header><h3>Item 2: Theory vs Sim card</h3><span class="chip next">next</span></header>
-    <p>A Fieldnote card that reads a design's dossier and puts each goal's theory prediction next to its measured value and verdict, using <code>predictions.json</code>, <code>results.json</code> and <code>verdict.md</code>.</p>
+    <p>A Ampwright card that reads a design's dossier and puts each goal's theory prediction next to its measured value and verdict, using <code>predictions.json</code>, <code>results.json</code> and <code>verdict.md</code>.</p>
   </section>
 
   <section class="stage">
@@ -197,7 +197,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: .85rem; }
   </table>
   </div>
 
-  <footer>Sources: <code>PROGRESS.md</code>, <code>errors.md</code>, <code>designs/fn_rc_check/report.md</code>, and Fieldnote's history from 26 Nov.</footer>
+  <footer>Sources: <code>PROGRESS.md</code>, <code>errors.md</code>, <code>designs/fn_rc_check/report.md</code>, and Ampwright's history from 26 Nov.</footer>
 </main>
 </body>
 </html>

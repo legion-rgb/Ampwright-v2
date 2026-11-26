@@ -1,17 +1,17 @@
 # /// script
 # dependencies = ["pywin32", "pywebview"]
 # ///
-"""Fieldnote window without Claude or AWR: the page renders backend states, shows faults, and saves the theme."""
+"""Ampwright window without Claude or AWR: the page renders backend states, shows faults, and saves the theme."""
 import os, sys, tempfile, time
 os.environ["APPDATA"] = tempfile.mkdtemp()  # never touch the user's settings
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "fieldnote"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ampwright"))
 import app
 import webview
 
 PROJECT = {"project": "Demo.emp", "file": r"C:\work\Demo.emp", "saved": False, "schematics": ["v2_rc_lpf"],
            "graphs": ["v2_rc_lpf_s"], "em_structures": [], "netlists": []}
 api, out = app.Api(claude_path=r"C:\nowhere\claude.exe"), {}
-w = webview.create_window("test_fieldnote", html=app.build_page(), js_api=api, hidden=True)
+w = webview.create_window("test_ampwright", html=app.build_page(), js_api=api, hidden=True)
 api._window = w
 q = lambda code: w.evaluate_js(code)
 
@@ -19,7 +19,7 @@ q = lambda code: w.evaluate_js(code)
 def run():
     time.sleep(3)
     try:
-        out["started"] = q("typeof window.fieldnote === 'object'")
+        out["started"] = q("typeof window.ampwright === 'object'")
         api._set(claude="up", awr="up", project=PROJECT, detail="")
         time.sleep(0.3)
         out["up"] = q("[$('projectName').textContent, $('awrState').textContent, $('nSchematics').textContent,"

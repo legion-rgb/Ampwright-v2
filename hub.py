@@ -141,16 +141,16 @@ class HubMCP(FastMCP):
         self._mcp_loop = None
         self._pending = {}  # request_id -> (loop, future) for approve calls waiting on the GUI
         self.add_tool(self.approve, name="approve", description=(
-            "Claude Code's --permission-prompt-tool: asks the Fieldnote window to allow or deny a tool call. "
+            "Claude Code's --permission-prompt-tool: asks the Ampwright window to allow or deny a tool call. "
             "Not for direct use."), structured_output=False)  # Claude Code needs the bare JSON text, not {"result": ...}
         self.add_tool(self.reply, name="reply", description=(
-            "Send your answer to the user in the Fieldnote desktop app. Use it to answer every message "
-            "that arrived as a <channel sender=\"fieldnote\"> tag; the user does not see the terminal."))
+            "Send your answer to the user in the Ampwright desktop app. Use it to answer every message "
+            "that arrived as a <channel sender=\"ampwright\"> tag; the user does not see the terminal."))
 
     def reply(self, text: str) -> dict:
         n = len(self._clients)
         self._broadcast({"event": "reply", "text": text})
-        return {"delivered_to": n} if n else {"delivered_to": 0, "note": "no Fieldnote window is connected"}
+        return {"delivered_to": n} if n else {"delivered_to": 0, "note": "no Ampwright window is connected"}
 
     async def approve(self, tool_name: str, input: dict, tool_use_id: str | None = None) -> str:
         name = tool_name[len(_PREFIX):] if tool_name.startswith(_PREFIX) else tool_name
@@ -162,7 +162,7 @@ class HubMCP(FastMCP):
         if not always:  # building in AWR (add parts, wire, simulate...) never asks; only save, new project and delete do
             return json.dumps({"behavior": "allow", "updatedInput": input})
         if not self._clients:
-            return deny("no Fieldnote window is connected to approve this")
+            return deny("no Ampwright window is connected to approve this")
         rid = uuid.uuid4().hex
         fut = asyncio.get_running_loop().create_future()
         self._pending[rid] = (asyncio.get_running_loop(), fut)
@@ -176,7 +176,7 @@ class HubMCP(FastMCP):
             self._pending.pop(rid, None)
         if beh == "allow":
             return json.dumps({"behavior": "allow", "updatedInput": input})
-        return deny("the user denied this in Fieldnote")
+        return deny("the user denied this in Ampwright")
 
     # ---- Claude Code channel (research preview) ----
     async def run_streams(self, read_stream, write_stream):
@@ -281,7 +281,7 @@ class HubMCP(FastMCP):
             text = args.get("text")
             if not isinstance(text, str) or not text.strip():
                 raise ValueError("text must be a non-empty string")
-            self._notify("notifications/claude/channel", {"content": text, "meta": {"sender": "fieldnote"}})
+            self._notify("notifications/claude/channel", {"content": text, "meta": {"sender": "ampwright"}})
             _source.set("gui")
             self._record("chat", args, True, "sent", 0)
             return {"sent": True}
@@ -365,8 +365,8 @@ class HubMCP(FastMCP):
 
     def start_hub(self):
         name = r"\\.\pipe\AWRMWO-%s-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
-        fixed = os.environ.get("FIELDNOTE_PIPE", "")  # Fieldnote starts this server and names its pipe, so no discovery
-        if fixed.startswith(name.rsplit("-", 1)[0] + "-fieldnote-"):
+        fixed = os.environ.get("AMPWRIGHT_PIPE", "")  # Ampwright starts this server and names its pipe, so no discovery
+        if fixed.startswith(name.rsplit("-", 1)[0] + "-ampwright-"):
             name = fixed
         ready = threading.Event()
 

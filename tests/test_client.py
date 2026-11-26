@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 from mcp.types import ToolAnnotations
 
-import fieldnote_client as fc
+import ampwright_client as fc
 import hub
 
 mcp = hub.HubMCP("test")

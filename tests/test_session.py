@@ -4,7 +4,7 @@ import queue
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "fieldnote"))
+sys.path.insert(0, os.path.join(HERE, "..", "ampwright"))
 import session
 
 ev = queue.Queue()

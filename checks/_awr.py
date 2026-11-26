@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 
 def call(tool, **args):
-    import fieldnote_client as fc
+    import ampwright_client as fc
     sessions = fc.list_sessions()
     if not sessions:
         raise RuntimeError("no AWRMWO hub session found (is AWR + the server running?)")

@@ -2,7 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pywin32", "pywebview"]
 # ///
-"""Fieldnote: a desktop front-end for Claude Code doing AWR work. Starts a hidden Claude Code session on the
+"""Ampwright: a desktop front-end for Claude Code doing AWR work. Starts a hidden Claude Code session on the
 user's subscription, attaches to that session's AWRMWO-mcp hub pipe, and shows the open AWR project."""
 import ctypes
 import json
@@ -20,14 +20,14 @@ UI = os.path.join(HERE, "ui")
 WORKSPACE = os.path.dirname(os.path.dirname(HERE))  # workspace: project CLAUDE.md rules load from here
 # Design mode runs in the v2 folder, so its CLAUDE.md (Design Lead loop), agents and hooks load
 WORKSPACES = {"quick": WORKSPACE, "design": os.path.dirname(HERE)}
-SETTINGS = os.path.join(os.environ.get("APPDATA", HERE), "Fieldnote", "settings.json")
-PIPE = r"\\.\pipe\AWRMWO-%s-fieldnote-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
+SETTINGS = os.path.join(os.environ.get("APPDATA", HERE), "Ampwright", "settings.json")
+PIPE = r"\\.\pipe\AWRMWO-%s-ampwright-%d" % (os.environ.get("USERNAME", "user"), os.getpid())
 HISTORY = os.path.join(os.path.dirname(SETTINGS), "history.json")
 HISTORY_MAX = 500  # items kept on disk
 TOOL_PREFIX = "mcp__AWRMWO-mcp__"
 APPROVE_WAIT = 120  # seconds; the server denies on its own after this (hub.APPROVE_TIMEOUT), so the dialog closes too
 POLL_S = 10  # project refresh; read-only pipe call, costs no Claude tokens
-DENY_TEXTS = ("the user denied this in Fieldnote", "timed out waiting for the user")  # hub.approve's deny messages
+DENY_TEXTS = ("the user denied this in Ampwright", "timed out waiting for the user")  # hub.approve's deny messages
 
 
 class FLASHWINFO(ctypes.Structure):  # winuser.h, for FlashWindowEx
@@ -112,7 +112,7 @@ class Api:
             snap = dict(self._state)
         if self._window:
             try:
-                self._window.evaluate_js("window.fieldnote && window.fieldnote.onState(%s)" % json.dumps(snap))
+                self._window.evaluate_js("window.ampwright && window.ampwright.onState(%s)" % json.dumps(snap))
             except Exception:
                 pass  # window not ready or closing; the page pulls state() on load
 
@@ -124,7 +124,7 @@ class Api:
     def _push_history(self):
         if self._window:
             try:
-                self._window.evaluate_js("window.fieldnote && window.fieldnote.onHistory(%s)" % json.dumps(self._history))
+                self._window.evaluate_js("window.ampwright && window.ampwright.onHistory(%s)" % json.dumps(self._history))
             except Exception:
                 pass
 
@@ -424,7 +424,7 @@ class Api:
 def main():
     import webview
     api = Api()
-    api._window = webview.create_window("Fieldnote", html=build_page(), js_api=api, width=1360, height=880,
+    api._window = webview.create_window("Ampwright", html=build_page(), js_api=api, width=1360, height=880,
                                        min_size=(980, 640), background_color="#0c1a1f")
     api._window.events.closed += api.shutdown
     webview.start(api.start, http_server=False)

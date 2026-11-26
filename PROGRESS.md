@@ -8,6 +8,12 @@
 - The old window (`desktop_app.py`, `launch_desktop.bat`, `ui/`, `UI_PLAN.md`) is in `_archive_desktop_v2/`. `fieldnote_client.py` stays: `checks/_awr.py` uses it.
 - Checked: 18/18 AWR-free tests, `validate` 71/71, `validate_em` 21/21, and the server starts. Not yet checked live with AWR open: open AWR, run `Fieldnote.bat`, and do the Phase 2 demo (RC low-pass, then delete a graph and Deny).
 
+**Theory training (user, 26 Nov, before item 2):** plan in [THEORY_PLAN.md](THEORY_PLAN.md), rules in [THEORY_GOVERNANCE.md](THEORY_GOVERNANCE.md). Both proposed, nothing built. Phases T0 (baseline drills) to T6; absorbs items 3 and 4. Waiting on the user: approve the governance, textbooks to cite, OK for a `theory-curator` agent, first circuit classes.
+
+**Renamed Fieldnote to Ampwright (user, 26 Nov, lead):** folders, files, agents, the pipe name and `AMPWRIGHT_PIPE`, the channel sender, deny texts and the UI. `%APPDATA%\Fieldnote` was copied to `%APPDATA%\Ampwright`, and the old folder is kept because v1 still uses it. v1 itself is unchanged and still called Fieldnote. Left as they were: older entries in this file, `designs/`, `_archive_desktop_v2/`, `docs/v2_proposal/` (untracked, not mine). All 18 AWR-free tests pass. `errors.md`/`playbook.md` were passed to lesson-keeper (mode `upgrade`). The AWR MCP server shows the new name in its instructions only after a restart. Older entries below say "Fieldnote" for the same app.
+
+**v3 PA plan (user, 26 Nov):** drafted in "v3: RF power amplifier" at the bottom of this file. Proposed, nothing built. PA tasks only; all other RF design stays on the theory-first v2 loop with THEORY_PLAN (user, 26 Nov). Rewritten 26 Nov around the 10-step PA workflow (step gates, a device model card, a new `pa-diagnostician`, `pa_rules.md` experience base). Waiting on the user: the 6 open decisions there.
+
 **Next (user, 25 Nov):** plan in chat: (1) a Quick/Design mode switch so Fieldnote can run the v2 agent loop, (2) a Theory vs Sim card read from the dossier, (3) the `*_design` inverses in rf_theory, (4) Chebyshev synthesis and an FET bias solver in rf_theory, (5) the open items below. v3 comes after.
 
 **Mode switch (item 1), 25 Nov, lead:** planned in chat. Spec gate is reply-based (user). Design mode = cwd `AWRMWO-mcp-v2`, tools `Read,Glob,Grep,Write,Agent`, `DESIGN_PROMPT`, same AWR server + `approve`.
@@ -39,7 +45,7 @@
 3. Re-run the AWR regression suites (`tests/validate.py`, `validate_em.py` via `mcp_call.py --batch`), which haven't run since the `_set_param` change.
 4. cheb5_lpf step check. MSTEP can't model the 0.039 width ratio, and the user stopped the MSTEPX (EM) retry because it may use an EM license. Ask the user before any EM or license-heavy run.
 5. A first real `evals/run_headless.py` run (only dry-run so far).
-6. Version 3: take the user's plans. v2's known gaps (from the 22 Nov summary): EM designs through the agent loop, larger and active circuits (amplifiers, stability, noise, harmonic balance), Touchstone import, standard part values and tolerance, open-ended specs.
+6. Version 3: take the user's plans. The PA part is drafted in "v3: RF power amplifier" below. v2's known gaps (from the 22 Nov summary): EM designs through the agent loop, larger and active circuits (amplifiers, stability, noise, harmonic balance), Touchstone import, standard part values and tolerance, open-ended specs.
 
 **Before any AWR step:** check `ListAgents` (another session writing to AWR?) and `project_info`, which can be empty after a manual reset (errors.md E013). Never save without the user's yes.
 
@@ -93,3 +99,96 @@ AWR: fresh untitled project (user, 21 Nov). Never saved.
 Incident 21 Nov: the AWR untitled project was found empty during step 13. The v1 session made no AWR writes; most likely AWR was reset or restarted by hand. All dossiers are on disk and nothing was saved.
 
 **Paused 22 Nov at the user's request.** The user has plans for a version 3. Still open in v2: run `lmatch_opt` (needs an open AWR project), run the AWR regression suites after the `_set_param` change, and the cheb5 step check (EM, or widen to >= 275 um and retune).
+
+
+## v3: RF power amplifier (plan, rewritten 26 Nov 2026, not started)
+Goal: the agents design an RF PA in AWR the way a PA designer does. Theory is used only where it decides something: class and feasibility (step 2) and matching synthesis (step 7). Every other step is decided by running the right AWR tool and reading its plots. AWR is the source of truth, but only inside the device model's valid range and with a correct set-up (converged HB, enough harmonics). Every analysis of an AWR plot is written down, so the next design starts with that experience.
+
+**Where we start (checked 26 Nov):**
+- Every PASS so far is passive or a DC bias point. No agent, playbook entry or check knows PA metrics.
+- `add_measurement` accepts a `simulator` (`aplac_hb`...), but no HB run has been done through the server.
+- Missing: port power and power sweep, load-pull, source-pull, two-tone, HB options, dynamic load line.
+- NE3508 is a low-noise device. A PA needs a power device with a nonlinear vendor model.
+
+### Scope: two loops (user, 26 Nov)
+**This workflow is for PA design only.** The Lead picks the loop at spec intake and records it in `state.json` as `"loop": "pa"` or `"loop": "rf"`:
+
+| Task | Loop | Driven by |
+|---|---|---|
+| Power amplifiers (and later other large-signal active stages, if the user says so) | **PA loop** (below) | AWR tools, plot reading, the Diagnostician, `pa_rules.md` |
+| Everything else in RF and microwave engineering: transmission lines, microstrip, matching networks, Smith-chart work, filters, couplers, dividers, resonators, stubs, transformers, bias networks | **RF loop**: the existing v2 loop (theory, build, evaluate, judge, fix, review), unchanged | Textbook theory first (Pozar-style microwave engineering), through THEORY_PLAN's cards and `rf_design.py`; the Judge keeps the gap check between prediction and measurement |
+
+- The two loops share the theory base. PA step 7 (matching) uses the same matching cards and functions as the RF loop, so THEORY_PLAN T3 serves both.
+- The PA additions (`pa-diagnostician`, the model card, `check_validity`, `pa_rules.md`, the step gates) run only when `loop` is `pa`. The v2 agents keep their current RF behaviour. Each agent's PA rules go in a separate "PA loop" section of its file, so the RF instructions stay as they are.
+- An unclear case (for example a mixed PA plus filter module) is a question to the user at spec intake: one loop per block, or the PA loop for the whole design.
+- P5 adds a routing test: `test_agents` checks that both loops are described and that no PA-only rule (judging against the spec only, no theory gap) leaks into the RF loop.
+
+### The PA workflow (step gates)
+The Lead runs one step at a time. Each step names the AWR tool to run, what to read from its plot, the decision rule, and when the step is done. The Diagnostician reads the plots at **every** step, not only on failure.
+
+| # | Step | Tool / source | Read from the plot | Decision, and when the step is done |
+|---|---|---|---|---|
+| 1 | **Spec intake** | Lead + **user** | — | Pout, Vdd, efficiency, technology, f0 and bandwidth, gain, linearity. **Ask the user for the device model's valid range** (step 1b). Done when the user approves spec.md |
+| 1b | **Device model card** | user, vendor documents | — | `library/devices/<device>.md`: valid Vds and Vgs, Id max, Pdiss max, breakdown, frequency range, temperature, the model's known limits. Anything missing is asked of the user, never guessed. Done when the user confirms the card |
+| 2 | **Class and feasibility** | the user's formulas in `rf_design.py` | — | Class, Ropt, Imax, ideal η, expected Pout. Done when Pout and η are reachable with margin; if not, stop with SPEC_UNREACHABLE |
+| 3 | **Bias point** | DC I-V, gm and gm3 against Vgs | knee, pinch-off, gm shape, where gain expansion would start | Vgs and Idq inside the model card. Done when the bias is inside the valid range and matches the chosen class |
+| 4 | **Stability (first pass)** | K, μ, stability circles over a wide band (about 0.1 to 3 × f0) | where K < 1 or μ < 1, and at which frequency | Add a stabiliser if needed. Done when the stage is unconditionally stable over the wide band |
+| 5 | **Architecture** | Lead + experience | — | Narrowband or wideband; single-ended, balanced, Doherty, harmonic-tuned. **Shown to the user** with the step-2 class (proposed checkpoint) |
+| 6 | **Load-pull and source-pull** | AWR load-pull and source-pull (f0, band edges, harmonics if needed) | Pout and PAE contours, their optima, the trade-off region | The target ZL and ZS. Done when the target point meets Pout and PAE with margin and stays inside the model card |
+| 7 | **Matching networks** | theory synthesis (THEORY_PLAN T3) + AWR | impedance path on the Smith chart across the band | Done when the impedances the device sees stay inside the chosen contours over the band |
+| 8 | **Full PA check** | HB power sweep | Pout, gain, P1dB, PAE against Pin, harmonics, dynamic load line against the I-V and the model card | Done when every spec goal passes, and the load line stays inside breakdown, Pdiss and the model range |
+| 9 | **Linearity** | AM-AM, AM-PM, two-tone IM3, ACLR | compression shape, phase drift, IM3 slope and sweet spots | Done when the linearity goals pass |
+| 10 | **Final stability and robustness** | K and μ again at all drive levels; output mismatch if specified | — | Done when it is stable everywhere; then the Judge gives the final PASS |
+| ↺ | **Diagnose and iterate** | Diagnostician | the symptom in the plot | A fault goes back to the step that owns its cause (for example low PAE back to step 6 or 3), not always to the last step |
+
+**Stops for the user:** spec (1), model card (1b), class and architecture (5, proposed), SPEC_UNREACHABLE or 3 failed rounds on a step, any save.
+
+### Agents
+| Agent | Change |
+|---|---|
+| **pa-diagnostician** (new, Opus) | Reads the plots and data after every AWR run: `graph_data`, plus `graph_image` for shape only. Applies the rules in `pa_rules.md` and cites their ids. Writes `diagnosis.md` in the dossier (step, symptom, plot, likely cause, the check that confirms it, the proposed fix, confidence) and one entry in the run journal. A new pattern gets a `Rule-candidate:` line. It may add graphs and measurements only in documents named `v2_<slug>_diag*` and simulate those; it never changes the circuit. A hook enforces this. It counts as an AWR writer (one at a time) |
+| circuit-theory | Narrowed to step 2 (the user's class formulas) and step 7 (matching synthesis). It no longer predicts every metric |
+| awr-builder | Runs each step's tool set-up, following the PA recipes in the playbook |
+| circuit-evaluator | PA metrics through `check_spec`, plus `check_validity.py`: operating point and dynamic load line against the model card, HB convergence |
+| verification-judge | Judges against the spec and the model card, not against theory. Stability is a hard gate. HB results are re-checked once with more harmonics. A theory gap alone is never a FAIL |
+| circuit-fixer | Applies the Diagnostician's proposed fix, one change per round, at the step that owns the cause. May use the optimizer on load-pull or matching goals |
+| design-reviewer | Adds PA hygiene: DC blocks and feeds, no floating DC node, part ratings, values realistic for the technology |
+| lesson-keeper | Also the only writer of `pa_rules.md` and `designs/INDEX.md` (see below) |
+
+### Experience: what is kept from every run
+- **Run journal:** each `diagnosis.md` holds every plot read and what was concluded, kept in the dossier for good.
+- **`pa_rules.md`** (rule base): one rule per pattern. Fields: id, symptom, plot, the check that confirms it, cause, fix, step, technology, source (user or run), seen in, status. Status runs `candidate` → `draft` → `confirmed`. A rule is confirmed by the user, or when its fix was confirmed by the Judge in 2 runs. A rule whose fix fails is demoted and the failure is noted. The user's own rules start as `user` (trusted).
+- **`designs/INDEX.md`** (case memory): one line per PA design (technology, device, f0, bandwidth, Pout, class, architecture, result). The Lead and the Diagnostician start from the nearest past design.
+- **Rule for keeping a lesson:** after a rule or recipe changes, the PA evals are re-run. A change that lowers the score is reverted.
+
+### Phases
+| # | Phase | What | Done when | Who |
+|---|---|---|---|---|
+| P0 | Tool probe | In a `v2_pa_probe` sandbox with the chosen device: I-V and gm, K and μ with stability circles, HB power sweep (Pout, gain, PAE, harmonics), dynamic load line, load-pull, source-pull, two-tone and AM-PM. Record the working measurement strings, set-up steps and run times in `designs/_probes/pa_tools.md` | Each item returns data through `graph_data`, or its gap is written with the server change it needs | awr-builder (probe), lead checks |
+| P1 | Server gaps | Only what P0 proves is missing (likely port power or power sweep, HB options, load-pull and source-pull returning the optimum and contours as data). Each new tool gets a unit test and a hook rule if it writes | Tests pass; the tools run live on the probe | fieldnote-builder, test-runner |
+| P2 | Model card and validity | Model card format, `library/devices/`, and `checks/check_validity.py` (bias, load line, Pdiss against the card) | `test_checks` passes on fixtures, including one load line that goes out of range | lead |
+| P3 | Spec and step format | PA metrics in `spec.json` (`Pout_dBm`, `Gain_dB`, `P1dB_dBm`, `PAE_pct`, `DE_pct`, `H2_dBc`, `IM3_dBc`, `Idq_A`, `K_min`/`mu_min` over a wide band); `check_spec` computes P1dB and peak PAE; `state.json` tracks the current step | Tests pass on fixture traces with hand-known values | lead |
+| P4 | Step-2 and step-7 tools | The user's class and feasibility formulas in `rf_design.py` with cards; matching synthesis from THEORY_PLAN T3 | Self-checks pass; one worked example of the user's each | theory-curator or lead |
+| P5 | Diagnostician and experience files | `pa-diagnostician.md`, its hook, `pa_rules.md`, `designs/INDEX.md`, keeper changes, the PA section of the workflow in CLAUDE.md and AGENTIC_PLAN.md | `test_agents` and `test_hooks` pass; the diagnostician is refused any edit to a non-`diag` document | lead |
+| P6 | Seed the rules | The user's diagnostic rules ("when I see X in plot Y, I check Z") written as `user` rules | The user checks the list | user + keeper |
+| P7 | Design ladder and evals | (1) `pa_bias_stab`: steps 1 to 4; (2) `pa_classA_hb`: up to step 8 with a fixed load; (3) `pa_classAB_lp`: full flow with load-pull and source-pull and PAE; (4) **diagnosis evals:** seeded faults (oscillation, bias too low with gain expansion, load near the knee, detuned output match, bias outside the model card), each scored on whether the Diagnostician names the right cause and step; (5) linearity (step 9); (6) stretch: wideband or harmonic-tuned | Each rung PASSes before the next; the old 6 evals still score at least 5/6 | design team, test-runner |
+| P8 | Layout and EM (later) | EM checks of the critical matching parts | Only after the user OKs the licence use | design team |
+
+**Order:** P0 needs AWR; P2, P3 and P5 need none and can run beside it. P4 waits for the user's formulas and THEORY_PLAN T1. P7 rung 1 can start after P0 to P3 and P5.
+
+**Success measures:** diagnosis evals name the right cause at least 80% of the time; fix rounds per PA design go down over the ladder; no operating point outside the model card goes undetected; the number of confirmed rules goes up.
+
+**Risks:**
+- Vendor models differ in quality and in which parameters they expose.
+- HB may fail to converge at high drive.
+- Load-pull or source-pull may not be scriptable through COM; P0 will show this.
+- The 15-minute `simulate` limit may be hit.
+- A wrong rule can mislead later designs, which is why rules need confirmation and evals gate every change.
+
+**Open decisions for the user:**
+1. Device and model: which power transistor, is its vendor kit installed in AWR, and what is its valid range (or where it is documented)?
+2. First target: f0, bandwidth, Pout, PAE, Vdd, substrate.
+3. Licences: are HB and load-pull/source-pull licensed in this AWR install?
+4. Your class and feasibility formulas (step 2), and a first set of diagnostic rules (P6).
+5. Should the step-5 class and architecture checkpoint stop for you (proposed: yes)?
+6. Order: start P0, P2, P3 and P5 now beside the theory plan, or finish theory T0 to T2 first? And the `theory-curator` decision from THEORY_PLAN.

@@ -1,4 +1,4 @@
-"""Client for the AWRMWO hub named pipe (see hub.py). Used by the Fieldnote desktop app."""
+"""Client for the AWRMWO hub named pipe (see hub.py). Used by the Ampwright desktop app."""
 import ctypes
 import itertools
 import json

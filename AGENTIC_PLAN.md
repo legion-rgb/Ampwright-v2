@@ -6,7 +6,7 @@ Status (21 Nov 2026):
 - **C done:** `hook_guard`, `hook_tidy`, `.claude/settings.json`, `test_hooks` OK, and live: a session in this folder had `add_equation` refused for a non-`v2_*` document and for a missing `document` (project-wide). Progress is tracked in [PROGRESS.md](PROGRESS.md).
 - **D done (21 Nov):** rc_lpf and ne3508_bias reached PASS with complete dossiers; a seeded 10x C1 fault was caught and fixed in 1 round. See PROGRESS.md.
 - **E in progress (21 Nov):** E.1 tools done and tested live (eval `lmatch_opt` waits for an MCP restart); E.2 library (4 blocks), E.3 evals (5/6 OK, 1 not run), E.4 prompt, E.5 playbook note, E.6 `run_headless.py` built. See PROGRESS.md.
-The Fieldnote GUI was built in v1 (`../AWRMWO-mcp`) and moved into v2 on 25 Nov 2026 (see PROGRESS.md).
+The GUI was built in v1 (`../AWRMWO-mcp`) as Fieldnote, moved into v2 on 25 Nov 2026 and renamed Ampwright on 26 Nov (see PROGRESS.md).
 
 ## Goal
 
@@ -120,7 +120,7 @@ Each phase has a test that says when it is done.
 3. **Agent eval suite:** `evals/` with 5–8 tasks that have known answers. `test-runner` runs them after any change to prompts, models or tools, and reports pass rate, rounds and token use per task.
 4. **Design-space exploration:** Theory proposes 2–3 topologies in parallel; the Lead picks which to build, one at a time.
 5. **Vendor library search** (`search_library`, already approved for v1).
-6. **Headless runs** via `claude -p` (the Fieldnote app-session mode) for unattended evals.
+6. **Headless runs** via `claude -p` (the Ampwright app-session mode) for unattended evals.
 
 ## Cost rules
 
@@ -131,7 +131,7 @@ Each phase has a test that says when it is done.
 
 ## Risks
 
-- **Subagents can't nest.** If the Lead runs in a subagent (for example from Fieldnote), it can't dispatch. The Lead must be the main session.
+- **Subagents can't nest.** If the Lead runs in a subagent (for example from Ampwright), it can't dispatch. The Lead must be the main session.
 - **AWR modal dialogs** block COM and stall every agent. The Lead checks `status_messages` and asks you.
 - **The Judge reads the same numbers the Evaluator wrote.** Its independence comes from checking the spec, the prediction and the measurement together, and from re-reading the key graph itself.
 - **Theory can be wrong.** A large prediction gap is reported, not hidden; the Judge decides whether the theory or the build is at fault.

@@ -12,7 +12,7 @@ Every agent reads this before working. Add one line per new lesson, with the dat
 - A 2-pin part at rotation 0 runs left to right (pin 1 left); at 270 it runs top to bottom (pin 1 on top). Use 270 for shunt parts, or `add_shunt`.
 - `set_frequencies(document=...)` gives one document its own sweep; without `document` it changes the project sweep for everything. The guard hook denies `set_frequencies` and `add_equation` without `document` (21 Nov): always pass `document='v2_<slug>'`.
 - `graph_data` reads the real part only.
-- If `v2_<slug>` or its graph already exists before the build, say so in `build_log.md` and rebuild in place, so the dossier explains it; cause seen: an earlier Fieldnote Quick-mode turn built it without subagents or a dossier (26 Nov, fn_rc_check).
+- If `v2_<slug>` or its graph already exists before the build, say so in `build_log.md` and rebuild in place, so the dossier explains it; cause seen: an earlier Ampwright (then Fieldnote) Quick-mode turn built it without subagents or a dossier (26 Nov, fn_rc_check).
 
 ## Simulation
 - A COM call can't be interrupted. Tool calls time out after 15 min, but AWR keeps working and later calls queue. Use `simulate` then `wait_for_simulation` for long runs.

@@ -133,8 +133,8 @@ Lookup: search for the error text (for example `Parse Error`, `Ports may not`, `
 
 ## E015 Evaluator's Bash denied, so check_spec.py and check_tidy.py don't run
 - **Symptom:** the evaluator's call failed with `No such tool available: Bash. Bash is disabled for this session`; the scripted checks in `checks/` couldn't run.
-- **Cause:** Fieldnote's Design mode started Claude Code with a lean `--tools` list (Read,Glob,Grep,Write,Edit,Agent). Subagents inherit that list, whatever their agent file says (`circuit-evaluator.md` lists Bash).
-- **Fix:** `fieldnote/session.py` now adds Bash to the Design-mode tool list. `hub.approve` (`_runs_check` in `hub.py`) lets only `uv run|python checks/check_spec.py designs/<slug>` and `checks/check_tidy.py <schematic>` (optional `cd <v2 folder> && ` prefix) run without a dialog; any other Bash command shows the approval dialog. Workaround for older runs: read values with `graph_data` and judge tidiness from `list_wires`, and say the scripts did not run.
+- **Cause:** Ampwright's (Fieldnote before 26 Nov) Design mode started Claude Code with a lean `--tools` list (Read,Glob,Grep,Write,Edit,Agent). Subagents inherit that list, whatever their agent file says (`circuit-evaluator.md` lists Bash).
+- **Fix:** `ampwright/session.py` now adds Bash to the Design-mode tool list. `hub.approve` (`_runs_check` in `hub.py`) lets only `uv run|python checks/check_spec.py designs/<slug>` and `checks/check_tidy.py <schematic>` (optional `cd <v2 folder> && ` prefix) run without a dialog; any other Bash command shows the approval dialog. Workaround for older runs: read values with `graph_data` and judge tidiness from `list_wires`, and say the scripts did not run.
 - **Status:** fixed-in-code
 - **Seen:** v2, 26 Nov 2026, fn_rc_check (PASS by the manual route)
-- **Recheck:** `uv run --script tests/test_fieldnote_approval.py` and `python tests/test_session.py`. Live recheck: the next Design-mode run shows check_spec.py running in the evaluator.
+- **Recheck:** `uv run --script tests/test_ampwright_approval.py` and `python tests/test_session.py`. Live recheck: the next Design-mode run shows check_spec.py running in the evaluator.
