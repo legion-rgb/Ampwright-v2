@@ -36,7 +36,7 @@ uv run --script AWRMWO-mcp/tests/mcp_call.py project_info '{}'
 
 ### Ampwright desktop app
 
-Ampwright (called Fieldnote in v1) is a desktop window for AWR work, brought over from v1 on 25 Nov 2026. Open AWR with your project, then double-click `Ampwright.bat` in this folder (needs uv and Microsoft Edge WebView2). It starts Claude Code hidden, on your own subscription login with no API key, and shows the open AWR project. You chat with it, watch each step in the activity feed, stop a turn, and allow or deny save, new project and delete in a dialog. The plan is in [AMPWRIGHT_PLAN.md](AMPWRIGHT_PLAN.md). The older v2 window is archived in `_archive_desktop_v2/`.
+Ampwright is a desktop window for AWR work, brought over from v1 on 25 Nov 2026. Open AWR with your project, then double-click `Ampwright.bat` in this folder (needs uv and Microsoft Edge WebView2). It starts Claude Code hidden, on your own subscription login with no API key, and shows the open AWR project. You chat with it, watch each step in the activity feed, stop a turn, and allow or deny save, new project and delete in a dialog. The plan is in [AMPWRIGHT_PLAN.md](AMPWRIGHT_PLAN.md). The older v2 window is archived in `_archive_desktop_v2/`.
 
 Ampwright's hidden session starts in the workspace folder, so it uses the lean setup (AWR server only) and not this folder's agent loop or `v2_*` guard hooks. The agent loop still runs from a Claude Code session opened in this folder.
 
@@ -125,7 +125,7 @@ You and Claude work in part IDs and pin names. Coordinates stay inside the serve
 
 Every circuit was built through the MCP tools and compared with an independent analytic reference, `tests/rf_theory.py`. That module uses ABCD matrices, transmission-line theory, Hammerstad-Jensen and Kirschning-Jansen microstrip formulas, Hammerstad-Bekkadal open-end correction, the Balanis cavity model, and Curtice, Statz and Angelov FET equations. It has 103 self-checks of its own.
 
-### Schematics: 71 of 71 checks pass (`tests/validate.py`)
+### Schematics: (`tests/validate.py`)
 
 | Circuit | Result |
 |---|---|
@@ -137,7 +137,7 @@ Every circuit was built through the MCP tools and compared with an independent a
 | FET I-V, CURTICE2 | Within 0.016% of the Curtice equation |
 | FET I-V, ANGELOV | Within 0.002% of the Angelov equation, including RS and RD |
 
-### EM: 21 of 21 checks pass (`tests/validate_em.py`)
+### EM: (`tests/validate_em.py`)
 
 | Structure | Result |
 |---|---|
