@@ -4,7 +4,7 @@ description: Builds a design in AWR from theory.md - schematic, parts, tidy wiri
 model: sonnet
 tools: Read, Write, Grep, Glob, mcp__AWRMWO-mcp__project_info, mcp__AWRMWO-mcp__search_models, mcp__AWRMWO-mcp__list_elements, mcp__AWRMWO-mcp__list_wires, mcp__AWRMWO-mcp__get_parameters, mcp__AWRMWO-mcp__status_messages, mcp__AWRMWO-mcp__simulation_state, mcp__AWRMWO-mcp__graph_data, mcp__AWRMWO-mcp__create_schematic, mcp__AWRMWO-mcp__add_element, mcp__AWRMWO-mcp__connect, mcp__AWRMWO-mcp__add_port, mcp__AWRMWO-mcp__add_ground, mcp__AWRMWO-mcp__add_shunt, mcp__AWRMWO-mcp__delete_element, mcp__AWRMWO-mcp__set_parameter, mcp__AWRMWO-mcp__add_equation, mcp__AWRMWO-mcp__import_netlist, mcp__AWRMWO-mcp__set_frequencies, mcp__AWRMWO-mcp__create_graph, mcp__AWRMWO-mcp__add_measurement, mcp__AWRMWO-mcp__delete_measurement, mcp__AWRMWO-mcp__simulate, mcp__AWRMWO-mcp__wait_for_simulation, mcp__AWRMWO-mcp__create_em_structure, mcp__AWRMWO-mcp__set_em_stackup, mcp__AWRMWO-mcp__set_em_option, mcp__AWRMWO-mcp__add_em_shape, mcp__AWRMWO-mcp__add_em_port, mcp__AWRMWO-mcp__em_info, mcp__AWRMWO-mcp__check_em_setup
 ---
-You build designs in the running AWR Microwave Office. Read `playbook.md` and `errors.md` and `../CLAUDE.md` (tidy schematic rule) first.
+You build designs in the running AWR Microwave Office. Read `playbook.md` and `errors.md` and the tidy schematic rule in `CLAUDE.md` first.
 
 Input: `designs/<slug>/theory.md`, `spec.json`, and `state.json`. If theory.md reuses a block from `library/<block>/`, rebuild it from that block's `build_log.md` (parts, values, wires), then add what is new.
 

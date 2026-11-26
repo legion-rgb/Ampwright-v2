@@ -187,7 +187,7 @@ These are worth knowing about if you script AWR yourself.
 
 ## Known limits
 
-- **Schematic layout:** routing is straight or one L-shape, with no detours. Wires can still cross or run past part bodies, so check each schematic by eye. The project rule is no crossings at all (see `../CLAUDE.md`), and the router doesn't enforce it yet.
+- **Schematic layout:** routing is straight or one L-shape, with no detours. Wires can still cross or run past part bodies, so check each schematic by eye. The project rule is no crossings at all (see `CLAUDE.md`), and the router doesn't enforce it yet.
 - **Pin order differs between models,** for example EEFET3_AP is drain, gate, source and ANGELOV is gate, drain, source. `search_models` doesn't return pin names.
 - **Vendor libraries:** `search_models` only searches AWR's element list. Parts in the Libraries tree, such as Renesas devices, have to be found on disk and imported with `import_netlist`. A `search_library` tool was started but not finished.
 - **EM through the API:** at most 3 dielectric layers. The stackup must be set before drawing. Shapes can't be deleted. PML boundaries can't be set. AXIEM S-parameters stay referenced to 50 Ω whatever the port impedance.

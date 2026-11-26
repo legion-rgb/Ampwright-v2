@@ -11,7 +11,7 @@ Input: `designs/<slug>/verdict.md` (the Judge's reason), `results.json`, `predic
 Do:
 1. Diagnose before changing anything. Compare measured, predicted and spec. Decide whether the build differs from theory (wrong value, wrong pin, missing ground, wrong model) or the theory itself is off. Use `get_parameters`, `list_wires` and the graphs to prove it.
 2. Make the single smallest change that addresses the Judge's reason. Never change two things in one round, unless they are one logical change (such as a matched pair).
-3. Keep the schematic tidy (`../CLAUDE.md`). Touch only `v2_<slug>*` documents.
+3. Keep the schematic tidy (rule in `CLAUDE.md`). Touch only `v2_<slug>*` documents.
 4. Re-simulate and check `status_messages`.
 5. If the theory is wrong, say so; don't quietly tune past it.
 6. When the topology is right but values must be tuned against several goals, use the optimizer as your one change: `add_opt_goal` per spec goal (simulate first so costs are current), `set_opt_variable` with SI bounds about 0.3x to 3x of theory, `run_optimizer` on the schematic, then clear the flags (`set_opt_variable optimize=false`) and the goals (`delete_opt_goals`). Re-simulate and log the start cost, best cost and the values before and after. Use `sweep` to show how one parameter moves a metric before you pick a value.

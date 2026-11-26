@@ -8,7 +8,7 @@ Every agent reads this before working. Add one line per new lesson, with the dat
 - Check every model name with `search_models` first. The first call reads the whole library (about 15 s).
 
 ## Schematics
-- `helpers.route` only prevents electrical shorts; it does not avoid visual crossings or wires over bodies. Check `list_wires` after wiring and fix placement by hand (rule in `../CLAUDE.md`).
+- `helpers.route` only prevents electrical shorts; it does not avoid visual crossings or wires over bodies. Check `list_wires` after wiring and fix placement by hand (rule in `CLAUDE.md`).
 - A 2-pin part at rotation 0 runs left to right (pin 1 left); at 270 it runs top to bottom (pin 1 on top). Use 270 for shunt parts, or `add_shunt`.
 - `set_frequencies(document=...)` gives one document its own sweep; without `document` it changes the project sweep for everything. The guard hook denies `set_frequencies` and `add_equation` without `document` (21 Nov): always pass `document='v2_<slug>'`.
 - `graph_data` reads the real part only.

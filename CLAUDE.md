@@ -22,9 +22,18 @@ This session is also the master for the v2 plan. Subagents can't start subagents
 - Stop for the user only at: spec approval, SPEC_UNREACHABLE or 3 failed rounds, anything that would save, and another session writing to AWR (check `ListAgents` before AWR steps).
 - Report to the user when all steps in PROGRESS.md are done.
 
+## Schematic tidiness (user rule, 20 Nov 2026)
+Every schematic built through AWRMWO-mcp must be tidy and easy to read:
+- Wires must not overlap or cross other wires, and must not run through part bodies or other pins. A wire that only avoids shorting is not enough; it must also look unambiguous.
+- Place parts so connections are short, straight or one clean L, with no crossings. Move or rotate a part, or swap which side a pin faces, instead of accepting a crossing.
+- Check each finished schematic (list_wires / list_elements, and look at it) before calling it done. If a crossing remains, fix the placement and rebuild.
+- Known gap: the current router (`helpers.route`) only prevents electrical shorts. It does not yet avoid visual crossings or wires over bodies, so the layout must be checked and fixed by hand until it does.
+
+(Copied 26 Nov 2026 from the parent folder's CLAUDE.md, so the repo has it on its own.)
+
 ## Rules
 - Only one AWR-writing agent (`awr-builder`, `circuit-fixer`) runs at a time. Never start them in parallel or in the background together.
 - Give each subagent the dossier path and nothing it can read for itself. Ask for its short report; the details stay in the files.
 - Update `state.json` after each step, so a run can be resumed.
 - If the user says they are testing the v1 GUI (Fieldnote), hold every AWR step until they say they are done.
-- AWR safety from `../CLAUDE.md` and the user's standing rules: never open or change the user's `.emp` files, never touch the AWR install folder, never close AWR, leave `Schematic 1` alone.
+- AWR safety (the user's standing rules): never open or change the user's `.emp` files, never touch the AWR install folder, never close AWR, leave `Schematic 1` alone.

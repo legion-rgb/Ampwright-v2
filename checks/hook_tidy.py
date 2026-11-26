@@ -22,7 +22,7 @@ def main():
     except Exception:
         return  # shortcut: silent when the hub is unreachable; check_tidy is still run by the reviewer
     if issues:
-        text = "Tidiness check on %s found %d issue(s) (rule in ../CLAUDE.md); fix placement before calling it done:\n" % (
+        text = "Tidiness check on %s found %d issue(s) (rule in CLAUDE.md); fix placement before calling it done:\n" % (
             sch, len(issues)) + "\n".join("- %s: %s" % (i["kind"], i["detail"]) for i in issues[:10])
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": text}}))
 

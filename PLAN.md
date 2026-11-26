@@ -112,7 +112,7 @@ The hardest part for an LLM is placing and wiring by coordinates. Hide that.
 4. **Prompt demos:** the phase demos above, run by hand in Claude Code before calling a phase done.
 
 ## Rule: tidy schematics (user, 20 Nov 2026)
-Wires must never overlap or cross other wires, part bodies or pins; schematics must be clean and easy to read (full text in ../CLAUDE.md). Open work: teach `helpers.route` / `add_element` placement to avoid visual crossings (the FET_IV demo's gate wire crosses the drain lead), then add a crossing check to the schematic tests.
+Wires must never overlap or cross other wires, part bodies or pins; schematics must be clean and easy to read (full text in CLAUDE.md). Open work: teach `helpers.route` / `add_element` placement to avoid visual crossings (the FET_IV demo's gate wire crosses the drain lead), then add a crossing check to the schematic tests.
 
 ## Suggestions
 
