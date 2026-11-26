@@ -375,6 +375,14 @@ async def create_graph(name: str, type: str = "rectangular") -> dict:
 
 
 @mcp.tool()
+async def tidy_graph(graph: str) -> dict:
+    """Make a graph read like an engineer's plot: round axis ends and 1/2/5 steps that cover every point (dB floor 80 dB
+    below the peak), axis titles with units, distinct colour-blind-safe trace colours, short legend text, no symbols on dense
+    traces, no stray second y axis. Needs simulated data; simulate(graph=...) already does this. Returns the axes set."""
+    return await run(gr.tidy_graph_sync, graph)
+
+
+@mcp.tool()
 async def set_graph_axis(graph: str, axis: str = "y", min: float | None = None, max: float | None = None,
                          step: float | None = None, auto: bool = False, label: str | None = None) -> dict:
     """Set a graph axis (axis: x, y or y2). min/max fix the range (e.g. min=-60, max=0 for a dB plot), step is the
@@ -417,12 +425,13 @@ async def add_measurement(graph: str, source_doc: str, measurement: str, simulat
 
 
 @mcp.tool()
-async def simulate(wait_seconds: int = 0, graph: str | None = None) -> dict:
+async def simulate(wait_seconds: int = 0, graph: str | None = None, tidy: bool = True) -> dict:
     """Without graph: start Simulate > Analyze for the whole project and return at once (or wait up to wait_seconds);
     follow with wait_for_simulation. With graph: simulate only that graph's measurements (their schematics), BLOCKING
     until done (a big sweep can take minutes; the call gives up after 15 min), so a broken schematic elsewhere is not
-    touched. Clears the status window first, so errors returned belong to this run."""
-    return await run(gr.simulate_sync, wait_seconds, graph)
+    touched. Clears the status window first, so errors returned belong to this run.
+    With graph, the graph is also tidied (see tidy_graph); pass tidy=False to keep axes you set by hand."""
+    return await run(gr.simulate_sync, wait_seconds, graph, tidy)
 
 
 @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))

@@ -1,5 +1,6 @@
 """Frequencies, simulation, status window, graphs and plots."""
 import io
+import math
 import re
 import time
 
@@ -36,7 +37,7 @@ def _has_data(m):
         return False
 
 
-def simulate_sync(wait_seconds=0, graph=None):
+def simulate_sync(wait_seconds=0, graph=None, tidy=True):
     awr().Status.RemoveAllItems()  # so the errors returned belong to this run only
     if graph:
         # SimulateMeasurements is blocking (checked live: 28 s for 400k points) and leaves AnalyzeState at 3 ("ended").
@@ -46,7 +47,10 @@ def simulate_sync(wait_seconds=0, graph=None):
         empty = [m.Name for m in g.Measurements if not _has_data(m)]
         if empty:
             raise RuntimeError(f"Simulation ended without data for {empty}; the solver probably rejected the input. Check em_simulation_log and check_em_setup. State: {simulation_state_sync()}")
-        return {**simulation_state_sync(), "graph": graph}
+        out = {**simulation_state_sync(), "graph": graph}
+        if tidy:  # every graph leaves a simulation readable; tidy=False keeps hand-set axes
+            out["tidy"] = tidy_graph_sync(graph)
+        return out
     awr().Project.Simulator.AnalyzeAsync()  # state reads 2 (simulating) right after this returns
     return wait_for_simulation_sync(wait_seconds)
 
@@ -177,6 +181,69 @@ def set_graph_trace_sync(graph, trace=None, color=None, dash=None, symbol=None, 
         out.append({"trace": t.Name, "color": f"#{c & 255:02x}{c >> 8 & 255:02x}{c >> 16 & 255:02x}", "dash": int(t.DashStyle),
                     "symbol": int(t.Symbol), "symbol_visible": bool(t.SymbolVisible), "symbol_size": int(t.SymbolSize)})
     return out
+
+
+PALETTE = ["#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]  # Okabe-Ito: readable on white, colour-blind safe
+DB_FLOOR = 80  # dB below the peak; a deeper null would squash the pass band
+
+
+def nice_axis(lo, hi, ticks=6):
+    """Round (lo, hi, step) that cover the data, with a 1/2/5 x 10^n step and 4 to 10 grid lines, like a hand-drawn plot."""
+    if hi - lo < 1e-12 * max(abs(lo), abs(hi), 1e-300):  # flat trace: open the window so the line is not on the frame
+        pad = abs(hi) * 0.1 or 1.0
+        lo, hi = lo - pad, hi + pad
+    raw = (hi - lo) / ticks
+    mag = 10 ** math.floor(math.log10(raw))
+    for k in (1, 2, 5, 10):
+        step = k * mag
+        a, b = math.floor(lo / step + 1e-9) * step, math.ceil(hi / step - 1e-9) * step
+        if round((b - a) / step) <= 10:
+            break
+    clean = lambda v: round(v, 12) + 0.0  # no -0.0 or 0.30000000000000004 in the axis
+    return clean(a), clean(b), clean(step)
+
+
+def tidy_graph_sync(graph):
+    """What a reviewing engineer would fix: round axis ends and steps that cover every point, titles with units,
+    distinct colour-blind-safe trace colours, short legend text, no symbol clutter on dense traces, no stray second y axis.
+    Rectangular graphs with simulated data only; anything else is reported as skipped."""
+    g = find(awr().Project.Graphs, graph)
+    if int(g.Type) != GRAPH_TYPE["rectangular"]:
+        return {"graph": graph, "skipped": "not a rectangular graph"}
+    rows = graph_data_sync(graph, max_points=10**9, display=True)
+    if not rows or not all(r["x"] for r in rows):
+        return {"graph": graph, "skipped": "no simulated data yet; simulate first"}
+    traces, done = list(g.Traces), {}
+    one_doc = len({t.Name.split(":")[0] for t in traces if ":" in t.Name}) == 1
+    for i, t in enumerate(traces):  # style
+        rgb = int(PALETTE[i % len(PALETTE)][1:], 16)
+        t.Color = (rgb & 255) << 16 | (rgb >> 8 & 255) << 8 | rgb >> 16  # RGB -> AWR's BGR
+        t.SymbolVisible = len(rows[min(i, len(rows) - 1)]["x"]) <= 20  # a symbol on every one of 100 points is noise
+        if one_doc and ":" in t.Name:
+            t.UseDefaultLegendText = False
+            t.LegendText = t.Name.split(":", 1)[1]
+    left = all(int(t.PlotAxis) == 0 for t in traces)
+    xs = [x / r["x_scale"] for r in rows for x in r["x"]]
+    ys = [y / r["y_scale"] for r in rows for y in r["y"]]
+    if rows[0]["y_unit"] == "dB" and ys:
+        ys = [max(y, max(ys) - DB_FLOOR) for y in ys]
+    plan = [("x", xs, "x_axis")] + ([("y", ys, "y_axis")] if left else [])
+    for axis, vals, title in plan:
+        lo, hi, step = nice_axis(min(vals), max(vals))
+        ax = g.Axes.Item(AXIS[axis])
+        ax.AutoScale, ax.MinimumScale, ax.MaximumScale = False, lo, hi
+        ax.MajorGridlinesAutoStep, ax.MajorGridlinesStep = False, step
+        ax.MajorGridlinesVisible, ax.MinorGridlinesVisible = True, False
+        names = list(dict.fromkeys(r[title] for r in rows))
+        if len(names) > 1 and axis == "y":  # several measurements share the axis: name the quantity, not each measurement
+            units = list(dict.fromkeys(r["y_disp"] for r in rows if r["y_disp"]))
+            names = [f"Magnitude ({units[0]})" if units == ["dB"] else f"Value ({', '.join(units)})" if units else "Value"]
+        ax.LabelVisible, ax.LabelText = True, " / ".join(names)
+        done[axis] = {"min": lo, "max": hi, "step": step, "label": ax.LabelText}
+    if left and int(g.Axes.Count) > 2:  # the unused right axis would show a meaningless 0 to 10 scale
+        ax = g.Axes.Item(AXIS["y2"])
+        ax.GridlineLabelsVisible = ax.LabelVisible = ax.MajorGridlinesVisible = ax.MinorGridlinesVisible = False
+    return {"graph": graph, "axes": done, "traces": len(traces)}
 
 
 def add_graph_marker_sync(graph, measurement, x):

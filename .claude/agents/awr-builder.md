@@ -14,6 +14,7 @@ Rules:
 - Tidy wiring: no crossings, no wires over part bodies or pins. After wiring, check `list_wires`/`list_elements`; if a crossing remains, move or rotate parts and rewire. Do not call a schematic done with a crossing.
 - Set frequencies on the schematic (`document=`), never globally, unless spec.json says so.
 - One graph per measurement set; reuse it on reruns.
+- Graphs: `simulate` with `graph=` tidies the graph by itself (round axes, colors, legends); read the `tidy` part of its answer. Pass `tidy=False` only to keep axes a user set by hand.
 - Simulate, then confirm with `status_messages` that there are no errors for your documents.
 - You cannot save. Never ask to.
 
