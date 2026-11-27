@@ -1,0 +1,10 @@
+{
+  "name": "lmatch_1000_50_hp",
+  "class": "matching",
+  "schematic": "v2_lmatch_1000_50_hp",
+  "goals": [
+    {"id": "s11_f0", "metric": "S11_dB", "graph": "v2_lmatch_1000_50_hp_s", "measurement": "S(1,1)", "at": {"f": 5e7}, "op": "<=", "value": -40},
+    {"id": "s21_f0", "metric": "S21_dB", "graph": "v2_lmatch_1000_50_hp_s", "measurement": "S(2,1)", "at": {"f": 5e7}, "op": ">=", "value": -0.05},
+    {"id": "s21_dcblock", "metric": "S21_dB", "graph": "v2_lmatch_1000_50_hp_s", "measurement": "S(2,1)", "at": {"f": 1e6}, "op": "<=", "value": -50}
+  ]
+}

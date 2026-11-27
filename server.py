@@ -375,6 +375,14 @@ async def create_graph(name: str, type: str = "rectangular") -> dict:
 
 
 @mcp.tool()
+async def arrange_windows(schematic: str, graph: str | None = None, direction: str = "vertical", only: bool = True) -> dict:
+    """Lay out AWR's windows for a demo or a review: the schematic and its graph side by side (direction='vertical') or
+    stacked ('horizontal'), each zoomed to show everything (View All), so the whole circuit is visible. only=True minimises
+    all other windows. Display only; call it after building, and again if you resize AWR."""
+    return await run(gr.arrange_windows_sync, schematic, graph, direction, only)
+
+
+@mcp.tool()
 async def tidy_graph(graph: str) -> dict:
     """Make a graph read like an engineer's plot: round axis ends and 1/2/5 steps that cover every point (the y axis always
     reaches the deepest dip or highest peak; only nulls >150 dB below the peak are cut as numerical noise), axis titles with units, distinct colour-blind-safe trace colours, short legend text, no symbols on dense

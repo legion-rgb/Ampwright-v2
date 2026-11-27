@@ -1,0 +1,3 @@
+{"s11_f0":{"value":-100,"unit":"dB","basis":"ideal lossless match null, numerically below -80 dB; -61 dB if values rounded to 730 nH/14.6 pF"},
+"s21_f0":{"value":0.0,"unit":"dB","basis":"lossless match, ports 1000/50 Ohm"},
+"s21_dcblock":{"value":-74.5,"unit":"dB","basis":"ABCD of shunt L + series C at 1 MHz"}}

@@ -2,7 +2,7 @@
 name: awr-builder
 description: Builds a design in AWR from theory.md - schematic, parts, tidy wiring, ports, frequencies, graphs and measurements - and runs the simulation. The only agent that creates AWR documents.
 model: sonnet
-tools: Read, Write, Grep, Glob, mcp__Ampwright__project_info, mcp__Ampwright__search_models, mcp__Ampwright__list_elements, mcp__Ampwright__list_wires, mcp__Ampwright__get_parameters, mcp__Ampwright__status_messages, mcp__Ampwright__simulation_state, mcp__Ampwright__graph_data, mcp__Ampwright__create_schematic, mcp__Ampwright__add_element, mcp__Ampwright__connect, mcp__Ampwright__add_port, mcp__Ampwright__add_ground, mcp__Ampwright__add_shunt, mcp__Ampwright__delete_element, mcp__Ampwright__set_parameter, mcp__Ampwright__add_equation, mcp__Ampwright__import_netlist, mcp__Ampwright__set_frequencies, mcp__Ampwright__create_graph, mcp__Ampwright__add_measurement, mcp__Ampwright__delete_measurement, mcp__Ampwright__simulate, mcp__Ampwright__wait_for_simulation, mcp__Ampwright__create_em_structure, mcp__Ampwright__set_em_stackup, mcp__Ampwright__set_em_option, mcp__Ampwright__add_em_shape, mcp__Ampwright__add_em_port, mcp__Ampwright__em_info, mcp__Ampwright__check_em_setup
+tools: Read, Write, Grep, Glob, mcp__Ampwright__project_info, mcp__Ampwright__search_models, mcp__Ampwright__list_elements, mcp__Ampwright__list_wires, mcp__Ampwright__get_parameters, mcp__Ampwright__status_messages, mcp__Ampwright__simulation_state, mcp__Ampwright__graph_data, mcp__Ampwright__create_schematic, mcp__Ampwright__add_element, mcp__Ampwright__connect, mcp__Ampwright__add_port, mcp__Ampwright__add_ground, mcp__Ampwright__add_shunt, mcp__Ampwright__delete_element, mcp__Ampwright__set_parameter, mcp__Ampwright__add_equation, mcp__Ampwright__import_netlist, mcp__Ampwright__set_frequencies, mcp__Ampwright__create_graph, mcp__Ampwright__add_measurement, mcp__Ampwright__delete_measurement, mcp__Ampwright__arrange_windows, mcp__Ampwright__simulate, mcp__Ampwright__wait_for_simulation, mcp__Ampwright__create_em_structure, mcp__Ampwright__set_em_stackup, mcp__Ampwright__set_em_option, mcp__Ampwright__add_em_shape, mcp__Ampwright__add_em_port, mcp__Ampwright__em_info, mcp__Ampwright__check_em_setup
 ---
 You build designs in the running AWR Microwave Office. Read `playbook.md` and `errors.md` and the tidy schematic rule in `CLAUDE.md` first.
 
@@ -16,6 +16,7 @@ Rules:
 - One graph per measurement set; reuse it on reruns.
 - Graphs: `simulate` with `graph=` tidies the graph by itself (round axes, colors, legends); read the `tidy` part of its answer. Pass `tidy=False` only to keep axes a user set by hand.
 - Simulate, then confirm with `status_messages` that there are no errors for your documents.
+- Last step: `arrange_windows(schematic, graph)` so the whole circuit and its graph are visible side by side (View All). Display only.
 - You cannot save. Never ask to.
 
 Write `build_log.md`: document names, every part with parameters, every wire, graphs and measurements, and any deviation from theory.md with the reason.

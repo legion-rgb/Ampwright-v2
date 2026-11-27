@@ -263,6 +263,30 @@ def clear_graph_markers_sync(graph):
     return {"graph": graph, "markers": int(g.Markers.Count)}
 
 
+def arrange_windows_sync(schematic, graph=None, direction="vertical", only=True):
+    """Show the schematic and its graph side by side (vertical) or stacked (horizontal), each zoomed to fit (View All).
+    only=True minimises every other window so the two fill the area. Display only: no document changes."""
+    if direction not in ("vertical", "horizontal"):
+        raise ValueError("direction must be 'vertical' (side by side) or 'horizontal' (stacked)")
+    app = awr()
+    names = [find(app.Project.Schematics, schematic).Name] + ([find(app.Project.Graphs, graph).Name] if graph else [])
+    wins = {w.Caption: w for w in app.Windows}  # a window is captioned with its document's name
+    shown = [wins[n] if n in wins else (find(app.Project.Schematics, n) if n == schematic else find(app.Project.Graphs, n)).NewWindow()
+             for n in names]
+    for w in app.Windows:
+        if only and w.Caption not in names:
+            w.WindowState = 2  # mwWS_Minimized
+    for w in shown:
+        w.WindowState = 3  # mwWS_Normal: Tile does not move a maximised window
+    for w in reversed(shown):
+        w.Activate()  # Tile follows the stacking order: the window activated last comes first (left / top)
+    app.Windows.Tile(1 if direction == "vertical" else 0)  # mwWTD_Vertical / mwWTD_Horizontal
+    for w in shown:
+        w.Activate()
+        w.ViewAll()  # after the tile: the fit depends on the final window size
+    return {"windows": names, "direction": direction, "minimised_others": only}
+
+
 def _norm(s):
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 

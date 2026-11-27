@@ -1,0 +1,9 @@
+{
+ "s11_f0": {"value": -100, "unit": "dB", "basis": "exact L=318.31 nH, C=25.465 pF gives a numerical null; rounded parts -74 dB; any value <= -70 is consistent"},
+ "s21_f0": {"value": 0.0, "unit": "dB", "basis": "lossless, matched: transducer gain 1"},
+ "s21_150": {"value": -17.18, "unit": "dB", "basis": "ABCD of series L + shunt C, 50->250 Ohm, power-wave S21"},
+ "extra_points": {
+  "S11_dB": {"5": -3.57, "25": -5.08, "50": -100, "75": -2.55, "100": -0.56, "150": -0.08},
+  "S21_dB": {"5": -2.51, "25": -1.61, "50": 0.0, "75": -3.52, "100": -9.14, "150": -17.18}
+ }
+}

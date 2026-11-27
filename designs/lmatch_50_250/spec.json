@@ -1,0 +1,10 @@
+{
+  "name": "lmatch_50_250",
+  "class": "matching",
+  "schematic": "v2_lmatch_50_250",
+  "goals": [
+    {"id": "s11_f0", "metric": "S11_dB", "graph": "v2_lmatch_50_250_s", "measurement": "S(1,1)", "at": {"f": 5e7}, "op": "<=", "value": -40},
+    {"id": "s21_f0", "metric": "S21_dB", "graph": "v2_lmatch_50_250_s", "measurement": "S(2,1)", "at": {"f": 5e7}, "op": ">=", "value": -0.05},
+    {"id": "s21_150", "metric": "S21_dB", "graph": "v2_lmatch_50_250_s", "measurement": "S(2,1)", "at": {"f": 1.5e8}, "op": "<=", "value": -10}
+  ]
+}

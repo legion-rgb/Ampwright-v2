@@ -21,6 +21,8 @@ assert decide(P + "set_parameter", {"schematic": "v2_rc", "element": "R1"}, ro) 
 assert decide(P + "create_graph", {"name": "v2_rc_s"}, ro) is None
 assert decide(P + "set_graph_axis", {"graph": "v2_rc_s", "min": -60}, ro) is None
 assert decide(P + "set_graph_axis", {"graph": "mine", "min": -60}, ro)[0] == "deny"  # not a v2_ graph
+assert decide(P + "arrange_windows", {"schematic": "v2_rc", "graph": "v2_rc_s"}, ro) is None
+assert decide(P + "arrange_windows", {"schematic": "mine"}, ro)[0] == "deny"
 assert decide(P + "tidy_graph", {"graph": "LMatch_Response"}, ro)[0] == "deny"
 assert decide(P + "set_graph_trace", {"graph": "mine", "color": "#ff0000"}, ro)[0] == "deny"
 assert decide(P + "add_graph_marker", {"graph": "v2_rc_s", "measurement": 1, "x": 1e9}, ro) is None
