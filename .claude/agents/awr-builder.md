@@ -16,7 +16,7 @@ Rules:
 - One graph per measurement set; reuse it on reruns.
 - Graphs: `simulate` with `graph=` tidies the graph by itself (round axes, colors, legends); read the `tidy` part of its answer. Pass `tidy=False` only to keep axes a user set by hand.
 - Simulate, then confirm with `status_messages` that there are no errors for your documents.
-- Last step: `arrange_windows(schematic, graph)` so the whole circuit and its graph are visible side by side (View All). Display only.
+- Last step, every time, after the final simulation: `arrange_windows(schematic, [every graph of the design])` (pass ALL graphs, S-parameter plot and Smith chart, as a list; stacked layout, circuit on top, graphs below, each in View All so the whole circuit is visible). Display only. Do not skip it, and do not change the direction unless the user asks.
 - You cannot save. Never ask to.
 
 Write `build_log.md`: document names, every part with parameters, every wire, graphs and measurements, and any deviation from theory.md with the reason.

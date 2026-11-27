@@ -105,7 +105,7 @@ You and Claude work in part IDs and pin names. Coordinates stay inside the serve
 | `set_frequencies` | Sets the sweep for the project, one schematic or one EM structure |
 | `create_graph`, `delete_graph` | Rectangular, polar, Smith, tabular and other graph types |
 | `add_measurement`, `delete_measurement` | For example `DB(\|S(2,1)\|)`, `IVCurve(IV1)` or `IDC(DCVS.VD,1)`. `simulator` picks the engine, such as `aplac_dc` for APLAC models |
-| `arrange_windows` | Schematic and graph side by side (or stacked), each zoomed to fit (View All); other windows minimised. Display only |
+| `arrange_windows` | Schematic and graph stacked (circuit on top; `direction='vertical'` for side by side), each zoomed to fit (View All); other windows minimised. The builder and fixer run it after every simulation. Display only |
 | `tidy_graph` | Makes a graph read like an engineer's plot: round axis ends with 1/2/5 steps, axis titles with units, distinct colours, short legends, no symbol clutter, no stray right axis. `simulate(graph=...)` runs it by itself (`tidy=False` to opt out) |
 | `set_graph_axis` | Axis range, grid step and label for `x`, `y` or `y2`; `auto=True` gives the axis back to AWR. Needs simulated data first |
 | `set_graph_trace` | Trace color (`#RRGGBB`), dash, symbol, symbol size and legend text; one trace or all |

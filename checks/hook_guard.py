@@ -29,8 +29,9 @@ def decide(tool_name, tool_input, ro=None):
         return "deny", f"{tool} without document changes the whole project. Pass document='v2_<slug>...'."
     for k in DOC_ARGS:
         v = (tool_input or {}).get(k)
-        if isinstance(v, str) and v and not v.startswith("v2_"):
-            return "deny", f"{tool} targets '{v}', which is not a v2_* document. Agents only change documents they created (named v2_<slug>...)."
+        for s in v if isinstance(v, list) else [v]:  # arrange_windows takes a list of graphs
+            if isinstance(s, str) and s and not s.startswith("v2_"):
+                return "deny", f"{tool} targets '{s}', which is not a v2_* document. Agents only change documents they created (named v2_<slug>...)."
     return None
 
 

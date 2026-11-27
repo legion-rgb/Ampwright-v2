@@ -210,7 +210,7 @@ def tidy_graph_sync(graph):
     g = find(awr().Project.Graphs, graph)
     if int(g.Type) != GRAPH_TYPE["rectangular"]:
         return {"graph": graph, "skipped": "not a rectangular graph"}
-    rows = graph_data_sync(graph, max_points=10**9, display=True)
+    rows = graph_data_sync(graph, max_points=10**9, display=True, span_units=False)
     if not rows or not all(r["x"] for r in rows):
         return {"graph": graph, "skipped": "no simulated data yet; simulate first"}
     traces, done = list(g.Traces), {}
@@ -238,6 +238,8 @@ def tidy_graph_sync(graph):
         if len(names) > 1 and axis == "y":  # several measurements share the axis: name the quantity, not each measurement
             units = list(dict.fromkeys(r["y_disp"] for r in rows if r["y_disp"]))
             names = [f"Magnitude ({units[0]})" if units == ["dB"] else f"Value ({', '.join(units)})" if units else "Value"]
+        if axis == "x":  # AWR appends the project's unit to the x title itself: "Frequency (GHz)" would show as "Frequency (GHz) (MHz)"
+            names = [n.split(" (")[0] for n in names]
         ax.LabelVisible, ax.LabelText = True, " / ".join(names)
         done[axis] = {"min": lo, "max": hi, "step": step, "label": ax.LabelText}
     if left and int(g.Axes.Count) > 2:  # the unused right axis would show a meaningless 0 to 10 scale
@@ -263,24 +265,34 @@ def clear_graph_markers_sync(graph):
     return {"graph": graph, "markers": int(g.Markers.Count)}
 
 
-def arrange_windows_sync(schematic, graph=None, direction="vertical", only=True):
-    """Show the schematic and its graph side by side (vertical) or stacked (horizontal), each zoomed to fit (View All).
-    only=True minimises every other window so the two fill the area. Display only: no document changes."""
+def arrange_windows_sync(schematic, graph=None, direction="horizontal", only=True):
+    """Show the schematic and its graph(s) stacked (horizontal, the default: circuit on top, graphs below in the given order) or side by side
+    (vertical), each zoomed to fit (View All). graph: one name or a list (S-parameter plot, Smith chart...).
+    only=True minimises every other window so these fill the area. Display only: no document changes."""
     if direction not in ("vertical", "horizontal"):
-        raise ValueError("direction must be 'vertical' (side by side) or 'horizontal' (stacked)")
+        raise ValueError("direction must be 'horizontal' (stacked) or 'vertical' (side by side)")
     app = awr()
-    names = [find(app.Project.Schematics, schematic).Name] + ([find(app.Project.Graphs, graph).Name] if graph else [])
+    graphs = [graph] if isinstance(graph, str) else list(graph or [])
+    docs = [(find(app.Project.Schematics, schematic), True)] + [(find(app.Project.Graphs, g), False) for g in graphs]
+    names = [d.Name for d, _ in docs]
     wins = {w.Caption: w for w in app.Windows}  # a window is captioned with its document's name
-    shown = [wins[n] if n in wins else (find(app.Project.Schematics, n) if n == schematic else find(app.Project.Graphs, n)).NewWindow()
-             for n in names]
+    shown = [wins[d.Name] if d.Name in wins else d.NewWindow() for d, _ in docs]
     for w in app.Windows:
         if only and w.Caption not in names:
             w.WindowState = 2  # mwWS_Minimized
     for w in shown:
         w.WindowState = 3  # mwWS_Normal: Tile does not move a maximised window
     for w in reversed(shown):
-        w.Activate()  # Tile follows the stacking order: the window activated last comes first (left / top)
+        w.Activate()  # Tile follows the stacking order: the window activated last comes first (top / left)
     app.Windows.Tile(1 if direction == "vertical" else 0)  # mwWTD_Vertical / mwWTD_Horizontal
+    if len(shown) > 2:  # Tile makes a grid (1 on top, 2 below); with 3+ windows place them in one clean stack / row instead
+        W, H = max(w.Left + w.Width for w in shown), max(w.Top + w.Height for w in shown)
+        n = len(shown)
+        for i, w in enumerate(shown):
+            if direction == "horizontal":
+                w.Left, w.Top, w.Width, w.Height = 0, i * H // n, W, H // n
+            else:
+                w.Left, w.Top, w.Width, w.Height = i * W // n, 0, W // n, H
     for w in shown:
         w.Activate()
         w.ViewAll()  # after the tile: the fit depends on the final window size
@@ -348,8 +360,9 @@ def _sweep_text(s, units):
     return f"{s.Name} = {s.Value / per:.4g}" + (f" {disp}" if disp else "")
 
 
-def graph_data_sync(graph, max_points=2000, summary=False, display=False):
-    """display=True adds x_axis/y_axis text and x_scale/y_scale (base unit -> project display unit) for plotting."""
+def graph_data_sync(graph, max_points=2000, summary=False, display=False, span_units=True):
+    """display=True adds x_axis/y_axis text and x_scale/y_scale (base unit -> display unit) for plotting.
+    span_units=False keeps the project's frequency unit: AWR axes are in that unit, so tidy_graph needs it."""
     ms = list(find(awr().Project.Graphs, graph).Measurements)
     units = _units()
     out = []
@@ -360,7 +373,7 @@ def graph_data_sync(graph, max_points=2000, summary=False, display=False):
         (xb, xd, xp), (yb, yd, yp) = _unit(m, 1, units), _unit(m, 2, units)
         if not yb and m.MeasName.upper().startswith("DB"):
             yb = yd = "dB"  # shortcut: COM reports no unit type for DB(...), so it is recognised by name only
-        if display and int(m.UnitType(1)) == 1 and xs:  # frequency: pick Hz/kHz/MHz/GHz from the span instead of the project unit
+        if display and span_units and int(m.UnitType(1)) == 1 and xs:  # frequency: pick Hz/kHz/MHz/GHz from the span instead of the project unit
             xd, xp = next((u, s) for u, s in (("GHz", 1e9), ("MHz", 1e6), ("kHz", 1e3), ("Hz", 1)) if max(xs) >= s or s == 1)
         for k in range(1, n + 1) if n > 1 else [1]:
             # YValues(k) is data dimension k (complex: re, im pairs), not trace k; TraceValues(k) rows are (x, re[, im])

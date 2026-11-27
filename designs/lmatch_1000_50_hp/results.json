@@ -1,0 +1,18 @@
+{
+ "_sim": "ok",
+ "s11_f0": {
+  "measured": -61.254651088594926,
+  "meets": true,
+  "how": "linear interpolation of v2_lmatch_1000_50_hp:DB(|S(1,1)|) at f=5e+07"
+ },
+ "s21_f0": {
+  "measured": -3.2532644315616532e-06,
+  "meets": true,
+  "how": "linear interpolation of v2_lmatch_1000_50_hp:DB(|S(2,1)|) at f=5e+07"
+ },
+ "s21_dcblock": {
+  "measured": -74.49599868107158,
+  "meets": true,
+  "how": "linear interpolation of v2_lmatch_1000_50_hp:DB(|S(2,1)|) at f=1e+06"
+ }
+}

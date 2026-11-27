@@ -375,9 +375,9 @@ async def create_graph(name: str, type: str = "rectangular") -> dict:
 
 
 @mcp.tool()
-async def arrange_windows(schematic: str, graph: str | None = None, direction: str = "vertical", only: bool = True) -> dict:
-    """Lay out AWR's windows for a demo or a review: the schematic and its graph side by side (direction='vertical') or
-    stacked ('horizontal'), each zoomed to show everything (View All), so the whole circuit is visible. only=True minimises
+async def arrange_windows(schematic: str, graph: str | list[str] | None = None, direction: str = "horizontal", only: bool = True) -> dict:
+    """Lay out AWR's windows for a demo or a review: the schematic and ALL its graphs (pass a list: S-parameter plot and Smith chart) stacked (direction='horizontal', the default, circuit on top) or
+    side by side ('vertical'), each zoomed to show everything (View All), so the whole circuit is visible. only=True minimises
     all other windows. Display only; call it after building, and again if you resize AWR."""
     return await run(gr.arrange_windows_sync, schematic, graph, direction, only)
 
