@@ -90,7 +90,7 @@ The hardest part for an LLM is placing and wiring by coordinates. Hide that.
 - `check_em_setup(em)`: a pre-flight lint run before simulating. It flags these rules, plus air margin < λ/4 at the lowest frequency, an odd number of boundary edges, and ports outside the boundary. Cheap, and saves many failed runs.
 - Mesh and AMR settings, then read the convergence from `em_simulation_log`.
 
-**Demo:** rebuild the single-element antenna (or a plain patch) from a text description and simulate it.
+**Demo:** rebuild a single-element antenna (or a plain patch) from a text description and simulate it.
 
 ### Phase 5: optimise, tune, sweep
 - `add_opt_goal`, `run_optimizer(type, iterations)`, report the best values.

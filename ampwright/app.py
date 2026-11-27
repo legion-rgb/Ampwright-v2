@@ -17,7 +17,7 @@ import pipe as pipe_mod
 import session as session_mod
 
 UI = os.path.join(HERE, "ui")
-WORKSPACE = os.path.dirname(os.path.dirname(HERE))  # workspace: project CLAUDE.md rules load from here
+WORKSPACE = os.path.dirname(os.path.dirname(HERE))  # parent folder: project CLAUDE.md rules load from here
 # Design mode runs in the v2 folder, so its CLAUDE.md (Design Lead loop), agents and hooks load
 WORKSPACES = {"quick": WORKSPACE, "design": os.path.dirname(HERE)}
 SETTINGS = os.path.join(os.environ.get("APPDATA", HERE), "Ampwright", "settings.json")

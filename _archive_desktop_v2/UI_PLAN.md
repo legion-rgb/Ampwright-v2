@@ -92,7 +92,7 @@ Claude Code ──stdio──> Ampwright ─────────────
 | Account | Shows signed-in or signed-out. "Sign in" opens `claude` in a terminal so you run `/login` there. Fieldnote never handles your credentials |
 | Mode | Linked or App session |
 | Model (app session) | Your choice, never changed by the app |
-| Workspace folder | `workspace` (where `.mcp.json` and `CLAUDE.md` live) |
+| Workspace folder | the parent folder (where `.mcp.json` and `CLAUDE.md` live) |
 
 Stored in `%APPDATA%\Fieldnote\settings.json`. No secrets are stored.
 
