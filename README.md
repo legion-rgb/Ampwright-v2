@@ -27,6 +27,18 @@ spec (you approve) -> theory -> build -> evaluate -> judge --pass--> review -> r
                                   +------- fix <--------+   (3 failed rounds, then it asks you)
 ```
 
+| Agent | What it does |
+|---|---|
+| `circuit-theory` | Picks the topology, calculates part values and predicts every spec metric before anything is built. Never touches AWR |
+| `awr-builder` | Builds the schematic, wiring, ports, sweep and graphs in AWR, simulates, then arranges the windows |
+| `circuit-evaluator` | Measures the simulated design against the spec with scripted checks and writes `results.json` |
+| `verification-judge` | Compares spec, prediction and measurement and decides PASS or FAIL |
+| `circuit-fixer` | Diagnoses a FAIL and applies one targeted change, then re-simulates |
+| `design-reviewer` | Reviews a passing design for tidiness, naming and leftover clutter |
+| `graph-formatter` | Sets axes, trace colours, legend and markers when you ask for specific graph styling |
+| `lesson-keeper` | Records errors and lessons in `errors.md` and `playbook.md`; the only agent that edits them |
+| `test-runner` | Runs the test suites and evals and reports the numbers. Edits nothing |
+
 Agents are in [.claude/agents/](.claude/agents/); the rules are in [CLAUDE.md](CLAUDE.md) and [AGENTIC_PLAN.md](AGENTIC_PLAN.md). Scripted checks in `checks/` enforce tidy schematics and `v2_*` document names.
 
 **Clean output.** Schematics are wired without crossings or shorts. Graphs get round axes that reach the deepest null, readable colours and markers, and the schematic and graphs are stacked in view-all windows.
